@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Pymatgen,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="ASE 在 DFT 计算中的骚操作令人印象深刻。类似 ASE 的科研工具还有很多，比如 VASPKIT 和 QVASP。熟练使用这些科研工具肯定会助力大家快速完成科研任务，发出更好更高质量的文章。 此次，本文向大家隆重介绍另一款出色的科研工具：Pymatgen。 Pymatgen 是 python materials genomics 的缩写，它是一款基于 python 的、开源的、强大的材料分析">
+<meta name="keywords" content="Pymatgen">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pymatgen的骚操作系列（计算离子电导率）">
+<meta property="og:url" content="http://www.bigbrosci.com/2020/09/08/A18/index.html">
+<meta property="og:site_name" content="Learn VASP The Hard Way">
+<meta property="og:description" content="ASE 在 DFT 计算中的骚操作令人印象深刻。类似 ASE 的科研工具还有很多，比如 VASPKIT 和 QVASP。熟练使用这些科研工具肯定会助力大家快速完成科研任务，发出更好更高质量的文章。 此次，本文向大家隆重介绍另一款出色的科研工具：Pymatgen。 Pymatgen 是 python materials genomics 的缩写，它是一款基于 python 的、开源的、强大的材料分析">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.bigbrosci.com/2020/09/08/A18/examples.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2020/09/08/A18/Li_Sn_S.jpg">
+<meta property="og:image" content="http://www.bigbrosci.com/2020/09/08/A18/MSD.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2020/09/08/A18/打赏码.jpg">
+<meta property="og:updated_time" content="2020-10-03T18:55:50.869Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Pymatgen的骚操作系列（计算离子电导率）">
+<meta name="twitter:description" content="ASE 在 DFT 计算中的骚操作令人印象深刻。类似 ASE 的科研工具还有很多，比如 VASPKIT 和 QVASP。熟练使用这些科研工具肯定会助力大家快速完成科研任务，发出更好更高质量的文章。 此次，本文向大家隆重介绍另一款出色的科研工具：Pymatgen。 Pymatgen 是 python materials genomics 的缩写，它是一款基于 python 的、开源的、强大的材料分析">
+<meta name="twitter:image" content="http://www.bigbrosci.com/2020/09/08/A18/examples.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.bigbrosci.com/2020/09/08/A18/">
+
+
+
+
+
+  <title>Pymatgen的骚操作系列（计算离子电导率） | Learn VASP The Hard Way</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Learn VASP The Hard Way</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">The 2nd edition</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.bigbrosci.com/2020/09/08/A18/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="By BigBro(a)s">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn VASP The Hard Way">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Pymatgen的骚操作系列（计算离子电导率）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-09-08T20:30:16-04:00">
+                2020-09-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/LVASPTHW/" itemprop="url" rel="index">
+                    <span itemprop="name">LVASPTHW</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/09/08/A18/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/09/08/A18/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2020/09/08/A18/" class="leancloud_visitors" data-flag-title="Pymatgen的骚操作系列（计算离子电导率）">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>ASE 在 DFT 计算中的骚操作令人印象深刻。类似 ASE 的科研工具还有很多，比如 VASPKIT 和 QVASP。熟练使用这些科研工具肯定会助力大家快速完成科研任务，发出更好更高质量的文章。</p>
+<p>此次，本文向大家隆重介绍另一款出色的科研工具：Pymatgen。</p>
+<p>Pymatgen 是 python materials genomics 的缩写，它是一款基于 python 的、开源的、强大的材料分析软件（<a href="https://pymatgen.org/）。" target="_blank" rel="noopener">https://pymatgen.org/）。</a></p>
+<p>Pymatgen 包含一系列能够表示元素（Element）、位点（Site）、分子（Molecule）、和结构（Structure）的类（Class）。它具有为很多计算软件提供前处理和后处理的能力。这些计算软件包括VASP，ABINIT，exciting，FEFF，QCHEM，LAMMPS，ADF，AIIDA，ASE，Gaussian，Lobster，Phonopy，Shengbte，Pwscf，和Zeo++等等。它能实现科研狗的众多后处理需求，包括生成相图（Phase diagram）和布拜图（Pourbaix diagrams），分析态密度和能带等等。</p>
+<p>Pymatgen 还提供了很多数据库（Materials Project REST API，Crystallography Open Database，and other external data sources）的接口，方便大家从数据库中查询结构和其他数据。</p>
+<p>真是科研狗快乐科研之利器呀！</p>
+<blockquote>
+<p>以下是Pymatgen官网提供的后处理的例子：</p>
+</blockquote>
+<p><img src="/2020/09/08/A18/examples.png" alt=""></p>
+<p><em>Top: (left) Phase and (right) Pourbaix diagram from the Materials API. Bottom left: Calculated bandstructure plot using pymatgen’s parsing and plotting utilities. Bottom right: Arrhenius plot using pymatgen’s DiffusionAnalyzer.</em></p>
+<p><strong>此次，本文就介绍一下如何使用 Pymatgen 的 DiffusionAnalyzer 类去计算锂离子固态电解质中锂离子电导率。</strong></p>
+<h2 id="计算离子电导率的理论与公式"><a href="#计算离子电导率的理论与公式" class="headerlink" title="计算离子电导率的理论与公式"></a>计算离子电导率的理论与公式</h2><p>目前，比较准确的计算离子电导率的方法是先用NVT系综第一性原理分子动力学（<strong>AIMD</strong>，<em>ab initio</em> molecular dynamics）模拟材料中离子在不同温度下的运动，然后计算出离子的平均（average）均方位移（<strong>MSD</strong>，mean square displacement），再计算出自扩散系数（D$_s$，self-diffusion coefficient），最后求得离子在某温度下的电导率（$\sigma$，conductivity）。</p>
+<h3 id="如何进行AIMD计算"><a href="#如何进行AIMD计算" class="headerlink" title="如何进行AIMD计算"></a>如何进行AIMD计算</h3><p>AIMD计算通常非常耗时，所以，为了减少计算成本，我们可以适当放宽计算精度。如果用 VASP 进行计算，具体的，大家可以</p>
+<ul>
+<li>采用较小的截断能。氧化物用 400 eV，硫化物用 280 eV，硒化物用 270 eV</li>
+<li>采用Gamma点作为K点设置，并使用gam版本的 VASP 进行计算</li>
+<li>采用单胞计算，如果材料的单胞包含比较多的原子</li>
+<li>采用合适的步长，比如2 fs，即 POTIM = 2</li>
+</ul>
+<h3 id="后处理的基本公式"><a href="#后处理的基本公式" class="headerlink" title="后处理的基本公式"></a>后处理的基本公式</h3><p>一旦AIMD计算完成，大家就可以着手计算离子电导率了。本文首先先介绍以下计算过程中使用的公式，方便有兴趣的同学自己开发脚本。</p>
+<blockquote>
+<p>平均均方位移（average MSD）可以通过以下公式计算：</p>
+<script type="math/tex; mode=display">
+averageMSD=\langle[\, \mathbf r(t)]^2\,\rangle=\frac{1}{N}\sum_{i}^{N}\langle[\,  \mathbf r_i(t+t_0)]\,^2 - [\,  \mathbf r_i(t_0)]\,^2\rangle</script><p>$\mathbf r_i(t)$ 是第 $i$ 个离子在 $t$ 时刻的位移。</p>
+<p>自扩散系数（$D_s$）可以通过以下公式计算：</p>
+<script type="math/tex; mode=display">
+D_s=\frac{averageMSD}{2dt}</script><p>$d$ 是离子在材料中的扩散维度（一般地，$d=3$），$t$ 是离子扩散的时间。</p>
+<p>最后，离子电导率（$\sigma$）可以这样计算：</p>
+<script type="math/tex; mode=display">
+\sigma=\frac{ne^2Z^2}{k_BT}D_s</script><p>$n$ 是材料中的离子密度，$e$ 是元电荷，$Z$ 是离子的价态，$k_B$ 是玻尔兹曼常数，$T$ 是温度。</p>
+</blockquote>
+<h2 id="电导率计算的例子"><a href="#电导率计算的例子" class="headerlink" title="电导率计算的例子"></a>电导率计算的例子</h2><p>现在我们通过一个 Li_Sn_S 材料的例子来详细了解一下整个计算和处理的过程。该材料的结构显示如下：</p>
+<p><img src="/2020/09/08/A18/Li_Sn_S.jpg" alt=""></p>
+<p>本例中采用单胞做计算，INCAR 设置如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[test@ln0%tianhe2 li_sn_s]$ vi INCAR</span><br><span class="line"></span><br><span class="line">ISTART = <span class="number">0</span></span><br><span class="line">ICHARG = <span class="number">2</span></span><br><span class="line">IBRION = <span class="number">0</span></span><br><span class="line">ISIF = <span class="number">2</span></span><br><span class="line">NPAR = <span class="number">8</span></span><br><span class="line">NSW = <span class="number">30000</span></span><br><span class="line">TEBEG = <span class="number">900</span> <span class="comment">#还要设置成 1500K 等等</span></span><br><span class="line">PREC = N</span><br><span class="line">POTIM = <span class="number">2</span></span><br><span class="line">SMASS = <span class="number">0.0</span></span><br><span class="line">NELMIN = <span class="number">4</span></span><br><span class="line">LWAVE = F</span><br><span class="line">LCHARG = F</span><br><span class="line">IALGO = <span class="number">48</span></span><br><span class="line">LREAL = A</span><br></pre></td></tr></table></figure>
+<p>AIMD 计算结束之后会得到 XDATCAR 文件。很多时候，由于超算的时间限制，一个完整的AIMD计算需要提交两三次，从而产生两三个 XDATCAR 文件，这时，我们只要把它们按顺序通过 cat 命令合并在一起就行。例如我们有三个 XDATCAR 文件，分别命名成 XDATCAR01，XDATCAR02，和 XDATCAR03。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[test@ln0%tianhe2 li_sn_s]$ cat XDATCAR01 XDATCAR02 XDATCAR03 &gt; XDATCAR</span><br></pre></td></tr></table></figure>
+<p><strong>新得到的XDATCAR文件，注意删掉重复的与晶格信息相关的行</strong>，一般续算的次数也不多，在使用上面命令的时候，手动把<code>XDATCAR02</code>, <code>XDATCAR03</code> 中的删除即可。</p>
+<h3 id="Pymatgen-大显身手"><a href="#Pymatgen-大显身手" class="headerlink" title="Pymatgen 大显身手"></a>Pymatgen 大显身手</h3><h4 id="安装pymatgen"><a href="#安装pymatgen" class="headerlink" title="安装pymatgen"></a>安装pymatgen</h4><p>首先让我们安装 pyamtgen，推荐大家参考官网，使用 anaconda 安装，否则会出现问题。安装好了anaconda之后，不管是 linux 还是 windows, 安装 pyamtgen 的指令是一样的。下面以吕梁天河超算为例：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">[test@ln0%</span><span class="bash">tianhe2 li_sn_s]$ conda install --channel conda-forge pymatgen</span></span><br></pre></td></tr></table></figure>
+<p>安装完成后，我们可以试着运行 python，导入 Pyamtgen 模块，如果像下面一样没有出错，就是安装成功了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[test@ln0%tianhe2 li_sn_s]$ python</span><br><span class="line">Python <span class="number">3.7</span><span class="number">.3</span> (default, Mar <span class="number">27</span> <span class="number">2019</span>, <span class="number">22</span>:<span class="number">11</span>:<span class="number">17</span>) </span><br><span class="line">[GCC <span class="number">7.3</span><span class="number">.0</span>] :: Anaconda, Inc. on linux</span><br><span class="line">Type <span class="string">"help"</span>, <span class="string">"copyright"</span>, <span class="string">"credits"</span> <span class="keyword">or</span> <span class="string">"license"</span> <span class="keyword">for</span> more information.</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> pymatgen</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="查看-DiffusionAnalyzer-的类"><a href="#查看-DiffusionAnalyzer-的类" class="headerlink" title="查看 DiffusionAnalyzer 的类"></a>查看 DiffusionAnalyzer 的类</h4><p>大家可以通过官方文档（<a href="https://pymatgen.org/pymatgen.analysis.diffusion_analyzer.html）查看接下来要使用的类，熟悉一下代码的用法。" target="_blank" rel="noopener">https://pymatgen.org/pymatgen.analysis.diffusion_analyzer.html）查看接下来要使用的类，熟悉一下代码的用法。</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DiffusionAnalyzer</span><span class="params">(MSONable)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, structure, displacements, specie, temperature,</span></span></span><br><span class="line"><span class="function"><span class="params">                 time_step, step_skip, smoothed=<span class="string">"max"</span>, min_obs=<span class="number">30</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                 avg_nsteps=<span class="number">1000</span>, lattices=None)</span>:</span></span><br></pre></td></tr></table></figure>
+<p>这段代码显示，运行这个类需要一系列的输入信息，包括材料结构（structure），位移（displacements），要研究的离子（specie），温度（temperature）等等。</p>
+<p>但是这个类提供了很多方法让大家可以通过读取 XDATCAR 或者 vasprun 文件的方式来实例化，例如</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@classmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">from_structures</span><span class="params">(cls, structures, specie, temperature,</span></span></span><br><span class="line"><span class="function"><span class="params">                        time_step, step_skip, initial_disp=None,</span></span></span><br><span class="line"><span class="function"><span class="params">                        initial_structure=None, **kwargs)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        Convenient constructor that takes in a list of Structure objects to</span></span><br><span class="line"><span class="string">        perform diffusion analysis.</span></span><br><span class="line"><span class="string">        Args:</span></span><br><span class="line"><span class="string">            structures ([Structure]): list of Structure objects (must be</span></span><br><span class="line"><span class="string">                ordered in sequence of run). E.g., you may have performed</span></span><br><span class="line"><span class="string">                sequential VASP runs to obtain sufficient statistics.</span></span><br><span class="line"><span class="string">        ... ...</span></span><br><span class="line"><span class="string">        """</span></span><br></pre></td></tr></table></figure>
+<p>好了，废话不多说，直接上代码，开始进行后处理。</p>
+<h4 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h4><p>新建一个文件，名字为<code>li_conductivity.py</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">分析AIMD结果，计算MSD 和 conductivity</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.trajectory <span class="keyword">import</span> Trajectory</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Xdatcar</span><br><span class="line"><span class="keyword">from</span> pymatgen <span class="keyword">import</span> Structure</span><br><span class="line"><span class="keyword">from</span> pymatgen.analysis.diffusion_analyzer <span class="keyword">import</span> DiffusionAnalyzer</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这一步是读取 XDATCAR，得到一系列结构信息</span></span><br><span class="line">traj = Trajectory.from_file(<span class="string">'XDATCAR'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这一步是实例化 DiffusionAnalyzer 的类</span></span><br><span class="line"><span class="comment"># 并用 from_structures 方法初始化这个类； 900 是温度，2 是POTIM 的值，1是间隔步数</span></span><br><span class="line"><span class="comment"># 间隔步数（step_skip）不太容易理解，但是根据官方教程:</span></span><br><span class="line"><span class="comment"># dt = timesteps * self.time_step * self.step_skip</span></span><br><span class="line"></span><br><span class="line">diff = DiffusionAnalyzer.from_structures(traj,<span class="string">'Li'</span>,<span class="number">900</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可以用内置的 plot_msd 方法画出 MSD 图像</span></span><br><span class="line"><span class="comment"># 有些终端不能显示图像，这时候可以调用 export_msdt() 方法，得到数据后再自己作图</span></span><br><span class="line">diff.plot_msd()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 接下来直接得到 离子迁移率， 单位是 mS/cm</span></span><br><span class="line">C = diff.conductivity</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'result.dat'</span>,<span class="string">'w'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="string">'# AIMD result for Li-ion\n'</span>)</span><br><span class="line">    f.write(<span class="string">'temp\tconductivity\n'</span>)</span><br><span class="line">    f.write(<span class="string">'%d\t%.2f\n'</span> %(<span class="number">900</span>,C))</span><br></pre></td></tr></table></figure>
+<p>在终端运行该文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[test@ln0%tianhe2 li_sn_s]$ python li_conductivity.py</span><br></pre></td></tr></table></figure>
+<p>一段时间后就会得到MSD图像和离子电导率</p>
+<p><img src="/2020/09/08/A18/MSD.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[test@ln0%tianhe2 li_sn_s]$ vi result.dat</span><br><span class="line"></span><br><span class="line"># AIMD result for Li-ion</span><br><span class="line">temp	conductivity</span><br><span class="line">900	884.05</span><br></pre></td></tr></table></figure>
+<p>可见，该材料在 900K 时的锂离子电导率为 884.05 mS/cm。</p>
+<h4 id="例子下载："><a href="#例子下载：" class="headerlink" title="例子下载："></a>例子下载：</h4><p>链接：<a href="https://pan.baidu.com/s/1WGzOVJBoe6Ym8mvR1uWanA" target="_blank" rel="noopener">https://pan.baidu.com/s/1WGzOVJBoe6Ym8mvR1uWanA</a><br>提取码：jhc5</p>
+<h4 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h4><ul>
+<li>简短几行代码就可以计算出离子电导率，那么如何得出材料在300K下的电导率呢？</li>
+<li>如何计算离子在材料中的迁移势垒？</li>
+<li>如何可视化离子在材料中的扩散路径？</li>
+</ul>
+<p>本文只是浅谈离子电导率的计算，欢迎大家指出计算过程中的不足之处。</p>
+<h4 id="打赏"><a href="#打赏" class="headerlink" title="打赏"></a>打赏</h4><p>如果感觉本文对你的相关研究有帮助，欢迎打赏，支持作者的热心付出。如果你也有自己的骚操作，热烈欢迎无私分享，可以通过QQ联系（122103465）</p>
+<p><img src="/2020/09/08/A18/打赏码.jpg" style="zoom:25%;"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Pymatgen/" rel="tag"># Pymatgen</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/31/A17/" rel="next" title="ASE的骚操作系列">
+                <i class="fa fa-chevron-left"></i> ASE的骚操作系列
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/09/11/A19/" rel="prev" title="ASE的骚操作系列（扩胞）">
+                ASE的骚操作系列（扩胞） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar2.jpg" alt="By BigBro(a)s">
+            
+              <p class="site-author-name" itemprop="name">By BigBro(a)s</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#计算离子电导率的理论与公式"><span class="nav-number">1.</span> <span class="nav-text">计算离子电导率的理论与公式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何进行AIMD计算"><span class="nav-number">1.1.</span> <span class="nav-text">如何进行AIMD计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后处理的基本公式"><span class="nav-number">1.2.</span> <span class="nav-text">后处理的基本公式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#电导率计算的例子"><span class="nav-number">2.</span> <span class="nav-text">电导率计算的例子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Pymatgen-大显身手"><span class="nav-number">2.1.</span> <span class="nav-text">Pymatgen 大显身手</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装pymatgen"><span class="nav-number">2.1.1.</span> <span class="nav-text">安装pymatgen</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看-DiffusionAnalyzer-的类"><span class="nav-number">2.1.2.</span> <span class="nav-text">查看 DiffusionAnalyzer 的类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码示例"><span class="nav-number">2.1.3.</span> <span class="nav-text">代码示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#例子下载："><span class="nav-number">2.1.4.</span> <span class="nav-text">例子下载：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#思考"><span class="nav-number">2.1.5.</span> <span class="nav-text">思考</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#打赏"><span class="nav-number">2.1.6.</span> <span class="nav-text">打赏</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">By BigBro(a)s</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+  <div class="footer-custom">Hosted by <a target="_blank" href="https://pages.github.com">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://bigbrosci-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.bigbrosci.com/2020/09/08/A18/';
+          this.page.identifier = '2020/09/08/A18/';
+          this.page.title = 'Pymatgen的骚操作系列（计算离子电导率）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://bigbrosci-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OWE4jcfK8IWkx4zaWuOloxKU-gzGzoHsz", "MRBwViAFCsPSOnnRF9LW7bdo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+  
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        extensions: ["tex2jax.js","[siunitx]/siunitx.js"],
+        TeX: {
+          extensions: [
+            "AMSmath.js","AMSsymbols.js", "sinuitx.js", "[mhchem]/mhchem.js"
+          ]
+        },
+        jax: ["input/TeX","output/HTML-CSS"],
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+      MathJax.Ajax.config.path['siunitx']  = '/js/MathJax-siunitx';
+      MathJax.Ajax.config.path["mhchem"] = "https://cdnjs.cloudflare.com/ajax/libs/mathjax-mhchem/3.3.0";
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

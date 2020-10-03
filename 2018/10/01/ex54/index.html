@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="POSCAR,初始构型,简单粗暴,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="$\require{mediawiki-texvc}$ Ex54-Ex56主要介绍一下如何计算：单个氧原子在p(1x1)-Cu(111)表面top位上的吸附。在实际的计算过程中，一个好的初始结构会极大地加快并节约你的计算时间，这不仅仅体现在服务器运行的时间上，也会避免很多错误的结果，因为这些错误结果的纠正耗时费力，通常折磨得新手们心力交瘁。可以回顾下前面我们O$_2$ 分子的优化过程：不合理的初始">
+<meta name="keywords" content="POSCAR,初始构型,简单粗暴">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ex54 简单粗暴地获取初始构型（一）">
+<meta property="og:url" content="http://www.bigbrosci.com/2018/10/01/ex54/index.html">
+<meta property="og:site_name" content="Learn VASP The Hard Way">
+<meta property="og:description" content="$\require{mediawiki-texvc}$ Ex54-Ex56主要介绍一下如何计算：单个氧原子在p(1x1)-Cu(111)表面top位上的吸附。在实际的计算过程中，一个好的初始结构会极大地加快并节约你的计算时间，这不仅仅体现在服务器运行的时间上，也会避免很多错误的结果，因为这些错误结果的纠正耗时费力，通常折磨得新手们心力交瘁。可以回顾下前面我们O$_2$ 分子的优化过程：不合理的初始">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/10/01/ex54/ex54-1.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/10/01/ex54/ex54-2.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/10/01/ex54/ex54-4.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/10/01/ex54/ex54-5.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/10/01/ex54/ex54-6.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/10/01/ex54/ex54-7.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/10/01/ex54/ex54-8.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/10/01/ex54/ex54-9.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/10/01/ex54/ex54-10.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/10/01/ex54/ex54-11.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/10/01/ex54/ex54-12.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/10/01/ex54/ex54-13.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/10/01/ex54/ex54-14.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/10/01/ex54/ex54-16.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/10/01/ex54/ex54-17.gif">
+<meta property="og:updated_time" content="2020-10-03T18:55:51.508Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ex54 简单粗暴地获取初始构型（一）">
+<meta name="twitter:description" content="$\require{mediawiki-texvc}$ Ex54-Ex56主要介绍一下如何计算：单个氧原子在p(1x1)-Cu(111)表面top位上的吸附。在实际的计算过程中，一个好的初始结构会极大地加快并节约你的计算时间，这不仅仅体现在服务器运行的时间上，也会避免很多错误的结果，因为这些错误结果的纠正耗时费力，通常折磨得新手们心力交瘁。可以回顾下前面我们O$_2$ 分子的优化过程：不合理的初始">
+<meta name="twitter:image" content="http://www.bigbrosci.com/2018/10/01/ex54/ex54-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.bigbrosci.com/2018/10/01/ex54/">
+
+
+
+
+
+  <title>Ex54 简单粗暴地获取初始构型（一） | Learn VASP The Hard Way</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Learn VASP The Hard Way</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">The 2nd edition</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.bigbrosci.com/2018/10/01/ex54/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="By BigBro(a)s">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn VASP The Hard Way">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ex54 简单粗暴地获取初始构型（一）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-01T15:30:16-04:00">
+                2018-10-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/LVASPTHW/" itemprop="url" rel="index">
+                    <span itemprop="name">LVASPTHW</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/01/ex54/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/10/01/ex54/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/10/01/ex54/" class="leancloud_visitors" data-flag-title="Ex54 简单粗暴地获取初始构型（一）">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>$\require{mediawiki-texvc}$</p>
+<p>Ex54-Ex56主要介绍一下如何计算：单个氧原子在p(1x1)-Cu(111)表面top位上的吸附。在实际的计算过程中，一个好的初始结构会极大地加快并节约你的计算时间，这不仅仅体现在服务器运行的时间上，也会避免很多错误的结果，因为这些错误结果的纠正耗时费力，通常折磨得新手们心力交瘁。可以回顾下前面我们O$_2$ 分子的优化过程：不合理的初始结构导致的错误结果以及计算时间的增加。本节主要介绍一个快速获取优化初始构型的方法。该方法简单粗暴，可以让你在极短的时间内快速获得一个化学的feeling。</p>
+<hr>
+<h2 id="1-Top-site-的构型"><a href="#1-Top-site-的构型" class="headerlink" title="1 Top site 的构型"></a>1 Top site 的构型</h2><p>在Cu(111)表面上，top位指的是直接吸附在Cu原子上方。其他的位点是什么，先不要着急，后面会慢慢学。如果一个O原子吸附在Cu原子上方，在空间坐标上，大家很容易想到，O和Cu在xy方向的坐标应该是差不多的，z方向O的坐标为：Cu的z坐标 + Cu-O键的键长。如下图：</p>
+<p><img src="/2018/10/01/ex54/ex54-1.png" alt=""></p>
+<hr>
+<h2 id="2-确定O原子在z方向上的坐标"><a href="#2-确定O原子在z方向上的坐标" class="headerlink" title="2  确定O原子在z方向上的坐标"></a>2  确定O原子在z方向上的坐标</h2><p>知道了前面的基本原理，O原子的坐标我们就可以通过Cu-O的键长来初步获得了。那么Cu-O的键长怎么获得呢？这里列举了一下几个常用的方法。</p>
+<p>1）查数据库：</p>
+<p>2）查文献：自己去查，不要在QQ群里让别人给你发文献。</p>
+<p><img src="/2018/10/01/ex54/ex54-2.png" alt=""></p>
+<p>这两条主要考验的是大家查询资料的能力，这里暂且不详细介绍了。有兴趣的可以加入大师兄文献互助超级群，跟众多文献检索大牛学习。(群号:<strong>157099073</strong>)</p>
+<hr>
+<p>3）自己估算</p>
+<p>估算的话，可以根据Cu和O原子的半径：Cu和O成键，键长肯定要小于两者的半径之和。搜一下维基百科，Cu的半径为1.35 Å，O的为0.60 Å。(<a href="https://www.wikipedia.org/" target="_blank" rel="noopener">维基百科</a>，搜索<code>Atomic Radius</code>就可以得到下面这个表)</p>
+<p><img src="/2018/10/01/ex54/ex54-4.png" alt=""></p>
+<p>从上面的数据我们可以得出：Cu-O键要小于1.95 Å。在吸附构型搭建的时候设置比1.95 Å小点的值作为初始，进行优化。一般来说，原子半径之和减去0.1-0.3 Å都是可以的。但是不能太小，否则第一步优化的时候排斥力太大，会导致计算出错。</p>
+<hr>
+<p>4）自己初算：</p>
+<p>初算就是初步采用一个小的模型，简单优化一下，得到一个合理的键长数值。小的模型主要指2个方面： </p>
+<ul>
+<li><p>结构简单；</p>
+</li>
+<li><p>计算参数简单。</p>
+</li>
+</ul>
+<p>下面我们主要在估算的基础上，介绍一个初算的方法：直接优化一下气相中Cu-O双原子分子的结构。</p>
+<p>这个结构不难搭建，将前面练习中O$_2$分子中的一个O原子换成Cu进行优化即可。</p>
+<p>为了加深大家对搭建模型的印象，我们从<code>p(1x1)-Cu(111)</code>表面的结构出发，然后一步一步搭建CuO的气相结构模型，并计算。</p>
+<hr>
+<h2 id="3-搭建初算的模型-Cu-O双原子结构"><a href="#3-搭建初算的模型-Cu-O双原子结构" class="headerlink" title="3  搭建初算的模型(Cu-O双原子结构)"></a>3  搭建初算的模型(Cu-O双原子结构)</h2><p>1）p(1x1)-Cu(111)表面的结构</p>
+<p><img src="/2018/10/01/ex54/ex54-5.png" alt=""></p>
+<p>将前面几节计算的一个真空层为15 $\AA$的例子直接拿过来。表层原子在z方向的坐标为6.259 (第十二行)。</p>
+<hr>
+<p>2）修改格子大小(3-5行)</p>
+<p>这里修改的很随意，第三行中直接把2.571改成了12.571；</p>
+<p>第四行中把2.227改成了12.227。</p>
+<p>第五行中将21.299改成了12.299</p>
+<p><img src="/2018/10/01/ex54/ex54-6.png" alt=""></p>
+<p>效果如下:</p>
+<p><img src="/2018/10/01/ex54/ex54-7.png" alt=""></p>
+<p>注意：</p>
+<p>A）当然也可以用其他大小的格子；(例如：8x8x8 $\AA^3$)</p>
+<p>B）格子大小直接影响计算量和时间。(回顾下前面所学)</p>
+<hr>
+<p>3）保留表层的Cu原子，删除其他的Cu原子。</p>
+<p><img src="/2018/10/01/ex54/ex54-8.png" alt=""></p>
+<p>注意：</p>
+<p>A）我们这里将表层以下的三个原子删掉了，只保留z坐标为6.259的这个原子；</p>
+<p>B） 第7行中原子数目也要相应的改变。从4 改成1。</p>
+<p>C） 效果如下图：</p>
+<p><img src="/2018/10/01/ex54/ex54-9.png" alt=""></p>
+<hr>
+<p>4）加入O原子</p>
+<p><img src="/2018/10/01/ex54/ex54-10.png" alt=""></p>
+<p>注意：</p>
+<p>A）第6行中，在Cu的后面加上了一个O，不是数字0；</p>
+<p>B）Cu 和 O 之间用1个或者几个空格隔开，不要用<code>Tab</code>；</p>
+<p>C）第7行中，记得加上O原子的数目</p>
+<p>D）最后一行添加O原子的坐标，这里我们直接把Cu原子的复制过来了。</p>
+<p><img src="/2018/10/01/ex54/ex54-11.png" alt=""></p>
+<p>由于两个原子坐标一样，Cu和O堆在一起了。</p>
+<hr>
+<p>5）修改O原子坐标</p>
+<p><img src="/2018/10/01/ex54/ex54-12.png" alt=""></p>
+<p>注意:</p>
+<p>A）这里我们把Cu固定住了;为了方便下一步的计算。</p>
+<p>B）Cu-O之间的键长，设置的为1.8 Å；</p>
+<p>C）O的z坐标为：6.259 + 1.8 = 8.059。</p>
+<p><img src="/2018/10/01/ex54/ex54-13.png" alt=""></p>
+<hr>
+<p>6）到这里，Cu-O双原子分子的气相结构就搭建完毕了，保存成POSCAR即可。</p>
+<p>上面的效果图是本人每一步打开展示给大家的。实际操作中，完全没有必要。我们需要学习的是：</p>
+<p>A）怎么将脑子中的模型转化为VASP的POSCAR文件；</p>
+<p>B）格子大小怎么修改；</p>
+<p>C）怎么添加原子，添加或者删除原子后，原子数目怎么弄；</p>
+<p>D）怎么添加原子坐标。</p>
+<p>E）怎么通过改坐标修改原子位置。</p>
+<hr>
+<h2 id="4-INCAR检查"><a href="#4-INCAR检查" class="headerlink" title="4 INCAR检查"></a>4 INCAR检查</h2><p><img src="/2018/10/01/ex54/ex54-14.png" alt=""></p>
+<p>注意:</p>
+<p>1）算的是气相中的：ISMEAR = 0；SIGMA = 0.05 (本书前面就讲过了)</p>
+<p>2）IBRION = 2；POTIM = 0.1；NSW =100 是优化的参数</p>
+<p>3）EDIFF和EDIFFG是电子步和离子步的收敛标准。</p>
+<hr>
+<p>师兄，磁性呢？对称性呢？</p>
+<p>因为本例子是一个初算，几步算完，看下键长。这个任务的使命就完成了。</p>
+<p>很多细节的东西可以暂时不用考虑。这里EDIFFG用的也有点小，本人忘了修改了。大家可以设置为 -0.05或者直接使用能量作为标准，这些都可以的。</p>
+<p>虽然本节我们很多地方都没有考虑，这是由于任务的性质所决定的。我们对其定位就是瞎算下，得到一个初始的构型。这也是一个课题中为数不多的，可以为所欲为的计算了。但你正儿八经开始算的时候，各种细节问题都要考虑进去。而这一步的计算，也可以作为一个缓冲期，让你有充足的时间去思考一下正式计算时其他需要的注意事项。</p>
+<hr>
+<h2 id="5-POTCAR、KPOINTS检查"><a href="#5-POTCAR、KPOINTS检查" class="headerlink" title="5  POTCAR、KPOINTS检查"></a>5  POTCAR、KPOINTS检查</h2><p>A) 根据POSCAR获取对应的POTCAR：见附录自动生成POTCAR的脚本。</p>
+<p>B) 使用gamma点计算。<code>cat POTCAR</code></p>
+<p><strong>注意：</strong></p>
+<p>在提交一个任务前，一定要将INCAR、KPOINTS、POSCAR、POTCAR以及脚本在心里默念一遍。然后对应的检查一下，是否有些遗漏的地方。否则等算完了，发现错了，又得浪费很多时间重新计算了。</p>
+<hr>
+<h2 id="6-检查结果"><a href="#6-检查结果" class="headerlink" title="6 检查结果"></a>6 检查结果</h2><p><img src="/2018/10/01/ex54/ex54-16.png" alt=""></p>
+<p>1）上个厕所的功夫，任务就结束了，共算了6步。(其实是切换电脑系统的功夫)<img src="/2018/10/01/ex54/ex54-17.gif" alt=""></p>
+<p>2）Cu—O 的键长：7.95-6.26 = 1.69 Å</p>
+<p><strong>注意：</strong> </p>
+<p>此时的键长只作为下一步的初始猜测，如果和文献去比有点差异，也不要太较真。</p>
+<h2 id="7-总结"><a href="#7-总结" class="headerlink" title="7 总结:"></a>7 总结:</h2><p>本节，你会学到：</p>
+<p>1）如何通过原子半径，估算一个初始的键长值。</p>
+<p>2）如果搭建一个简单的模型，初算一个键长值。</p>
+<p>3）复习气相中的优化。</p>
+<p>4）复习下计算前准备工作：INCAR、POSCAR、POTCAR、KPONTS的检查。</p>
+<p>如果本节的内容，你有不理解的地方；想获取脚本等信息；请查阅前面讲的以及附录中的内容。搭建几何模型，无非就是按照软件的格式，修改原子坐标罢了。这里我们强调的是几何模型。但，几何模型所具有或者要表达的物理、化学意义，这才是最关键的。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/POSCAR/" rel="tag"># POSCAR</a>
+          
+            <a href="/tags/初始构型/" rel="tag"># 初始构型</a>
+          
+            <a href="/tags/简单粗暴/" rel="tag"># 简单粗暴</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/30/ex53/" rel="next" title="Ex53 表面吸附以及模型的搭建思想">
+                <i class="fa fa-chevron-left"></i> Ex53 表面吸附以及模型的搭建思想
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/02/ex55/" rel="prev" title="Ex55 简单粗暴地获取初始构型（二）">
+                Ex55 简单粗暴地获取初始构型（二） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar2.jpg" alt="By BigBro(a)s">
+            
+              <p class="site-author-name" itemprop="name">By BigBro(a)s</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Top-site-的构型"><span class="nav-number">1.</span> <span class="nav-text">1 Top site 的构型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-确定O原子在z方向上的坐标"><span class="nav-number">2.</span> <span class="nav-text">2  确定O原子在z方向上的坐标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-搭建初算的模型-Cu-O双原子结构"><span class="nav-number">3.</span> <span class="nav-text">3  搭建初算的模型(Cu-O双原子结构)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-INCAR检查"><span class="nav-number">4.</span> <span class="nav-text">4 INCAR检查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-POTCAR、KPOINTS检查"><span class="nav-number">5.</span> <span class="nav-text">5  POTCAR、KPOINTS检查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-检查结果"><span class="nav-number">6.</span> <span class="nav-text">6 检查结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-总结"><span class="nav-number">7.</span> <span class="nav-text">7 总结:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">By BigBro(a)s</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+  <div class="footer-custom">Hosted by <a target="_blank" href="https://pages.github.com">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://bigbrosci-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.bigbrosci.com/2018/10/01/ex54/';
+          this.page.identifier = '2018/10/01/ex54/';
+          this.page.title = 'Ex54 简单粗暴地获取初始构型（一）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://bigbrosci-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OWE4jcfK8IWkx4zaWuOloxKU-gzGzoHsz", "MRBwViAFCsPSOnnRF9LW7bdo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+  
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        extensions: ["tex2jax.js","[siunitx]/siunitx.js"],
+        TeX: {
+          extensions: [
+            "AMSmath.js","AMSsymbols.js", "sinuitx.js", "[mhchem]/mhchem.js"
+          ]
+        },
+        jax: ["input/TeX","output/HTML-CSS"],
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+      MathJax.Ajax.config.path['siunitx']  = '/js/MathJax-siunitx';
+      MathJax.Ajax.config.path["mhchem"] = "https://cdnjs.cloudflare.com/ajax/libs/mathjax-mhchem/3.3.0";
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

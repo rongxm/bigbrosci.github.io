@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="NEB,过渡态,检查,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前面一节我们通过粗糙的方法演示了一遍怎么在超算上跑过渡态的NEB计算。一般来说，通过这一步我们可以大体上确定这个基元反应中的路径是不是靠谱的了。不论你得到一个粗糙的NEB能量曲线： 亦或者一个比较精细的：  这都表明，你快要得到这个过渡态结构了。在进行后面操作讲解之前，我们先做2个事情： 1） 由于本人也是老司机了，算过渡态的时候遇到的那些零零碎碎的问题一时也很难记起来，如果你正在算过渡态，并且遇">
+<meta name="keywords" content="NEB,过渡态,检查">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ex78 过渡态任务的提交与查看（二）">
+<meta property="og:url" content="http://www.bigbrosci.com/2019/02/13/ex78/index.html">
+<meta property="og:site_name" content="Learn VASP The Hard Way">
+<meta property="og:description" content="前面一节我们通过粗糙的方法演示了一遍怎么在超算上跑过渡态的NEB计算。一般来说，通过这一步我们可以大体上确定这个基元反应中的路径是不是靠谱的了。不论你得到一个粗糙的NEB能量曲线： 亦或者一个比较精细的：  这都表明，你快要得到这个过渡态结构了。在进行后面操作讲解之前，我们先做2个事情： 1） 由于本人也是老司机了，算过渡态的时候遇到的那些零零碎碎的问题一时也很难记起来，如果你正在算过渡态，并且遇">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.bigbrosci.com/2019/02/13/ex78/ex78_01.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2019/02/13/ex78/ex78_02.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2019/02/13/ex78/ex78_03.png">
+<meta property="og:updated_time" content="2020-10-03T18:55:51.764Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ex78 过渡态任务的提交与查看（二）">
+<meta name="twitter:description" content="前面一节我们通过粗糙的方法演示了一遍怎么在超算上跑过渡态的NEB计算。一般来说，通过这一步我们可以大体上确定这个基元反应中的路径是不是靠谱的了。不论你得到一个粗糙的NEB能量曲线： 亦或者一个比较精细的：  这都表明，你快要得到这个过渡态结构了。在进行后面操作讲解之前，我们先做2个事情： 1） 由于本人也是老司机了，算过渡态的时候遇到的那些零零碎碎的问题一时也很难记起来，如果你正在算过渡态，并且遇">
+<meta name="twitter:image" content="http://www.bigbrosci.com/2019/02/13/ex78/ex78_01.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.bigbrosci.com/2019/02/13/ex78/">
+
+
+
+
+
+  <title>Ex78 过渡态任务的提交与查看（二） | Learn VASP The Hard Way</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Learn VASP The Hard Way</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">The 2nd edition</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.bigbrosci.com/2019/02/13/ex78/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="By BigBro(a)s">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn VASP The Hard Way">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ex78 过渡态任务的提交与查看（二）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-13T15:30:16-05:00">
+                2019-02-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/LVASPTHW/" itemprop="url" rel="index">
+                    <span itemprop="name">LVASPTHW</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/13/ex78/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/02/13/ex78/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/02/13/ex78/" class="leancloud_visitors" data-flag-title="Ex78 过渡态任务的提交与查看（二）">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前面一节我们通过粗糙的方法演示了一遍怎么在超算上跑过渡态的NEB计算。一般来说，通过这一步我们可以大体上确定这个基元反应中的路径是不是靠谱的了。不论你得到一个粗糙的NEB能量曲线：<img src="/2019/02/13/ex78/ex78_01.png" alt=""></p>
+<p>亦或者一个比较精细的：</p>
+<p><img src="/2019/02/13/ex78/ex78_02.png" alt=""></p>
+<p>这都表明，你快要得到这个过渡态结构了。在进行后面操作讲解之前，我们先做2个事情：</p>
+<p>1） 由于本人也是老司机了，算过渡态的时候遇到的那些零零碎碎的问题一时也很难记起来，如果你正在算过渡态，并且遇到了问题和错误，可以将计算打包，以及遇到的问题发给我。如果本人有幸可以帮你解决问题，那么，作为交换条件，这个例子就写在后续的教程里面。有下面几点需要注意的：</p>
+<ul>
+<li><p>i）请使用邮件发送例子（lqcata@gmail.com），尽可能保证计算的文件完整，千万不要删掉某些文件后再打包发给我（CHG，CHGCAR，WAVECAR除外）。如果例子太大，可以上传到百度网盘，然后将链接和你遇到的问题发给我。</p>
+</li>
+<li><p>ii）本人最近很忙，可能回复有些慢，请见谅。如果你看到我在QQ群里面瞎BB的话，可以提醒下我去查看邮件。</p>
+</li>
+<li><p>iii）只想解决自己问题，不愿意分享自己例子的，请不要发邮件给我。</p>
+</li>
+</ul>
+<p>2）第二件事就是分享一个自己平时常用的脚本，这个脚本主要是将前面的计算步骤保存起来，然后将CONTCAR复制成POSCAR用以下一步的计算。脚本的名字为：<code>save_calculations.sh</code>. </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env bash </span></span><br><span class="line"></span><br><span class="line">mv POSCAR POSCAR-<span class="variable">$1</span>  </span><br><span class="line">mv OUTCAR OUTCAR-<span class="variable">$1</span> </span><br><span class="line">mv OSZICAR OSZICAR-<span class="variable">$1</span></span><br><span class="line">mv vasprun.xml vasprun.xml-<span class="variable">$1</span></span><br><span class="line">mv EIGENVAL EIGENVAL-<span class="variable">$1</span></span><br><span class="line">mv IBZKPT IBZKPT-<span class="variable">$1</span></span><br><span class="line">cp CONTCAR CONTCAR-<span class="variable">$1</span></span><br><span class="line">mv CONTCAR POSCAR</span><br></pre></td></tr></table></figure>
+<p>脚本演示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/<span class="built_in">test</span>$ ls</span><br><span class="line">CONTCAR  DOSCAR  DYNMAT  IBZKPT  INCAR  KPOINTS  OSZICAR  OUTCAR  p4vasp.log  POSCAR  POTCAR  sub12  sub24  vasprun.xml</span><br><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/<span class="built_in">test</span>$</span><br><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/<span class="built_in">test</span>$ save_calculations.sh  gamma</span><br><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/<span class="built_in">test</span>$ ls</span><br><span class="line">DOSCAR  DYNMAT  IBZKPT  INCAR  KPOINTS  OSZICAR-gamma  OUTCAR-gamma  p4vasp.log  POSCAR  POSCAR-gamma  POTCAR  sub12  sub24  vasprun.xml-gamma</span><br></pre></td></tr></table></figure>
+<p>脚本说明：</p>
+<ul>
+<li>脚本内容很粗暴直接，大家嫌不好看也可以结合下for循环改进地更加简洁些，本人也懒得改，能实现目的就OK了；</li>
+<li>效果很简单，就是把之前计算的一些结果重新命名一下，大家可以根据自己的爱好或者习惯，将gamma换成其他的。 </li>
+</ul>
+<h3 id="提交任务"><a href="#提交任务" class="headerlink" title="提交任务"></a>提交任务</h3><p>我们把参数设置地稍微精细一下，然后再跑一遍NEB。</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/ex78$ ls</span><br><span class="line"><span class="number">00</span>  <span class="number">01</span>  <span class="number">02</span>  <span class="number">03</span>  <span class="number">04</span>  <span class="number">05</span>  <span class="number">06</span>  <span class="number">07</span>  <span class="number">08</span>  <span class="number">09</span>  INCAR  job_sub  KPOINTS  NEB.pdb  POTCAR  slurm-<span class="number">995085.</span><span class="keyword">out</span>  vasprun.xml</span><br><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/ex78$</span><br><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/ex78$ ls *</span><br><span class="line">INCAR  job_sub  KPOINTS  NEB.pdb  POTCAR  slurm-<span class="number">995085.</span><span class="keyword">out</span>  vasprun.xml</span><br><span class="line"></span><br><span class="line"><span class="number">00</span>:</span><br><span class="line">POSCAR</span><br><span class="line"></span><br><span class="line"><span class="number">01</span>:</span><br><span class="line">CHG  CHGCAR  CONTCAR  DOSCAR  EIGENVAL  IBZKPT  OSZICAR  OUTCAR  PCDAT  POSCAR  REPORT  WAVECAR  XDATCAR</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"><span class="number">08</span>:</span><br><span class="line">CHG  CHGCAR  CONTCAR  DOSCAR  EIGENVAL  IBZKPT  OSZICAR  OUTCAR  PCDAT  POSCAR  REPORT  stdout  WAVECAR  XDATCAR</span><br><span class="line"></span><br><span class="line"><span class="number">09</span>:</span><br><span class="line">POSCAR</span><br><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/ex78$ for i <span class="keyword">in</span> <span class="number">0</span>&#123;<span class="number">1.</span><span class="number">.8</span>&#125;; <span class="keyword">do</span> cd $i ; save_calculations.sh <span class="built_in">gamma</span> ; cd - ; done</span><br><span class="line">mv: cannot stat `vasprun.xml<span class="string">': No such file or directory</span></span><br><span class="line"><span class="string">/THFS/home/iciq-lq/LVASPTHW/ex78</span></span><br><span class="line"><span class="string">.</span></span><br><span class="line"><span class="string">.</span></span><br><span class="line"><span class="string">.</span></span><br><span class="line"><span class="string">mv: cannot stat `vasprun.xml'</span>: No such <span class="keyword">file</span> or directory</span><br><span class="line">/THFS/home/iciq-lq/LVASPTHW/ex78</span><br><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/ex78$</span><br><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/ex78$ ls *</span><br><span class="line">INCAR  job_sub  KPOINTS  NEB.pdb  POTCAR  slurm-<span class="number">995085.</span><span class="keyword">out</span>  vasprun.xml</span><br><span class="line"></span><br><span class="line"><span class="number">00</span>:</span><br><span class="line">POSCAR</span><br><span class="line"></span><br><span class="line"><span class="number">01</span>:</span><br><span class="line">CHG  CHGCAR  CONTCAR-<span class="built_in">gamma</span>  DOSCAR  EIGENVAL-<span class="built_in">gamma</span>  IBZKPT-<span class="built_in">gamma</span>  OSZICAR-<span class="built_in">gamma</span>  OUTCAR-<span class="built_in">gamma</span>  PCDAT  POSCAR  POSCAR-<span class="built_in">gamma</span>  REPORT  WAVECAR  XDATCAR</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"><span class="number">08</span>:</span><br><span class="line">CHG  CHGCAR  CONTCAR-<span class="built_in">gamma</span>  DOSCAR  EIGENVAL-<span class="built_in">gamma</span>  IBZKPT-<span class="built_in">gamma</span>  OSZICAR-<span class="built_in">gamma</span>  OUTCAR-<span class="built_in">gamma</span>  PCDAT  POSCAR  POSCAR-<span class="built_in">gamma</span>  REPORT  stdout  WAVECAR  XDATCAR</span><br><span class="line"></span><br><span class="line"><span class="number">09</span>:</span><br><span class="line">POSCAR</span><br><span class="line"></span><br><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/ex78$ kpoints.sh <span class="number">3</span> <span class="number">3</span> <span class="number">1</span> </span><br><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/ex78$ yhbatch -p gsc -N <span class="number">2</span> -J test job_sub</span><br><span class="line">Submitted batch job <span class="number">1133307</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>这里我们把01到08中的一些输出文件都保存了一下，然后将CONTCAR复制成POSCAR用来进行下一步的计算;</li>
+<li>运行的时候，会报错mv: cannot stat ‘vasprun.xml’: No such file or directory<code>，不用管就行，因为images的文件夹中没有</code>vasprun.xml`文件，嫌报错烦的可以自己加个if语句修改下脚本。</li>
+<li>我们将K点增加到331，继续计算。</li>
+</ul>
+<h3 id="查看计算结果"><a href="#查看计算结果" class="headerlink" title="查看计算结果"></a>查看计算结果</h3><p>查看结果的时候，有以下三个主要的方面：</p>
+<p>1） 看能量</p>
+<ul>
+<li>可以使用VTST的nebresults.pl 的小脚本，也可以使用自己写的小脚本（ta.sh）。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/ex78$ ls</span><br><span class="line">00  01  02  03  04  05  06  07  08  09  exts.dat  INCAR  job_sub  KPOINTS  mep.eps  movie  movie.vasp  neb.dat  nebef.dat  POTCAR  slurm-1133307.out  spline.dat  vaspgr  vasprun.xml</span><br><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/ex78$ nebresults.pl</span><br><span class="line"></span><br><span class="line">Unziping the OUTCARs ... done</span><br><span class="line">Do nebbarrier.pl ; nebspline.pl</span><br><span class="line">Do nebef.pl</span><br><span class="line">Do nebmovie.pl</span><br><span class="line">Do nebjmovie.pl</span><br><span class="line">Do nebconverge.pl</span><br><span class="line"></span><br><span class="line">Forces and Energy:</span><br><span class="line">   0         0.023782      -321.151800         0.000000</span><br><span class="line">   1         0.007650      -321.196900        -0.045100</span><br><span class="line">   2         0.009671      -321.160900        -0.009100</span><br><span class="line">   3         0.010446      -321.128300         0.023500</span><br><span class="line">   4         0.014498      -321.106600         0.045200</span><br><span class="line">   5         0.019054      -321.096100         0.055700</span><br><span class="line">   6         0.019424      -321.094300         0.057500</span><br><span class="line">   7         0.013325      -321.111700         0.040100</span><br><span class="line">   8         0.005225      -321.156900        -0.005100</span><br><span class="line">   9         0.011589      -321.098500         0.053300</span><br><span class="line"></span><br><span class="line">Extremum 1 found at image  0.910082 with energy: -0.046551</span><br><span class="line">Extremum 2 found at image  5.724723 with energy:  0.057913</span><br><span class="line">Extremum 3 found at image  8.102362 with energy: -0.007602</span><br><span class="line">Extremum 4 found at image  8.999187 with energy:  0.053367</span><br><span class="line"></span><br><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/ex78$ ta.sh</span><br><span class="line">00       -321.15187450</span><br><span class="line">01       -321.19698136</span><br><span class="line">02       -321.16098546</span><br><span class="line">03       -321.12832705</span><br><span class="line">04       -321.10664059</span><br><span class="line">05       -321.09613563</span><br><span class="line">06       -321.09434359</span><br><span class="line">07       -321.11177677</span><br><span class="line">08       -321.15691232</span><br><span class="line">09       -321.09850728</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>看到能量的时候，前面我们粗算的时候，已经知道能量随着路径的变化是怎么样的，这里我们就脑子自动画图，从01到08，看着能量慢慢上升，在05，06左右的时候达到最高点，然后继续下降。</p>
+</li>
+<li><p>注意：我们这是接着前面一节进行的计算， 00 和 09中的能量都是551K点下的能量，因此得到的能量随路径的变化是下面这样子的。如果看到这样的图片，不要慌张，跳过第一个和最后一个点，直接看中间的部分即可。</p>
+<p><img src="/2019/02/13/ex78/ex78_03.png" alt=""></p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/ex78$ grep irre */OUTCAR</span><br><span class="line"><span class="number">00</span>/OUTCAR: Found      <span class="number">9</span> irreducible k-points:</span><br><span class="line"><span class="number">01</span>/OUTCAR: Found      <span class="number">5</span> irreducible k-points:</span><br><span class="line"><span class="number">02</span>/OUTCAR: Found      <span class="number">5</span> irreducible k-points:</span><br><span class="line"><span class="number">03</span>/OUTCAR: Found      <span class="number">4</span> irreducible k-points:</span><br><span class="line"><span class="number">04</span>/OUTCAR: Found      <span class="number">4</span> irreducible k-points:</span><br><span class="line"><span class="number">05</span>/OUTCAR: Found      <span class="number">4</span> irreducible k-points:</span><br><span class="line"><span class="number">06</span>/OUTCAR: Found      <span class="number">4</span> irreducible k-points:</span><br><span class="line"><span class="number">07</span>/OUTCAR: Found      <span class="number">4</span> irreducible k-points:</span><br><span class="line"><span class="number">08</span>/OUTCAR: Found      <span class="number">5</span> irreducible k-points:</span><br><span class="line"><span class="number">09</span>/OUTCAR: Found     <span class="number">13</span> irreducible k-points:</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>2） 看计算有没有正常结束。</p>
+<p>主要是查看：i) NEB跑了多少步，ii) 自己设置了多少步，iii) 通过OUTCAR中结构收敛的特定关键词。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/ex78$ ls</span><br><span class="line">00  02  04  06  08  exts.dat  job_sub  mep.eps  movie       neb.dat    POTCAR             spline.dat  vasprun.xml</span><br><span class="line">01  03  05  07  09  INCAR     KPOINTS  mep.png  movie.vasp  nebef.dat  slurm-1133307.out  vaspgr</span><br><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/ex78$ tail 03/OSZICAR -n 5</span><br><span class="line">RMM:   2    -0.318010871323E+03   -0.48063E-06   -0.15546E-06   134   0.370E-03    0.397E-03</span><br><span class="line">RMM:   3    -0.318010871353E+03   -0.29988E-07   -0.12836E-08    21   0.273E-03    0.402E-03</span><br><span class="line">RMM:   4    -0.318010871104E+03    0.24867E-06    0.00000E+00    17   0.260E-03    0.157E-03</span><br><span class="line">RMM:   5    -0.318010871201E+03   -0.96799E-07   -0.11232E-08    18   0.266E-03</span><br><span class="line">  14 F= -.32114179E+03 E0= -.32112833E+03  d E =-.102536E-03</span><br><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/ex78$ grep NSW INCAR</span><br><span class="line">  NSW    = 200</span><br><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/ex78$ grep &apos;reached re&apos; 03/OUTCAR</span><br><span class="line"> reached required accuracy - stopping structural energy minimisation</span><br><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/ex78$</span><br></pre></td></tr></table></figure>
+<p>当然你可以写一个小脚本如下来避免每次都重读在终端里面打出来。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env bash </span></span><br><span class="line"></span><br><span class="line">tail 03/OSZICAR -n 5</span><br><span class="line">grep NSW INCAR</span><br><span class="line">grep <span class="string">'reached re'</span> 03/OUTCAR</span><br></pre></td></tr></table></figure>
+<p>也可以设置下alias来判断：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">alias</span> check=<span class="string">'tail 03/OSZICAR -n 5 &amp;&amp; grep NSW INCAR &amp;&amp; grep "reached re" 03/OUTCAR '</span></span><br></pre></td></tr></table></figure>
+<p>有能力的可以写一些更高级点的，加些if，for语句智能判断NEB有没有算完，有没有收敛。</p>
+<p>3） 查看NEB中各个IMAGE中的结构有没有跑乱，散架，有没有物理化学意义。前面我们讲过了几种办法，本节我们简单复习一下，就不再啰嗦了。</p>
+<p>i) 通过vaspkit 结合 vmd实现看动画的效果（Windows用户）</p>
+<p>ii）使用ASE 和 p4vasp 批量打开所有的IMAGES中的CONTCAR，挨个查看。</p>
+<h3 id="小节"><a href="#小节" class="headerlink" title="小节"></a>小节</h3><p>本节，我们主要是在前面计算的基础上，把gamma点的输出结果备份了一下，在此基础上，增加K点（提高精度）继续优化。最近瞎忙了很多事情，让很多人等急了，给大家拜个晚年，祝大伙猪年都学会麻溜滴算过渡态。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NEB/" rel="tag"># NEB</a>
+          
+            <a href="/tags/过渡态/" rel="tag"># 过渡态</a>
+          
+            <a href="/tags/检查/" rel="tag"># 检查</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/15/A12_jobID/" rel="next" title="A12 通过job-ID快速进入计算目录">
+                <i class="fa fa-chevron-left"></i> A12 通过job-ID快速进入计算目录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/22/A13_ase_install/" rel="prev" title="ASE的安装">
+                ASE的安装 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar2.jpg" alt="By BigBro(a)s">
+            
+              <p class="site-author-name" itemprop="name">By BigBro(a)s</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#提交任务"><span class="nav-number">1.</span> <span class="nav-text">提交任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看计算结果"><span class="nav-number">2.</span> <span class="nav-text">查看计算结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小节"><span class="nav-number">3.</span> <span class="nav-text">小节</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">By BigBro(a)s</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+  <div class="footer-custom">Hosted by <a target="_blank" href="https://pages.github.com">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://bigbrosci-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.bigbrosci.com/2019/02/13/ex78/';
+          this.page.identifier = '2019/02/13/ex78/';
+          this.page.title = 'Ex78 过渡态任务的提交与查看（二）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://bigbrosci-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OWE4jcfK8IWkx4zaWuOloxKU-gzGzoHsz", "MRBwViAFCsPSOnnRF9LW7bdo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

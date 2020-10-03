@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="OUTCAR,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="CONTCAR、OSZICAR我们已经大体了解了一下，这一节我们我们学习VASP的另一个极其重要的输出文件：OUTCAR。前面我们介绍到OSZICAR中包含了体系结构优化，电子结构迭代收敛的简单信息。OUTCAR中也包含这些信息，而且比OSZICAR的内容更加详细。此外，计算的参数设置（INCAR中有的，以及默认的），K点的设置，赝势的基本信息，VASP的版本，体系的几何结构以及电子性质相关的内容">
+<meta name="keywords" content="OUTCAR">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ex07 VASP的输出文件（三）">
+<meta property="og:url" content="http://www.bigbrosci.com/2017/10/29/ex07_OUTCAR/index.html">
+<meta property="og:site_name" content="Learn VASP The Hard Way">
+<meta property="og:description" content="CONTCAR、OSZICAR我们已经大体了解了一下，这一节我们我们学习VASP的另一个极其重要的输出文件：OUTCAR。前面我们介绍到OSZICAR中包含了体系结构优化，电子结构迭代收敛的简单信息。OUTCAR中也包含这些信息，而且比OSZICAR的内容更加详细。此外，计算的参数设置（INCAR中有的，以及默认的），K点的设置，赝势的基本信息，VASP的版本，体系的几何结构以及电子性质相关的内容">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-03T18:55:51.019Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ex07 VASP的输出文件（三）">
+<meta name="twitter:description" content="CONTCAR、OSZICAR我们已经大体了解了一下，这一节我们我们学习VASP的另一个极其重要的输出文件：OUTCAR。前面我们介绍到OSZICAR中包含了体系结构优化，电子结构迭代收敛的简单信息。OUTCAR中也包含这些信息，而且比OSZICAR的内容更加详细。此外，计算的参数设置（INCAR中有的，以及默认的），K点的设置，赝势的基本信息，VASP的版本，体系的几何结构以及电子性质相关的内容">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.bigbrosci.com/2017/10/29/ex07_OUTCAR/">
+
+
+
+
+
+  <title>Ex07 VASP的输出文件（三） | Learn VASP The Hard Way</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Learn VASP The Hard Way</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">The 2nd edition</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.bigbrosci.com/2017/10/29/ex07_OUTCAR/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="By BigBro(a)s">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn VASP The Hard Way">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ex07 VASP的输出文件（三）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-29T18:30:16-04:00">
+                2017-10-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/LVASPTHW/" itemprop="url" rel="index">
+                    <span itemprop="name">LVASPTHW</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/10/29/ex07_OUTCAR/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/10/29/ex07_OUTCAR/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/10/29/ex07_OUTCAR/" class="leancloud_visitors" data-flag-title="Ex07 VASP的输出文件（三）">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>CONTCAR</code>、<code>OSZICAR</code>我们已经大体了解了一下，这一节我们我们学习VASP的另一个极其重要的输出文件：<code>OUTCAR</code>。前面我们介绍到<code>OSZICAR</code>中包含了体系结构优化，电子结构迭代收敛的简单信息。<code>OUTCAR</code>中也包含这些信息，而且比<code>OSZICAR</code>的内容更加详细。此外，计算的参数设置（<code>INCAR</code>中有的，以及默认的），K点的设置，赝势的基本信息，<code>VASP</code>的版本，体系的几何结构以及电子性质相关的内容，计算的时间等，也都包含在<code>OUTCAR</code>中。所以说，<code>OUTCAR</code>是关于我们当前计算的一个非常全面的，多方位的信息汇总。</p>
+<p>信息太多，VASP官网也没有对<code>OUTCAR</code>一个很详细地描述，大部分都是穿插在INCAR的计算参数中介绍的。这是因为（本人自己瞎猜的）：</p>
+<ul>
+<li><code>VASP</code>可以计算的性质很多，每一个特定的任务都有其对应的输出内容，这就导致了<code>OUTCAR</code>的复杂多样性，比如说优化结构、频率、声子谱，能带、<code>DOS</code>等计算等，这些都会有特定的输出，需要用户根据自己的计算内容去学习；</li>
+<li>另外一个原因就是里面的条目太多了，每一项单独解释都需要花费大量的时间。</li>
+</ul>
+<p>信息多，就会容易让人眼花缭乱，不知所措。本节，我们就理一理思路，揭开<code>OUTCAR</code>神秘的面纱，让大家心里不至于那么恐慌。之前我们说过，<code>VASP</code>有很多输出文件，日常用的也就那么几个，有些估计等你文章发表了都不一定能用上。这也同样适用于<code>OUTCAR</code>中的信息，虽然多，但大部分基本用不到。</p>
+<p>首先要告诉大家的是，<code>VASP</code>各个输出部分之间用很长的横杠分割（——————————-），当你看到横杠的时候，就知道要进入结果的下一个部分内容了。举个<code>OUTCAR开头</code>的例子。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> vasp.5.4.4.18Apr17-6-g9f103f2a35 (build Sep 22 2017 10:53:27) complex</span><br><span class="line"></span><br><span class="line"> executed on             LinuxIFC date 2018.11.12  03:58:57</span><br><span class="line"> running on   24 total cores</span><br><span class="line"> distrk:  each k-point on   24 cores，    1 groups</span><br><span class="line"> distr:  one band on NCORES_PER_BAND=   1 cores，   24 groups</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">--------------------------------------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+<p><code>VASP</code>的版本信息，在多少个核上运行。所以，如果你不知道，自己的任务是VASP哪个版本计算的，也不知道如何去<code>VASP</code>的安装目录查找版本信息，可以运行一下，然后在<code>OUTCAR</code>的开头去找。可以看到，后跟着一堆<code>-</code>，说明要进入下一部分内容（计算体系，参数）的描述了。分别是：<code>POTCAR</code>，<code>POSCAR</code>，<code>KPOINTS</code>，以及<code>INCAR</code>的信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"> -----------------------------------------------------------------------------</span><br><span class="line">|                                                                             |</span><br><span class="line">|           W    W    AA    RRRRR   N    N  II  N    N   GGGG   !!!           |</span><br><span class="line">|           W    W   A  A   R    R  NN   N  II  NN   N  G    G  !!!           |</span><br><span class="line">|           W    W  A    A  R    R  N N  N  II  N N  N  G       !!!           |</span><br><span class="line">|           W WW W  AAAAAA  RRRRR   N  N N  II  N  N N  G  GGG   !            |</span><br><span class="line">|           WW  WW  A    A  R   R   N   NN  II  N   NN  G    G                |</span><br><span class="line">|           W    W  A    A  R    R  N    N  II  N    N   GGGG   !!!           |</span><br><span class="line">|                                                                             |</span><br><span class="line">|      For optimal performance we recommend to set                            |</span><br><span class="line">|        NCORE= 4 - approx SQRT( number of cores)                             |</span><br><span class="line">|      NCORE specifies how many cores store one orbital (NPAR=cpu/NCORE).     |</span><br><span class="line">|      This setting can  greatly improve the performance of VASP for DFT.     |</span><br><span class="line">|      The default，   NCORE=1            might be grossly inefficient         |</span><br><span class="line">|      on modern multi-core architectures or massively parallel machines.     |</span><br><span class="line">|      Do your own testing !!!!                                               |</span><br><span class="line">|      Unfortunately you need to use the default for GW and RPA calculations. |</span><br><span class="line">|      (for HF NCORE is supported but not extensively tested yet)             |</span><br><span class="line">|                                                                             |</span><br><span class="line"> -----------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line"> POTCAR:    PAW_PBE O 08Apr2002</span><br><span class="line">   VRHFIN =O: s2p4</span><br><span class="line">   LEXCH  = PE</span><br><span class="line">   EATOM  =   432.3788 eV，   31.7789 Ry</span><br><span class="line"></span><br><span class="line">   TITEL  = PAW_PBE O 08Apr2002</span><br><span class="line">   LULTRA =        F    use ultrasoft PP ?</span><br><span class="line">   IUNSCR =        1    unscreen: 0-lin 1-nonlin 2-no</span><br><span class="line">   RPACOR =    1.200    partial core radius</span><br><span class="line">   POMASS =   16.000; ZVAL   =    6.000    mass and valenz</span><br><span class="line">   RCORE  =    1.520    outmost cutoff radius</span><br><span class="line">   RWIGS  =    1.550; RWIGS  =    0.820    wigner-seitz radius (au A)</span><br><span class="line">   ENMAX  =  400.000; ENMIN  =  300.000 eV</span><br><span class="line">   ICORE  =        2    local potential</span><br><span class="line">   LCOR   =        T    correct aug charges</span><br><span class="line">   LPAW   =        T    paw PP</span><br><span class="line">   EAUG   =  605.392</span><br><span class="line">   DEXC   =    0.000</span><br><span class="line">   RMAX   =    1.553    core radius for proj-oper</span><br><span class="line">   RAUG   =    1.300    factor for augmentation sphere</span><br><span class="line">   RDEP   =    1.550    radius for radial grids</span><br><span class="line">   RDEPT  =    1.329    core radius for aug-charge</span><br></pre></td></tr></table></figure>
+<p>基本上每次运行的时候，（即使你的输入是正确的），<code>VASP</code>都会输出一个大大的<code>WARNING</code>来吓唬你，不用担心，无视即可。但如果你的计算失败了，这个警告信息<strong>或许</strong>（个人感觉基本没用）对你排查错误可能会有所帮助。 <code>WARNING</code>下面是<code>POTCAR</code>的基本信息，如果你想通过<code>OUTCAR</code>查看<code>POTCAR中</code>的元素时，可以使用下面的命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">grep POTCAR OUTCAR</span><br><span class="line">grep TIT OUTCAR</span><br><span class="line">grep ENMAX OUTCAR</span><br><span class="line">grep ZVAL OUTCAR #</span><br></pre></td></tr></table></figure>
+<p><code>ZVAL</code>是该<code>POTCAR</code>中对应元素的价电子，这里氧原子含有6个外层价电子。你可以自行对比下<code>POTCAR</code>中的内容。再往下，就是<code>POSCAR</code>的内容：坐标格式，原子位置，以及晶胞的形状大小。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">--------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> ion  position               nearest neighbor table</span><br><span class="line">   1  0.000  0.000  0.000-</span><br><span class="line"></span><br><span class="line">  LATTYP: Found a simple cubic cell.</span><br><span class="line"> ALAT       =     8.0000000000</span><br><span class="line"></span><br><span class="line">  Lattice vectors:</span><br><span class="line"></span><br><span class="line"> A1 = (   8.0000000000，   0.0000000000，   0.0000000000)</span><br><span class="line"> A2 = (   0.0000000000，   8.0000000000，   0.0000000000)</span><br><span class="line"> A3 = (   0.0000000000，   0.0000000000，   8.0000000000)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Analysis of symmetry for initial positions (statically):</span><br><span class="line">=====================================================================</span><br><span class="line"> Subroutine PRICEL returns:</span><br><span class="line"> Original cell was already a primitive cell.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> Routine SETGRP: Setting up the symmetry group for a</span><br><span class="line"> simple cubic supercell.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> Subroutine GETGRP returns: Found 48 space group operations</span><br><span class="line"> (whereof 48 operations were pure point group operations)</span><br><span class="line"> out of a pool of 48 trial point group operations.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">The static configuration has the point symmetry O_h .</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Analysis of symmetry for dynamics (positions and initial velocities):</span><br></pre></td></tr></table></figure>
+<p>体系的对称性以及点群操作相关的信息，在这里我们的体系是立方体，为<code>O_h</code>的点群，有48个对称操作。群论的知识大师兄早已原封不动地还给老师了，在这里就不再详细介绍了…</p>
+<p>K点信息：想查看K点个数：<code>grep irreducible OUTCAR</code>  或者 <code>grep irre OUTCAR</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> Subroutine IBZKPT returns following result:</span><br><span class="line"> ===========================================</span><br><span class="line"></span><br><span class="line"> Found      1 irreducible k-points:</span><br><span class="line"></span><br><span class="line"> Following reciprocal coordinates:</span><br><span class="line">            Coordinates               Weight</span><br><span class="line">  0.000000  0.000000  0.000000      1.000000</span><br><span class="line"></span><br><span class="line"> Following cartesian coordinates:</span><br><span class="line">            Coordinates               Weight</span><br><span class="line">  0.000000  0.000000  0.000000      1.000000</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">--------------------------------------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+<p><strong>下一部分就是<code>INCAR</code>的参数：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">SYSTEM =  O atom</span><br><span class="line">POSCAR =  O atom in a box</span><br><span class="line"></span><br><span class="line">Startparameter for this run:</span><br><span class="line">  NWRITE =      2    write-flag &amp; timer</span><br><span class="line">  PREC   = normal    normal or accurate (medium， high low for compatibility)</span><br><span class="line">  ISTART =      0    job   : 0-new  1-cont  2-samecut</span><br><span class="line">  ICHARG =      2    charge: 1-file 2-atom 10-const</span><br><span class="line">  ISPIN  =      1    spin polarized calculation?</span><br><span class="line">  LNONCOLLINEAR =      F non collinear calculations</span><br><span class="line">  LSORBIT =      F    spin-orbit coupling</span><br><span class="line">  INIWAV =      1    electr: 0-lowe 1-rand  2-diag</span><br><span class="line">  LASPH  =      F    aspherical Exc in radial PAW</span><br><span class="line">  METAGGA=      F    non-selfconsistent MetaGGA calc.</span><br><span class="line"></span><br><span class="line">Electronic Relaxation 1</span><br><span class="line">  ENCUT  =  400.0 eV  29.40 Ry    5.42 a.u.  13.05 13.05 13.05*2*pi/ulx，y，z</span><br><span class="line">  ENINI  =  400.0     initial cutoff</span><br><span class="line">  ENAUG  =  605.4 eV  augmentation charge cutoff</span><br><span class="line">  NELM   =     60;   NELMIN=  2; NELMDL= -5     # of ELM steps</span><br><span class="line">  EDIFF  = 0.1E-03   stopping-criterion for ELM</span><br><span class="line">  LREAL  =      F    real-space projection</span><br><span class="line">  NLSPLINE    = F    spline interpolate recip. space projectors</span><br><span class="line">  LCOMPAT=      F    compatible to vasp.4.4</span><br><span class="line">  GGA_COMPAT  = T    GGA compatible to vasp.4.4-vasp.4.6</span><br><span class="line">  LMAXPAW     = -100 max onsite density</span><br><span class="line">  LMAXMIX     =    2 max onsite mixed and CHGCAR</span><br><span class="line">  VOSKOWN=      0    Vosko Wilk Nusair interpolation</span><br><span class="line">  ROPT   =    0.00000</span><br></pre></td></tr></table></figure>
+<p>计算参数详情（默认的参数值以及代表的意义也列出来了，这个地方大家仔细看下， 一些不常见的参数，<code>VASP</code>会自动采用默认值。上面给我们的启示就是：不懂就不要写，默认就可，很多默认的参数也没必要在<code>INCAR</code>里面再额外写一遍！<strong>强调一下</strong>，不知道的参数，不要瞎往<code>INCAR</code>里面放！新手的话经常会加一些乱七八糟的参数，导致计算错误。）</p>
+<p>在统计完任务的基本输入后，<code>VASP</code>会总结一下本计算的文字描述，任务类型，体系大小，K点数目，计算所需的内存等信息。然后开始进入正式的计算部分：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">--------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> Static calculation</span><br><span class="line"> charge density and potential will be updated during run</span><br><span class="line"> non-spin polarized calculation</span><br><span class="line"> Variant of blocked Davidson</span><br><span class="line"> Davidson routine will perform the subspace rotation</span><br><span class="line"> perform sub-space diagonalisation</span><br><span class="line">    after iterative eigenvector-optimisation</span><br><span class="line"> modified Broyden-mixing scheme， WC =      100.0</span><br><span class="line"> initial mixing is a Kerker type mixing with AMIX =  0.4000 and BMIX =      1.0000</span><br><span class="line"> Hartree-type preconditioning will be used</span><br><span class="line"> using additional bands           21</span><br><span class="line"> reciprocal scheme for non local part</span><br><span class="line"> use partial core corrections</span><br><span class="line"> calculate Harris-corrections to forces</span><br><span class="line">   (improved forces if not selfconsistent)</span><br><span class="line"> use gradient corrections</span><br><span class="line"> use of overlap-Matrix (Vanderbilt PP)</span><br><span class="line"> Gauss-broadening in eV      SIGMA  =   0.01</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">--------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  energy-cutoff  :      400.00</span><br><span class="line">  volume of cell :      512.00</span><br><span class="line">      direct lattice vectors                 reciprocal lattice vectors</span><br><span class="line">     8.000000000  0.000000000  0.000000000     0.125000000  0.000000000  0.000000000</span><br><span class="line">     0.000000000  8.000000000  0.000000000     0.000000000  0.125000000  0.000000000</span><br><span class="line">     0.000000000  0.000000000  8.000000000     0.000000000  0.000000000  0.125000000</span><br><span class="line"></span><br><span class="line">  length of vectors</span><br><span class="line">     8.000000000  8.000000000  8.000000000     0.125000000  0.125000000  0.125000000</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> k-points in units of 2pi/SCALE and weight: K-POINTS</span><br><span class="line">   0.00000000  0.00000000  0.00000000       1.000</span><br><span class="line"></span><br><span class="line"> k-points in reciprocal lattice and weights: K-POINTS</span><br><span class="line">   0.00000000  0.00000000  0.00000000       1.000</span><br><span class="line"></span><br><span class="line"> position of ions in fractional coordinates (direct lattice)</span><br><span class="line">   0.00000000  0.00000000  0.00000000</span><br><span class="line"></span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"></span><br><span class="line"> total amount of memory used by VASP MPI-rank0    35846. kBytes</span><br><span class="line">=======================================================================</span><br><span class="line"></span><br><span class="line">   base      :      30000. kBytes</span><br><span class="line">   nonl-proj :        746. kBytes</span><br><span class="line">   fftplans  :       1114. kBytes</span><br><span class="line">   grid      :       3834. kBytes</span><br><span class="line">   one-center:          3. kBytes</span><br><span class="line">   wavefun   :        149. kBytes</span><br></pre></td></tr></table></figure>
+<p>对于O原子的计算来说，就是一个离子步内，电子步的迭代。这里我们只展示一个电子步的迭代信息即可，剩下的格式是一样的。大家在自己查看的时候注意能量在不同迭代步数中的变化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">--------------------------------------- Iteration      1(   1)  ---------------------------------------</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    POTLOK:  cpu time    0.0240: real time    0.0324</span><br><span class="line">    SETDIJ:  cpu time    0.0030: real time    0.0040</span><br><span class="line">     EDDAV:  cpu time    0.0320: real time    0.0397</span><br><span class="line">       DOS:  cpu time    0.0020: real time    0.0020</span><br><span class="line">    --------------------------------------------</span><br><span class="line">      LOOP:  cpu time    0.0610: real time    0.0781</span><br><span class="line"></span><br><span class="line"> eigenvalue-minimisations  :    48</span><br><span class="line"> total energy-change (2. order) : 0.3249700E+02  (-0.1026971E+03)</span><br><span class="line"> number of electron       6.0000000 magnetization</span><br><span class="line"> augmentation part        6.0000000 magnetization</span><br><span class="line"></span><br><span class="line"> Free energy of the ion-electron system (eV)</span><br><span class="line">  ---------------------------------------------------</span><br><span class="line">  alpha Z        PSCENC =         0.27139542</span><br><span class="line">  Ewald energy   TEWEN  =       -91.92708002</span><br><span class="line">  -Hartree energ DENC   =      -281.84385743</span><br><span class="line">  -exchange      EXHF   =         0.00000000</span><br><span class="line">  -V(xc)+E(xc)   XCENC  =        26.06853627</span><br><span class="line">  PAW double counting   =       346.54947689     -348.34814756</span><br><span class="line">  entropy T*S    EENTRO =        -0.00000000</span><br><span class="line">  eigenvalues    EBANDS =       -50.53652309</span><br><span class="line">  atomic energy  EATOM  =       432.26319604</span><br><span class="line">  Solvation  Ediel_sol  =         0.00000000</span><br><span class="line">  ---------------------------------------------------</span><br><span class="line">  free energy    TOTEN  =        32.49699652 eV</span><br><span class="line"></span><br><span class="line">  energy without entropy =       32.49699652  energy(sigma-&gt;0) =       32.49699652</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">--------------------------------------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+<p>每一电子步完成后，输出结果同时在<code>OSZICAR</code>中更新一行。</p>
+<p>其中各项的具体含义：</p>
+<p>alpha Z and the Ewald energy define the electrostatic  interaction of the ions in a compensating electron gas. The alpha Z component deals with the divergent parts (G=0). The following parts are the Hartree and exchange correlation energy as defined in the Kohn-Sham Hamiltonian. The entropy part stems from the smearing (using the free energy as variational parameter， electronic entropy)， EBANDS from Kohn-Sham eigenvalues， and EATOM is the reference energy for the potential (which is defined in the POTCAR file). </p>
+<p>（摘自：<a href="https://cms.mpi.univie.ac.at/vasp-forum/viewtopic.php?t=273）" target="_blank" rel="noopener">https://cms.mpi.univie.ac.at/vasp-forum/viewtopic.php?t=273）</a></p>
+<p>迭代结束，输出主要的结果：费米能级以及能带信息。</p>
+<p><code>Band 1</code> 对应的是2个 2s 电子，</p>
+<p><code>Band 2-4</code> 对应的是4个2p电子。固体物理中，费米能级对应的是最高电子占据轨道的能量，也就是<code>HOMO</code>，大家可以对比下<code>band 2-4</code>的能量和费米能级的能量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">--------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> average (electrostatic) potential at core</span><br><span class="line">  the test charge radii are     0.7215</span><br><span class="line">  (the norm of the test charge is              1.0000)</span><br><span class="line">       1 -83.5438</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> E-fermi :  -8.9011     XC(G=0):  -0.8049     alpha+bet : -0.1463</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> k-point     1 :       0.0000    0.0000    0.0000</span><br><span class="line">  band No.  band energies     occupation</span><br><span class="line">      1     -23.8440      2.00000</span><br><span class="line">      2      -8.9041      1.33333</span><br><span class="line">      3      -8.9041      1.33333</span><br><span class="line">      4      -8.9041      1.33333</span><br><span class="line">      5      -0.4682      0.00000</span><br><span class="line">      6       1.8628      0.00000</span><br><span class="line">      7       1.8628      0.00000</span><br><span class="line">      8       1.8628      0.00000</span><br><span class="line">      9       1.9954      0.00000</span><br><span class="line">     10       2.0322      0.00000</span><br><span class="line">     11       2.0322      0.00000</span><br><span class="line">     12       4.0245      0.00000</span><br><span class="line">     13       4.0245      0.00000</span><br><span class="line">     14       4.0245      0.00000</span><br><span class="line">     15       4.1983      0.00000</span><br><span class="line">     16       4.1983      0.00000</span><br><span class="line">     17       4.1983      0.00000</span><br><span class="line">     18       4.4039      0.00000</span><br><span class="line">     19       4.4039      0.00000</span><br><span class="line">     20       4.4555      0.00000</span><br><span class="line">     21       4.4555      0.00000</span><br><span class="line">     22       4.4555      0.00000</span><br><span class="line">     23       4.7550      0.00000</span><br><span class="line">     24       6.4902      0.00000</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">--------------------------------------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+<p>费米能级的获取：<code>grep E-fermi OUTCAR</code></p>
+<p>各个方向力的大小，体系的坐标（和<code>CONTCAR</code>是一样的），以及体系的能量。下面第一行的意思是达到了我们设置的收敛标准，迭代停止了。（后面我们会详细介绍收敛相关的事项，大家先有个印象。）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">------------------------ aborting loop because EDIFF is reached ----------------------------------------</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"></span><br><span class="line">  FORCE on cell =-STRESS in cart. coord.  units (eV):</span><br><span class="line">  Direction    XX          YY          ZZ          XY          YZ          ZX</span><br><span class="line">  --------------------------------------------------------------------------------------</span><br><span class="line">  Alpha Z     0.27140     0.27140     0.27140</span><br><span class="line">  Ewald     -30.64236   -30.64236   -30.64236     0.00000     0.00000     0.00000</span><br><span class="line">  Hartree    93.90340    93.90340    93.90340    -0.00000    -0.00000    -0.00000</span><br><span class="line">  E(xc)     -27.94710   -27.94710   -27.94710     0.00000     0.00000     0.00000</span><br><span class="line">  Local    -147.84573  -147.84573  -147.84573     0.00000    -0.00000     0.00000</span><br><span class="line">  n-local   -20.54959   -20.54959   -20.54959    -0.00000    -0.00000    -0.00000</span><br><span class="line">  augment     5.55385     5.55385     5.55385    -0.00000     0.00000    -0.00000</span><br><span class="line">  Kinetic   126.51138   126.51138   126.51138     0.00000     0.00000     0.00000</span><br><span class="line">  Fock        0.00000     0.00000     0.00000     0.00000     0.00000     0.00000</span><br><span class="line">  -------------------------------------------------------------------------------------</span><br><span class="line">  Total      -0.74475    -0.74475    -0.74475     0.00000    -0.00000     0.00000</span><br><span class="line">  in kB      -2.33051    -2.33051    -2.33051     0.00000    -0.00000     0.00000</span><br><span class="line">  external pressure =       -2.33 kB  Pullay stress =        0.00 kB</span><br><span class="line"></span><br><span class="line"> VOLUME and BASIS-vectors are now :</span><br><span class="line"> -----------------------------------------------------------------------------</span><br><span class="line">  energy-cutoff  :      400.00</span><br><span class="line">  volume of cell :      512.00</span><br><span class="line">      direct lattice vectors                 reciprocal lattice vectors</span><br><span class="line">     8.000000000  0.000000000  0.000000000     0.125000000  0.000000000  0.000000000</span><br><span class="line">     0.000000000  8.000000000  0.000000000     0.000000000  0.125000000  0.000000000</span><br><span class="line">     0.000000000  0.000000000  8.000000000     0.000000000  0.000000000  0.125000000</span><br><span class="line"></span><br><span class="line">  length of vectors</span><br><span class="line">     8.000000000  8.000000000  8.000000000     0.125000000  0.125000000  0.125000000</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  FREE ENERGIE OF THE ION-ELECTRON SYSTEM (eV)</span><br><span class="line">  ---------------------------------------------------</span><br><span class="line">  free  energy   TOTEN  =        -0.02147084 eV</span><br><span class="line"></span><br><span class="line">  energy  without entropy=       -0.00604461  energy(sigma-&gt;0) =       -0.01375772</span><br></pre></td></tr></table></figure>
+<p>上面的能能量有好几个，很多人不知道该用哪一个。前面我们讲解<code>OSZICAR</code>的时候，告诉大家要使用E0后面的那个数值，那么在<code>OUTCAR</code>中与<code>E0</code>对应（相同）的是<code>energy(sigma-&gt;0) =</code> 后面的那个。所以，在今后的学习中，我们不要再提问使用OUTCAR中的哪个能量的问题了。提取能量的命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">grep  without OUTCAR | tail -n 1</span><br><span class="line">grep &apos;  without&apos; OUTCAR | tail -n 1  # 本人常用的是这个</span><br><span class="line">grep sigma OUTCAR | tail -n 1</span><br></pre></td></tr></table></figure>
+<p>之所以用<code>tail -n 1</code>是为了保证我们取的是最后一步的能量。O原子肯定就一步，但以后优化结构的时候，就有很多步了。这里有一点需要注意的是：前面出现了一个<code>entropy</code>，也就是熵。但这个<code>Entropy</code>是采用<code>ISMEAR</code>方法而导致的，与物理化学中的熵这个概念不一样，如果你要计算熵，则需要通过计算频率，然后通过公式求解。看不懂不要紧：记住这里的<code>Entropy</code>不是物化书中的就OK。</p>
+<p>再往下是实际计算的内存和时间等信息，看到下面，说明计算正常结束了。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">--------------------------------------------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> writing wavefunctions</span><br><span class="line">     LOOP+:  cpu time    2.0037: real time    2.1098</span><br><span class="line">    4ORBIT:  cpu time    0.0000: real time    0.0000</span><br><span class="line"></span><br><span class="line"> total amount of memory used by VASP MPI-rank0    35846. kBytes</span><br><span class="line">=======================================================================</span><br><span class="line"></span><br><span class="line">   base      :      30000. kBytes</span><br><span class="line">   nonl-proj :        746. kBytes</span><br><span class="line">   fftplans  :       1114. kBytes</span><br><span class="line">   grid      :       3834. kBytes</span><br><span class="line">   one-center:          3. kBytes</span><br><span class="line">   wavefun   :        149. kBytes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> General timing and accounting informations for this job:</span><br><span class="line"> ========================================================</span><br><span class="line"></span><br><span class="line">                  Total CPU time used (sec):        5.492</span><br><span class="line">                            User time (sec):        1.991</span><br><span class="line">                          System time (sec):        3.501</span><br><span class="line">                         Elapsed time (sec):        5.931</span><br><span class="line"></span><br><span class="line">                   Maximum memory used (kb):      104300.</span><br><span class="line">                   Average memory used (kb):           0.</span><br><span class="line"></span><br><span class="line">                          Minor page faults:         8571</span><br><span class="line">                          Major page faults:            0</span><br><span class="line">                 Voluntary context switches:         3090</span><br></pre></td></tr></table></figure>
+<p>分析完前面的内容，大家会发现：具体到里面各项的含义以及各个细节上，还有很多值得讨论的地方，比如群论，薛定谔方程求解过程，<code>POTCAR</code>的相关信息等。对于新手来说，看完本节，能大体浏览下来，知道各个部分包含什么内容就很不错了。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>本练习中，带领大家粗略浏览了一遍<code>OUTCAR</code>各部分的信息。大家在浏览的时候时刻要思考：</p>
+<ul>
+<li>这部分包含的什么内容，具有什么物理或者化学意义？  </li>
+<li>怎么用<code>grep 关键词</code>获取有用的信息等。 </li>
+<li>怎么获取体系的能量；知道用众多能量中的哪一个。</li>
+<li>如何将<code>OUTCAR</code>的内容与计算的输入和输出文件关联起来。</li>
+<li>由于计算内容的多样性，对于<code>OUTCAR</code>的详细解释，需要很多的时间和精力去完成补充。一次性解释清楚是不可能的事情，所以在后续的计算过程中，我们还会结合具体的例子进行讲解。</li>
+</ul>
+<p> 一般来说，等你计算上手之后，<code>OUTCAR</code>里面的很多内容，可能等课题结束或者毕业了，都不会用到。更进一步说，你可能都不需要打开<code>OUTCAR</code>了。因此，完全不用担心里面的很多内容不理解。但，这不是我们偷懒的理由，如果你想把<code>VASP</code>学好，学精，这些都需要自己下功夫去琢磨，理解。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OUTCAR/" rel="tag"># OUTCAR</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/28/ex06_02_OSZICAR/" rel="next" title="Ex06 VASP的输出文件（二）">
+                <i class="fa fa-chevron-left"></i> Ex06 VASP的输出文件（二）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/30/ex08-calculate-oxygen-atom-energy/" rel="prev" title="Ex08 氧原子能量的正确计算">
+                Ex08 氧原子能量的正确计算 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar2.jpg" alt="By BigBro(a)s">
+            
+              <p class="site-author-name" itemprop="name">By BigBro(a)s</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">1.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">By BigBro(a)s</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+  <div class="footer-custom">Hosted by <a target="_blank" href="https://pages.github.com">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://bigbrosci-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.bigbrosci.com/2017/10/29/ex07_OUTCAR/';
+          this.page.identifier = '2017/10/29/ex07_OUTCAR/';
+          this.page.title = 'Ex07 VASP的输出文件（三）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://bigbrosci-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OWE4jcfK8IWkx4zaWuOloxKU-gzGzoHsz", "MRBwViAFCsPSOnnRF9LW7bdo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

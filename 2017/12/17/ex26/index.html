@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="乙醇,振动频率,零点能,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前面我们学会了通过使用 Jmol 查看分子振动。但分子振动频率在OUTCAR是什么样子的呢？今天我们就分析一下OUTCAR文件中的频率信息，以及如何写脚本计算零点能矫正。  1 OUTCAR分析1.1 回顾一下Jmol中的频率振动 Jmol 提取了OUTCAR中的振动信息，将每个振动模式的频率列了出来。 1.2 OUTCAR中的信息： 对比一下这两个振动频率和·中的前两个。  1）1 f = 代表">
+<meta name="keywords" content="乙醇,振动频率,零点能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ex26 乙醇分子的振动频率计算(四)">
+<meta property="og:url" content="http://www.bigbrosci.com/2017/12/17/ex26/index.html">
+<meta property="og:site_name" content="Learn VASP The Hard Way">
+<meta property="og:description" content="前面我们学会了通过使用 Jmol 查看分子振动。但分子振动频率在OUTCAR是什么样子的呢？今天我们就分析一下OUTCAR文件中的频率信息，以及如何写脚本计算零点能矫正。  1 OUTCAR分析1.1 回顾一下Jmol中的频率振动 Jmol 提取了OUTCAR中的振动信息，将每个振动模式的频率列了出来。 1.2 OUTCAR中的信息： 对比一下这两个振动频率和·中的前两个。  1）1 f = 代表">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/17/ex26/ex26-1.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/17/ex26/ex26-2.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/17/ex26/ex26-3.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/17/ex26/ex26-4.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/17/ex26/ex26-5.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/17/ex26/ex26-6.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/17/ex26/ex26-7.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/17/ex26/ex26-8.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/17/ex26/ex26-9.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/17/ex26/ex26-10.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/17/ex26/ex26-11.jpeg">
+<meta property="og:updated_time" content="2020-10-03T18:55:51.235Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ex26 乙醇分子的振动频率计算(四)">
+<meta name="twitter:description" content="前面我们学会了通过使用 Jmol 查看分子振动。但分子振动频率在OUTCAR是什么样子的呢？今天我们就分析一下OUTCAR文件中的频率信息，以及如何写脚本计算零点能矫正。  1 OUTCAR分析1.1 回顾一下Jmol中的频率振动 Jmol 提取了OUTCAR中的振动信息，将每个振动模式的频率列了出来。 1.2 OUTCAR中的信息： 对比一下这两个振动频率和·中的前两个。  1）1 f = 代表">
+<meta name="twitter:image" content="http://www.bigbrosci.com/2017/12/17/ex26/ex26-1.jpeg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.bigbrosci.com/2017/12/17/ex26/">
+
+
+
+
+
+  <title>Ex26 乙醇分子的振动频率计算(四) | Learn VASP The Hard Way</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Learn VASP The Hard Way</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">The 2nd edition</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.bigbrosci.com/2017/12/17/ex26/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="By BigBro(a)s">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn VASP The Hard Way">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ex26 乙醇分子的振动频率计算(四)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-17T02:06:48-05:00">
+                2017-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/LVASPTHW/" itemprop="url" rel="index">
+                    <span itemprop="name">LVASPTHW</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/17/ex26/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/12/17/ex26/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/12/17/ex26/" class="leancloud_visitors" data-flag-title="Ex26 乙醇分子的振动频率计算(四)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前面我们学会了通过使用 <strong>Jmol</strong> 查看分子振动。但分子振动频率在<code>OUTCAR</code>是什么样子的呢？今天我们就分析一下<code>OUTCAR</code>文件中的频率信息，以及如何写脚本计算零点能矫正。</p>
+<hr>
+<h2 id="1-OUTCAR分析"><a href="#1-OUTCAR分析" class="headerlink" title="1 OUTCAR分析"></a>1 OUTCAR分析</h2><h3 id="1-1-回顾一下Jmol中的频率振动"><a href="#1-1-回顾一下Jmol中的频率振动" class="headerlink" title="1.1 回顾一下Jmol中的频率振动"></a>1.1 回顾一下Jmol中的频率振动</h3><p><img src="/2017/12/17/ex26/ex26-1.jpeg" alt=""></p>
+<p><strong>Jmol</strong> 提取了<code>OUTCAR</code>中的振动信息，将每个振动模式的频率列了出来。</p>
+<h3 id="1-2-OUTCAR中的信息："><a href="#1-2-OUTCAR中的信息：" class="headerlink" title="1.2 OUTCAR中的信息："></a>1.2 OUTCAR中的信息：</h3><p><img src="/2017/12/17/ex26/ex26-2.jpeg" alt=""></p>
+<p>对比一下这两个振动频率和·中的前两个。</p>
+<hr>
+<p>1）<code>1 f =</code> 代表第一个振动模式，细心的你仔细观察，会发现每一行有四个单位的数值：<code>THz</code>, <code>2PiTHz</code>, <code>cm-1</code>,和 <code>meV</code>，这四个是完全等同的；</p>
+<p>2）下面一行为坐标 X Y Z和每个原子在 $x, y, z$ 方向上的振动大小；</p>
+<p>3）X Y Z下面的数字为结构的坐标信息（Cartesian坐标系），dx dy dz 为振动的具体数值；</p>
+<p>4)后面的振动模式的频率和第一个的格式一样。</p>
+<hr>
+<h2 id="2-频率单位的换算"><a href="#2-频率单位的换算" class="headerlink" title="2 频率单位的换算"></a>2 频率单位的换算</h2><p>我们先讲一下这四个单位的换算公式：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Relevant    Formulas:</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">$ E =   hc / \lambda $</td>
+</tr>
+<tr>
+<td style="text-align:left">$ \nu = c / \lambda $</td>
+</tr>
+<tr>
+<td style="text-align:left">$\tilde{\nu} = 1 / \lambda $</td>
+</tr>
+<tr>
+<td style="text-align:left">$ T =   1 / \nu $</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Definitions:</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">$E$ =   energy ($eV$)</td>
+</tr>
+<tr>
+<td style="text-align:left">$\lambda$ =   wavelength  ($m$)</td>
+</tr>
+<tr>
+<td style="text-align:left">$\tilde{\nu}$ =   wavenumber  ($m^{-1}$)</td>
+</tr>
+<tr>
+<td style="text-align:left">$T$ =   period ($s$)</td>
+</tr>
+<tr>
+<td style="text-align:left">$\nu$  =   frequency  ($s^{-1}$ or $\textrm{Hz}$)</td>
+</tr>
+<tr>
+<td style="text-align:left">$h$ = Planck’s constant = $4.135667516 \times 10^{-15}~eV \cdot s$</td>
+</tr>
+<tr>
+<td style="text-align:left">$c$ =   speed of  light = $ 299792458~m/s$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>以第一个振动为例：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">1f   =</th>
+<th style="text-align:right"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">111.907</td>
+<td style="text-align:right">$\textrm{THz}$</td>
+</tr>
+<tr>
+<td style="text-align:left">703.134</td>
+<td style="text-align:right">2PiTHz</td>
+</tr>
+<tr>
+<td style="text-align:left">3732.82</td>
+<td style="text-align:right">$cm^{-1} $</td>
+</tr>
+<tr>
+<td style="text-align:left">462.811</td>
+<td style="text-align:right">$meV$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>1） THz 和 2PiTHz 的换算： $2\pi$ 的关系：</p>
+<script type="math/tex; mode=display">111.907230~(\rm{THz})  \times 2 \pi  = 703.133866~(\rm{2PiTHz})</script><p>2） THz 和 cm-1 的关系：$\nu = c / \lambda = c \tilde{\nu} $， $c$ 是光速，$\lambda$ 是波长，$\tilde{\nu}$ 是波数，单位是 $m^{-1}$。计算前先换算成标准单位： 1 THz = 1012 Hz, 1 $cm^{-1}$ = 100 $m^{-1}$，因此：</p>
+<script type="math/tex; mode=display">111.907230 \times 1012~(\textrm{Hz}) = 299792458~(m/s) \times 3732.823294 \times 100 (m^{-1})</script><p>3）THz 和能量 eV 的关系：</p>
+<p>$ E = h\nu $， $h$ 为普朗克常数：$4.135667516 \times 10^{-15}~eV \cdot s$ <strong>(注意此时：Plank constant 的单位！！！)</strong></p>
+<script type="math/tex; mode=display">462.811270 (meV) = 0.4628 eV = 4.135667516 \times 10^{-15} (eV*s) *  111.907230 \times 1012 (Hz)</script><p>4） 波数（$cm^{-1}$）和能量（$meV$）的关系：<br>$E = hc / \lambda = h \tilde \nu $<br>$ 462.811270~meV = 0.4628~eV<br> = 4.135667516 \times 10^{-15}~(eV*s) \times 299792458~(m/s) \times 3732.823294 \times 100~(m^{-1}) $</p>
+<p>大家根据上面的公式自己手动算一遍就明白了，还可以使用下面这个网址进行计算：<a href="http://halas.rice.edu/conversions" target="_blank" rel="noopener">http://halas.rice.edu/conversions</a> 这里就不再多说了。</p>
+<hr>
+<h2 id="3-OUTCAR频率信息的提取："><a href="#3-OUTCAR频率信息的提取：" class="headerlink" title="3  OUTCAR频率信息的提取："></a>3  OUTCAR频率信息的提取：</h2><p>我们可以使用<code>grep</code>命令提取，有以下两个方式。在进行之前，首先强调一点：下面的解释<strong>只适用于</strong>NWRITE= 0、1或者2 的时候。因为NWRITE = 3 的时候，会额外再输出一次频率的信息。</p>
+<h3 id="3-1-使用以下几个命令："><a href="#3-1-使用以下几个命令：" class="headerlink" title="3.1 使用以下几个命令："></a>3.1 使用以下几个命令：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">grep THz OUTCAR</span><br><span class="line">grep 2PiTHz OUTCAR</span><br><span class="line">grep cm-1 OUTCAR</span><br><span class="line">grep meV OUTCAR；</span><br></pre></td></tr></table></figure>
+<p>这几个命令中，我们分别以振动的不同单位作为提取对象，便可以得到所有的振动信息（这里的所有指的是包含虚频）：以大师兄常用的 <code>grep cm-1 OUTCAR</code> 为例：</p>
+<p><img src="/2017/12/17/ex26/ex26-3.jpeg" alt=""></p>
+<p>黄色标出来的第一列：$9 \times 3 = 27$ 个振动模式，第二列是以<code>cm-1</code>为单位的振动频率大小，最后三行 <code>f/i=</code> 指的是虚频。</p>
+<hr>
+<p>前面我们提到过，虚频可以判断结构是否稳定。那这里，我们计算出的乙醇分子结构肯定不稳定喽？不一定。</p>
+<p>因为频率计算和软件的数值积分有关（我也不清楚数值积分怎么进行的）；</p>
+<p>计算过程中我们的设置对频率计算影响很大，<code>KPOINTS</code>, <code>ENCUT</code>, <code>EDIFF</code>, <code>POTIM</code>等都会影响计算的精度（下一节讨论）；综合这些因素，对于分子的振动频率来说（注意：声子谱不适用）一般低于 $100~cm^{-1}$ 的频率可以忽略。严格点可以降到 $50~cm^{-1}$，也就是说：如果你在计算中发现有个 $50~cm^{-1}$ 左右的虚频，完全可以不考虑。</p>
+<hr>
+<h3 id="3-2-grep-39-f-39-OUTCAR"><a href="#3-2-grep-39-f-39-OUTCAR" class="headerlink" title="3.2 grep &#39;f  =&#39; OUTCAR"></a>3.2 <code>grep &#39;f  =&#39; OUTCAR</code></h3><p><img src="/2017/12/17/ex26/ex26-4.jpeg" alt=""></p>
+<p><strong>注意：图中虚频部分没有显示出来！严格按照我用的这个命令</strong></p>
+<p>使用这个命令的时候，不提取虚频部分。查看虚频的时候，可以用之前的方式，也可以用这个命令：</p>
+<p><img src="/2017/12/17/ex26/ex26-5.jpeg" alt=""></p>
+<p>在零点能的计算时，虚频是不能考虑在内的，因为它不是分子的真实的振动模式。在我们这个例子中，虚频的出现是软件的误差所导致。在过渡态中，虚频代表的是反应方向。从另一个角度去分析：乙醇分子的零点能（下面讲到）为：$2.117~eV$，图中三个虚频对应的能量为：$0.76 + 2.31 + 8.14 = 11.11~meV = 0.01111~ eV$，所占比例为：$0.0111/2.117 = 0.5\% $ 这个可以忽略不计。</p>
+<hr>
+<h2 id="4-零点能校正"><a href="#4-零点能校正" class="headerlink" title="4 零点能校正"></a>4 零点能校正</h2><h3 id="4-1-明白什么是零点能：回顾频率计算第一节的内容："><a href="#4-1-明白什么是零点能：回顾频率计算第一节的内容：" class="headerlink" title="4.1 明白什么是零点能：回顾频率计算第一节的内容："></a>4.1 明白什么是零点能：回顾频率计算第一节的内容：</h3><p><img src="/2017/12/17/ex26/ex26-6.jpeg" alt=""></p>
+<p><img src="/2017/12/17/ex26/ex26-7.jpeg" alt=""></p>
+<h3 id="4-2-获取振动能量数据："><a href="#4-2-获取振动能量数据：" class="headerlink" title="4.2 获取振动能量数据："></a>4.2 获取振动能量数据：</h3><p><img src="/2017/12/17/ex26/ex26-8.jpeg" alt=""></p>
+<p>分析下结构：</p>
+<p><img src="/2017/12/17/ex26/ex26-9.jpeg" alt=""></p>
+<p>上图输出共有11列（列之间用空格分开）：我们要的零点能在第10列，使用下面的命令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep <span class="string">'f  ='</span> OUTCAR | awk <span class="string">'&#123;print $10&#125;'</span></span><br></pre></td></tr></table></figure></p>
+<p>如果想同时输出第 1 和 10 两列：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep <span class="string">'f  ='</span> OUTCAR | awk<span class="string">'&#123;print $1 " "$10&#125;'</span></span><br></pre></td></tr></table></figure></p>
+<p><code>$1</code> 和 <code>$10</code> 之间有 2个 双引号：<strong>“ “</strong>，两个双引号里面有一个空格用来分开），否则两列会连在一起。</p>
+<p><strong>注意！注意！注意！</strong></p>
+<p><strong>这里我们提取的能量为：$h\nu$ ！！！</strong></p>
+<p><strong>而零点能为 $1/2 h \nu$！！！</strong></p>
+<h3 id="4-3-将所有振动的能量求和："><a href="#4-3-将所有振动的能量求和：" class="headerlink" title="4.3 将所有振动的能量求和："></a>4.3 将所有振动的能量求和：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">qli@BigBroSci:~/Desktop/freq$ grep <span class="string">'f  ='</span> OUTCAR | awk <span class="string">'&#123;print $10&#125;'</span> | paste -sd+ | bc</span><br><span class="line">qli@BigBroSci:~/Desktop/freq$ 4233.962325</span><br></pre></td></tr></table></figure>
+<p>输出的4233.96就是所有的 hv 之和。</p>
+<p>1）不要忘记除以 $2$</p>
+<p>2）此时单位是 $meV$，换算成 $eV$ 还需要除以 $1000$。</p>
+<p>3）所以，我们的零点能是 $4233.962325/2/1000~ eV= 2.117~eV$</p>
+<h3 id="4-4-写脚本"><a href="#4-4-写脚本" class="headerlink" title="4.4 写脚本"></a>4.4 写脚本</h3><p>将前面的命令写到一个文件里面就成为了脚本：怎么写呢？本人平时喜欢使用类似 $4233.962325$ 这个数字，除以 $2000$ 这一步在后面的工作中进行。因此只用到了<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep <span class="string">'f ='</span> OUTCAR | awk <span class="string">'&#123;print $10&#125;'</span> | paste -sd+ | bc</span><br></pre></td></tr></table></figure></p>
+<p>这个命令。写脚本的具体操作：</p>
+<p><img src="/2017/12/17/ex26/ex26-10.jpeg" alt=""></p>
+<p>1）把这行命令写到一个文件中，文件名为 <code>fsum</code> （本人不喜欢 <code>.sh</code> 尾缀，加不加都一样）；</p>
+<p>2）赋予可执行权限<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod u+x ~/bin/fsum</span><br></pre></td></tr></table></figure></p>
+<p>3）移到 <code>~/bin</code> 文件夹<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv fsum ~/bin</span><br></pre></td></tr></table></figure></p>
+<p>4）在任何一个频率计算的目录下运行：敲命令 <code>fsum</code> 即可；</p>
+<p>5）不喜欢 <code>fsum</code> 这个命令，将文件名改成你自己喜欢的名字：</p>
+<p>如果想在脚本里面直接完成除以 $2000$ 的任务，可以这么写：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hv_sum=$(grep<span class="string">"f  ="</span> OUTCAR | awk <span class="string">'&#123;print  $10&#125;'</span>| paste -sd+ | bc)</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"scale =6; <span class="variable">$hv_sum</span>/2000"</span> | bc</span><br></pre></td></tr></table></figure>
+<p><img src="/2017/12/17/ex26/ex26-11.jpeg" alt=""></p>
+<p>此时结果的单位为：$eV$。</p>
+<hr>
+<h2 id="5-扩展练习："><a href="#5-扩展练习：" class="headerlink" title="5 扩展练习："></a>5 扩展练习：</h2><p>5.1 <code>OUTCAR</code>中的频率输出要看明白是怎么回事；</p>
+<p>5.2 频率的各个单位的换算要搞明白；</p>
+<p>5.3 怎么提取信息，计算零点能要掌握；</p>
+<p>5.4 怎么写脚本，从现在开始要练习了！</p>
+<h2 id="6-总结："><a href="#6-总结：" class="headerlink" title="6 总结："></a>6 总结：</h2><p>本节我们主要讨论了一下<code>OUTCAR</code>中的频率结果，能量换算，如何提取振动能量，以及如何计算零点能，最后简单介绍了一下脚本的写法，打消大家对脚本的崇拜心理，自己稍加琢磨也会写出实用的脚本！</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/乙醇/" rel="tag"># 乙醇</a>
+          
+            <a href="/tags/振动频率/" rel="tag"># 振动频率</a>
+          
+            <a href="/tags/零点能/" rel="tag"># 零点能</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/16/ex25/" rel="next" title="Ex25 乙醇分子的振动频率计算(三)">
+                <i class="fa fa-chevron-left"></i> Ex25 乙醇分子的振动频率计算(三)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/18/ex27/" rel="prev" title="Ex27 乙醇分子的振动频率计算(五)">
+                Ex27 乙醇分子的振动频率计算(五) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar2.jpg" alt="By BigBro(a)s">
+            
+              <p class="site-author-name" itemprop="name">By BigBro(a)s</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-OUTCAR分析"><span class="nav-number">1.</span> <span class="nav-text">1 OUTCAR分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-回顾一下Jmol中的频率振动"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 回顾一下Jmol中的频率振动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-OUTCAR中的信息："><span class="nav-number">1.2.</span> <span class="nav-text">1.2 OUTCAR中的信息：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-频率单位的换算"><span class="nav-number">2.</span> <span class="nav-text">2 频率单位的换算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-OUTCAR频率信息的提取："><span class="nav-number">3.</span> <span class="nav-text">3  OUTCAR频率信息的提取：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-使用以下几个命令："><span class="nav-number">3.1.</span> <span class="nav-text">3.1 使用以下几个命令：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-grep-39-f-39-OUTCAR"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 grep &#39;f  =&#39; OUTCAR</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-零点能校正"><span class="nav-number">4.</span> <span class="nav-text">4 零点能校正</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-明白什么是零点能：回顾频率计算第一节的内容："><span class="nav-number">4.1.</span> <span class="nav-text">4.1 明白什么是零点能：回顾频率计算第一节的内容：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-获取振动能量数据："><span class="nav-number">4.2.</span> <span class="nav-text">4.2 获取振动能量数据：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-将所有振动的能量求和："><span class="nav-number">4.3.</span> <span class="nav-text">4.3 将所有振动的能量求和：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-写脚本"><span class="nav-number">4.4.</span> <span class="nav-text">4.4 写脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-扩展练习："><span class="nav-number">5.</span> <span class="nav-text">5 扩展练习：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-总结："><span class="nav-number">6.</span> <span class="nav-text">6 总结：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">By BigBro(a)s</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+  <div class="footer-custom">Hosted by <a target="_blank" href="https://pages.github.com">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://bigbrosci-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.bigbrosci.com/2017/12/17/ex26/';
+          this.page.identifier = '2017/12/17/ex26/';
+          this.page.title = 'Ex26 乙醇分子的振动频率计算(四)';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://bigbrosci-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OWE4jcfK8IWkx4zaWuOloxKU-gzGzoHsz", "MRBwViAFCsPSOnnRF9LW7bdo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+  
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        extensions: ["tex2jax.js","[siunitx]/siunitx.js"],
+        TeX: {
+          extensions: [
+            "AMSmath.js","AMSsymbols.js", "sinuitx.js", "[mhchem]/mhchem.js"
+          ]
+        },
+        jax: ["input/TeX","output/HTML-CSS"],
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+      MathJax.Ajax.config.path['siunitx']  = '/js/MathJax-siunitx';
+      MathJax.Ajax.config.path["mhchem"] = "https://cdnjs.cloudflare.com/ajax/libs/mathjax-mhchem/3.3.0";
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

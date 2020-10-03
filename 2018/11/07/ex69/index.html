@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="表面吸附,熵,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="上一节我们知道怎么获取气相分子的熵以及吉布斯自由能的计算。这一节，我们简单介绍一下表面吸附分子熵的计算。 复习基础知识首先我们应该要知道对一个体系来说，都有哪几部分对熵有贡献。一般熵通过统计热力学计算分子的配分函数来获取：主要有平动，转动，振动，电子以及核这5部分。参考下面的这个链接： http://210.45.168.34:8080/elite/wlhx/jiaocai/C_05.htm 或者">
+<meta name="keywords" content="表面吸附,熵">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ex69 表面吸附物种的熵">
+<meta property="og:url" content="http://www.bigbrosci.com/2018/11/07/ex69/index.html">
+<meta property="og:site_name" content="Learn VASP The Hard Way">
+<meta property="og:description" content="上一节我们知道怎么获取气相分子的熵以及吉布斯自由能的计算。这一节，我们简单介绍一下表面吸附分子熵的计算。 复习基础知识首先我们应该要知道对一个体系来说，都有哪几部分对熵有贡献。一般熵通过统计热力学计算分子的配分函数来获取：主要有平动，转动，振动，电子以及核这5部分。参考下面的这个链接： http://210.45.168.34:8080/elite/wlhx/jiaocai/C_05.htm 或者">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/07/ex69/ex69-1.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/07/ex69/ex69-2.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/07/ex69/ex69-3.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/07/ex69/ex69-4.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/07/ex69/ex69-5.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/07/ex69/ex69-6.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/07/ex69/ex69-7.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/07/ex69/ex69-8.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/07/ex69/ex69-9.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/07/ex69/ex69-10.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/07/ex69/ex69-11.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/07/ex69/ex69-12.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/07/ex69/ex69-13.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/07/ex69/ex69-14.png">
+<meta property="og:updated_time" content="2020-10-03T18:55:51.713Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ex69 表面吸附物种的熵">
+<meta name="twitter:description" content="上一节我们知道怎么获取气相分子的熵以及吉布斯自由能的计算。这一节，我们简单介绍一下表面吸附分子熵的计算。 复习基础知识首先我们应该要知道对一个体系来说，都有哪几部分对熵有贡献。一般熵通过统计热力学计算分子的配分函数来获取：主要有平动，转动，振动，电子以及核这5部分。参考下面的这个链接： http://210.45.168.34:8080/elite/wlhx/jiaocai/C_05.htm 或者">
+<meta name="twitter:image" content="http://www.bigbrosci.com/2018/11/07/ex69/ex69-1.jpeg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.bigbrosci.com/2018/11/07/ex69/">
+
+
+
+
+
+  <title>Ex69 表面吸附物种的熵 | Learn VASP The Hard Way</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Learn VASP The Hard Way</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">The 2nd edition</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.bigbrosci.com/2018/11/07/ex69/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="By BigBro(a)s">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn VASP The Hard Way">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ex69 表面吸附物种的熵</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-07T15:30:16-05:00">
+                2018-11-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/LVASPTHW/" itemprop="url" rel="index">
+                    <span itemprop="name">LVASPTHW</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/07/ex69/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/07/ex69/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/11/07/ex69/" class="leancloud_visitors" data-flag-title="Ex69 表面吸附物种的熵">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>上一节我们知道怎么获取气相分子的熵以及吉布斯自由能的计算。这一节，我们简单介绍一下表面吸附分子熵的计算。</p>
+<h3 id="复习基础知识"><a href="#复习基础知识" class="headerlink" title="复习基础知识"></a>复习基础知识</h3><p>首先我们应该要知道对一个体系来说，都有哪几部分对熵有贡献。一般熵通过统计热力学计算分子的配分函数来获取：主要有平动，转动，振动，电子以及核这5部分。参考下面的这个链接： <a href="http://210.45.168.34:8080/elite/wlhx/jiaocai/C_05.htm" target="_blank" rel="noopener">http://210.45.168.34:8080/elite/wlhx/jiaocai/C_05.htm</a> 或者找本物化书狂补统计热力学的知识。</p>
+<p>1）电子运动的能级间隔很大，除了在几千度以上的高温条件下，电子常常处于基态。一般情况下各激发态对配分函数的贡献都可忽略。</p>
+<p>2）原子核的能级间隔极大，在一般的物理和化学过程中，原子核总是处于基态。所以这一项也可以忽略。</p>
+<p>3）到现在我们需要考虑的只有平动，转动和振动这三个了。</p>
+<h3 id="分子从气相到表面吸附的过程"><a href="#分子从气相到表面吸附的过程" class="headerlink" title="分子从气相到表面吸附的过程"></a>分子从气相到表面吸附的过程</h3><p>当分子从气相吸附到表面上，打个不恰当的比喻，就如同图中的苍蝇被粘住在纸板上，因此就不能随便乱飞了，更不用说施展什么空中技巧了。</p>
+<p><img src="/2018/11/07/ex69/ex69-1.jpeg" alt=""></p>
+<p>同样，对分子来说，举个例子，一个非线性的三原子分子，一共有3N个自由度。气相里面为：3个平动，3个转动以及3N-6个振动。但是当它吸附到表面上，由于平动和转动被限制住了，这6个自由度则会转化成振动自由度，也就是在表面上分子有3N个振动模式。如果你可视化表面上吸附分子频率计算的结果，会发现最后6个分别对应的是平动和转动，但它们已经不是气相中的平动和转动了，我们称之为：frustrated translation，frustrated rotation。</p>
+<p><img src="/2018/11/07/ex69/ex69-2.jpeg" alt=""></p>
+<p>（你大妈(平动转动)已经不是十年前的大妈了，你大爷(振动)永远是你大爷）</p>
+<p>这两个在表面化学里面是非常令人蛋疼的东西。这个我们后面慢慢讲。至少现在我们知道了，表面的吸附物种有3N个振动方式。所以，平动和转动对熵的贡献也不用管了，直接处理振动即可。（不会算的筒子们小开心下。）</p>
+<h3 id="通过振动频率来计算Entropy"><a href="#通过振动频率来计算Entropy" class="headerlink" title="通过振动频率来计算Entropy"></a>通过振动频率来计算Entropy</h3><p>振动频率对熵的贡献，随便查阅一本统计热力学的书，都可以找到答案，这里我们的参考书是第十版Atkins的物理化学。</p>
+<p>Physical Chemistry 第10版的642页。获取方式：QQ群文件，Books文件下里面就有，自己下载。</p>
+<p><img src="/2018/11/07/ex69/ex69-3.jpeg" alt="">  <img src="/2018/11/07/ex69/ex69-4.png" alt=""></p>
+<hr>
+<p><img src="/2018/11/07/ex69/ex69-5.png" alt=""></p>
+<p>图里面圈出来的公式里面，β，h，c，是基本的物理学常数。v （上面加个波浪号）是波数，单位是：m<sup>-1</sup>。我们就是通过这个公式来计算单个振动模式对熵的贡献。这个很简单，直接把数值带入公式即可，可以摁计算器，也可以用excel等其他工具进行计算。本节，我们分享一个对应这个公式的python小脚本。</p>
+<p><img src="/2018/11/07/ex69/ex69-6.png" alt=""></p>
+<p>通过单个振动频率计算熵的小脚本，图里面的98.485是错的，应该是96.485，kJ/mol 转换为 eV的常数。</p>
+<p>脚本解释：</p>
+<p>i）VASP得到的频率波数是cm<sup>-1</sup>，这也是大家所习惯接受的，所以在12行，单位要乘以100先将 cm<sup>-1</sup> 转化成m<sup>-1</sup>。</p>
+<p>ii） 剩下的14-19行是一些基本的物理量，我们默认温度是300K;</p>
+<p>iii) 21-27行：是我们定义的一个计算熵的小函数。</p>
+<p>x_i 是书里面的 βhcv</p>
+<p>pf_l和pf_r 是花括号里面，减号左面和右面的部分</p>
+<p>pf 得到的是花括号的结果</p>
+<p>然后entropy 是 pf * R</p>
+<p>iv）29-31行就是调用函数，然后输出S, TS部分了。这里S的单位是 J K<sup>-1</sup>mol<sup>-1</sup>。TS 的单位是我们熟悉的eV。</p>
+<p>v）自己对着图片输入一遍就可以得到脚本了，不要问我要现成的。如果自己照着抄的脚本运行出现错误，反复跟图片里面的进行对比，然后进行修改。</p>
+<hr>
+<h3 id="熟悉不同的振动频率对熵的贡献"><a href="#熟悉不同的振动频率对熵的贡献" class="headerlink" title="熟悉不同的振动频率对熵的贡献"></a>熟悉不同的振动频率对熵的贡献</h3><p>有了这个小脚本，我们就可以计算任何振动频率对熵的贡献了。一般来说，我们VASP的频率计算会有3N个波数，我们需要做的就是挨个算（虚频除外），然后求和即可。这里，大师兄想强调的并不是如何去通过这些频率去算熵（相信到现在你也已经学会了），而是要了解频率大小对熵的贡献程度。下图是我们计算了不同波数（从10到500 cm<sup>-1</sup>）的振动所对应的熵，以及TS, 单位分别为：J K<sup>-1</sup>mol<sup>-1</sup> 和 eV。</p>
+<p><img src="/2018/11/07/ex69/ex69-7.png" alt=""></p>
+<p>通过上图的结果，你会发现：当波数越小的时候，TS越大，随着波数增加，TS越来越小，在490 cm<sup>-1</sup>, 300K 的时候,连0.01eV都不到。一般来说，正常的振动频率（3n-6，过去以及现在的大爷那部分）对熵的贡献，基本上就可以忽略掉了，因为一般来说正常的频率波数在400-3000cm<sup>-1</sup>范围之间。</p>
+<p>我们现在知道，波数越小，他们对熵的贡献也就越大，而前面我们说的frustrated translation 和 rotation，它们恰恰具有很小的波数，尤其是frustrated translation这部分，大部分都在50cm<sup>-1</sup>以下，因此他们对熵的贡献不能忽略。然而，它们既有体相声子谱的一些特征，也有气相分子的平动和转动的样子。因此在处理的时候，要小小心心地将它们剥离开来，非常令人蛋疼。正所谓：雄兔脚扑朔，雌兔眼迷离；双兔傍地走，安能辨我是雄雌？</p>
+<p><img src="/2018/11/07/ex69/ex69-8.jpeg" alt=""></p>
+<p>另一方面：由于它们的波数很小，而VASP在小波数这部分的计算很烂，软件计算的结果也会导致很大的误差产生。一般来说大家都直接放弃，忽略这部分了。当然这样的理由很多人不服，明明知道它们波数小，对熵的贡献大，却又不得不忽略。这里，大师兄再给你另外一个解释：摘自Computational Catalysis (RSC) 这本书的第32页。如下：</p>
+<p><img src="/2018/11/07/ex69/ex69-9.png" alt=""></p>
+<p>在这里建议我们将平动单独处理，假设的是分子在二维平面内可以运动。也就是说只损失了一个方向的自由度。经验告诉我们，对不同的过渡金属表面来说，平动部分对熵的贡献可以作为一个常数来处理。所以，又可以不考虑了…. 以上是大家一般都不考虑这部分的贡献的原因。当然，你也可以根据上面的公式计算frustrated translation对熵的贡献，然后其他的按照振动来处理即可。</p>
+<p>如果你对这一部分感兴趣，可以参考下这些人的工作：</p>
+<p>1） Campbell 这个牛牛的JACS，还有一篇Chemical Review，大家自己找下。</p>
+<p><img src="/2018/11/07/ex69/ex69-10.png" alt=""></p>
+<p>2） 最新的一篇JPCC</p>
+<p><img src="/2018/11/07/ex69/ex69-11.png" alt=""></p>
+<p>3） Tamkin 这个软件的作者以及她发表的一些文章： <a href="http://molmod.github.io/tamkin/" target="_blank" rel="noopener">http://molmod.github.io/tamkin/</a> </p>
+<p><img src="/2018/11/07/ex69/ex69-12.png" alt=""></p>
+<p>4）Norskov 这个牛牛的一本书：Fundamental Concepts in Heterogeneous Catalysis （群文件也有，自己去找）</p>
+<p><a href="https://onlinelibrary.wiley.com/doi/book/10.1002/9781118892114" target="_blank" rel="noopener">https://onlinelibrary.wiley.com/doi/book/10.1002/9781118892114</a> </p>
+<p><img src="/2018/11/07/ex69/ex69-13.jpeg" alt=""></p>
+<p>注意： 在这本书里的P33页，不同的吸附位点，构型数目，也会对熵有贡献：如下图：</p>
+<p><img src="/2018/11/07/ex69/ex69-14.png" alt=""></p>
+<p>这个的贡献不是很大，如果你的覆盖度为1/9的时候，R <em> ln((1/9) / (8/9)) = R </em> ln (1/8)， 300K的时候，TS = 300 <em> 8.314 </em> ln (1/8) / 1000 / 98.485 = 0.053 eV。差不多可以忽略掉。</p>
+<h3 id="再提零点能"><a href="#再提零点能" class="headerlink" title="再提零点能"></a>再提零点能</h3><p>师兄，既然前面的frustrated的平动和转动我们都忽略了，那么他们的零点能矫正的时候还用不用考虑。</p>
+<p>答：小波数范围对零点能的贡献很小，一般来说，考虑或者不考虑它们的贡献，无关紧要。本人一般直接都加上。</p>
+<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><p>1）表面化学中，熵的贡献主要在吸附/脱附的阶段，因为分子损失/获得了大部分的平动和转动，对于表面吸附物种的熵：</p>
+<p>i）3N-6的振动部分贡献很小，可以忽略不计；</p>
+<p>ii）Frustrated rotation 大约在200-400cm<sup>-1</sup>左右，也可以和振动部分一起忽略；</p>
+<p>iii）Frustrated translation部分，可以近似为二维平动来处理。也可以忽略，一般来说：忽略 是大家普遍的做法。如果理论基础不扎实，只想简单算算，那么你的腰椎间盘还是不要突出为妙。</p>
+<p>iv）表面吸附位点的数目对熵的贡献，基本也可以忽略。</p>
+<p>2） 而在表面反应的阶段，我们计算反应热和活化能的时候通过下面的公式：</p>
+<p>ΔE = E(FS) – E(IS)；</p>
+<p>Ea = E(TS) – E(IS) </p>
+<p>这两个量的计算都是通过相减来得到的，而这个相减的过程中：</p>
+<p>i）大部分熵的贡献可以被抵消掉了；</p>
+<p>ii）小波数范围内零点能的矫正部分也会被抵消掉，所以零点能校正的时候，大胆地直接地把非虚频的部分直接加起来就可以了。</p>
+<p>iii）如果你不信，那么可以通过频率计算一下IS，FS，或者TS的熵，然后计算矫正过的ΔE, Ea，会发现熵的贡献很小很小，所以一般大家都直接考虑零点能，而不考虑熵的贡献，如果有审稿人问你这个问题，用脚本算一下，回答审稿人说影响不大就是了。</p>
+<p>3）总结：表面吸附物种的熵，一路忽略，结果就是啥也不算… 不过，不算归不算，但背后的原因或者依据你得搞明白。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/表面吸附/" rel="tag"># 表面吸附</a>
+          
+            <a href="/tags/熵/" rel="tag"># 熵</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/06/ex68/" rel="next" title="Ex68 频率，零点能，吉布斯自由能的计算">
+                <i class="fa fa-chevron-left"></i> Ex68 频率，零点能，吉布斯自由能的计算
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/08/ex70/" rel="prev" title="Ex70 过渡态的计算（一）">
+                Ex70 过渡态的计算（一） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar2.jpg" alt="By BigBro(a)s">
+            
+              <p class="site-author-name" itemprop="name">By BigBro(a)s</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#复习基础知识"><span class="nav-number">1.</span> <span class="nav-text">复习基础知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分子从气相到表面吸附的过程"><span class="nav-number">2.</span> <span class="nav-text">分子从气相到表面吸附的过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过振动频率来计算Entropy"><span class="nav-number">3.</span> <span class="nav-text">通过振动频率来计算Entropy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#熟悉不同的振动频率对熵的贡献"><span class="nav-number">4.</span> <span class="nav-text">熟悉不同的振动频率对熵的贡献</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#再提零点能"><span class="nav-number">5.</span> <span class="nav-text">再提零点能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#思考"><span class="nav-number">6.</span> <span class="nav-text">思考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">By BigBro(a)s</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+  <div class="footer-custom">Hosted by <a target="_blank" href="https://pages.github.com">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://bigbrosci-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.bigbrosci.com/2018/11/07/ex69/';
+          this.page.identifier = '2018/11/07/ex69/';
+          this.page.title = 'Ex69 表面吸附物种的熵';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://bigbrosci-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OWE4jcfK8IWkx4zaWuOloxKU-gzGzoHsz", "MRBwViAFCsPSOnnRF9LW7bdo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

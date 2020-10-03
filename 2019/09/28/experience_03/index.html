@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="数据库,网站,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="汇集本人日常学习中的一些数据库，个人感觉不错的网站。也会不断地更新完善。如果你有好的数据库，链接，推荐的书籍，也欢迎发邮件至lqcata@gmail.com留言帮助我们更新。 结构查找The Materials Project https://www.materialsproject.org/ 使用方法： 1） 点击右上方：Login   2） 点击： Sign in with your ema">
+<meta name="keywords" content="数据库,网站">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用的数据库总结">
+<meta property="og:url" content="http://www.bigbrosci.com/2019/09/28/experience_03/index.html">
+<meta property="og:site_name" content="Learn VASP The Hard Way">
+<meta property="og:description" content="汇集本人日常学习中的一些数据库，个人感觉不错的网站。也会不断地更新完善。如果你有好的数据库，链接，推荐的书籍，也欢迎发邮件至lqcata@gmail.com留言帮助我们更新。 结构查找The Materials Project https://www.materialsproject.org/ 使用方法： 1） 点击右上方：Login   2） 点击： Sign in with your ema">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/eHmVsslNkaBtAHO0jsHMuK5APDGLDXXLGYribdZDjcjYmEiaz7KtQPzPe1L0wYiaY0Ok2jtgl80Kx11zHDlWG8jfg/640?wx_fmt=png">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_jpg/eHmVsslNkaBtAHO0jsHMuK5APDGLDXXL7M3g9VbsIicuyWwcNrwXMnL9cQBsvrIeRFbgNmHiaAlMp1yZTswmcNeA/640?wx_fmt=jpeg">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_jpg/eHmVsslNkaBtAHO0jsHMuK5APDGLDXXLjOuXI8VKlV8BECMzI4PehhbehXThX1tysRKCM2tJrEufnh9JwSQ97w/640?wx_fmt=jpeg">
+<meta property="og:updated_time" content="2020-10-03T18:55:51.794Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="常用的数据库总结">
+<meta name="twitter:description" content="汇集本人日常学习中的一些数据库，个人感觉不错的网站。也会不断地更新完善。如果你有好的数据库，链接，推荐的书籍，也欢迎发邮件至lqcata@gmail.com留言帮助我们更新。 结构查找The Materials Project https://www.materialsproject.org/ 使用方法： 1） 点击右上方：Login   2） 点击： Sign in with your ema">
+<meta name="twitter:image" content="https://mmbiz.qpic.cn/mmbiz_png/eHmVsslNkaBtAHO0jsHMuK5APDGLDXXLGYribdZDjcjYmEiaz7KtQPzPe1L0wYiaY0Ok2jtgl80Kx11zHDlWG8jfg/640?wx_fmt=png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.bigbrosci.com/2019/09/28/experience_03/">
+
+
+
+
+
+  <title>常用的数据库总结 | Learn VASP The Hard Way</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Learn VASP The Hard Way</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">The 2nd edition</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.bigbrosci.com/2019/09/28/experience_03/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="By BigBro(a)s">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn VASP The Hard Way">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">常用的数据库总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-28T15:30:16-04:00">
+                2019-09-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/个人经验/" itemprop="url" rel="index">
+                    <span itemprop="name">个人经验</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/09/28/experience_03/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/09/28/experience_03/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/09/28/experience_03/" class="leancloud_visitors" data-flag-title="常用的数据库总结">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://mmbiz.qpic.cn/mmbiz_png/eHmVsslNkaBtAHO0jsHMuK5APDGLDXXLGYribdZDjcjYmEiaz7KtQPzPe1L0wYiaY0Ok2jtgl80Kx11zHDlWG8jfg/640?wx_fmt=png" alt="img"></p>
+<p>汇集本人日常学习中的一些数据库，个人感觉不错的网站。也会不断地更新完善。如果你有好的数据库，链接，推荐的书籍，也欢迎发邮件至lqcata@gmail.com留言帮助我们更新。</p>
+<h4 id="结构查找"><a href="#结构查找" class="headerlink" title="结构查找"></a>结构查找</h4><h5 id="The-Materials-Project"><a href="#The-Materials-Project" class="headerlink" title="The Materials Project"></a>The Materials Project</h5><p> <a href="https://www.materialsproject.org/" target="_blank" rel="noopener">https://www.materialsproject.org/</a></p>
+<p>使用方法：</p>
+<p>1） 点击右上方：Login  </p>
+<p>2） 点击： Sign in with your email address </p>
+<p>3） 输入自己的邮箱，然后点击：send login link</p>
+<p>4） 打开邮箱，点击链接，即可查询数据库。</p>
+<h5 id="ioChem-BD"><a href="#ioChem-BD" class="headerlink" title="ioChem-BD"></a>ioChem-BD</h5><p> <a href="http://www.iochem-bd.org/" target="_blank" rel="noopener">http://www.iochem-bd.org/</a> </p>
+<p>本人老板和其他几个老板一起做的数据库，涵盖VASP，高斯等主流程序，可以上传结果。数据库依托于巴塞罗那超算中心。本人博士，博后的所有工作都在这个数据库中。</p>
+<h5 id="ChemSpider"><a href="#ChemSpider" class="headerlink" title="ChemSpider"></a>ChemSpider</h5><p> <a href="http://www.chemspider.com/" target="_blank" rel="noopener">http://www.chemspider.com/</a> RSC旗下的一个数据库，非常方便查找下载结构。</p>
+<h5 id="Pubchem"><a href="#Pubchem" class="headerlink" title="Pubchem"></a>Pubchem</h5><p><a href="https://pubchem.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">https://pubchem.ncbi.nlm.nih.gov/</a> </p>
+<h5 id="ICSD-数据库"><a href="#ICSD-数据库" class="headerlink" title="ICSD 数据库"></a>ICSD 数据库</h5><p> <a href="http://www2.fiz-karlsruhe.de/icsd_home.html" target="_blank" rel="noopener">http://www2.fiz-karlsruhe.de/icsd_home.html</a> , 需要账号密码</p>
+<h5 id="CCDC-The-Cambridge-Crystallographic-Data-Centre"><a href="#CCDC-The-Cambridge-Crystallographic-Data-Centre" class="headerlink" title="CCDC: The Cambridge Crystallographic Data Centre"></a>CCDC: The Cambridge Crystallographic Data Centre</h5><p><a href="https://www.ccdc.cam.ac.uk/" target="_blank" rel="noopener">https://www.ccdc.cam.ac.uk/</a></p>
+<h5 id="cccbdb-数据库"><a href="#cccbdb-数据库" class="headerlink" title="cccbdb 数据库"></a>cccbdb 数据库</h5><p><a href="https://cccbdb.nist.gov" target="_blank" rel="noopener">https://cccbdb.nist.gov</a></p>
+<h5 id="团簇数据库："><a href="#团簇数据库：" class="headerlink" title="团簇数据库："></a>团簇数据库：</h5><p><a href="http://www-wales.ch.cam.ac.uk/~wales/CCD/CoCCD/cobalt.html" target="_blank" rel="noopener">http://www-wales.ch.cam.ac.uk/~wales/CCD/CoCCD/cobalt.html</a>  </p>
+<p>可能有些老了。</p>
+<p><a href="https://ww2.mathworks.cn/matlabcentral/fileexchange/33449-cluster-generator" target="_blank" rel="noopener">https://ww2.mathworks.cn/matlabcentral/fileexchange/33449-cluster-generator</a> </p>
+<h5 id="Wulffman"><a href="#Wulffman" class="headerlink" title="Wulffman"></a>Wulffman</h5><p><a href="https://www.ctcms.nist.gov/wulffman/" target="_blank" rel="noopener">https://www.ctcms.nist.gov/wulffman/</a></p>
+<h5 id="XPS"><a href="#XPS" class="headerlink" title="XPS"></a>XPS</h5><p><a href="https://xpssimplified.com/" target="_blank" rel="noopener">https://xpssimplified.com/</a></p>
+<p><strong>Cn Fullerenes</strong></p>
+<p><a href="http://www.nanotube.msu.edu/fullerene/fullerene-isomers.html" target="_blank" rel="noopener">http://www.nanotube.msu.edu/fullerene/fullerene-isomers.html</a></p>
+<h4 id="热力学数据"><a href="#热力学数据" class="headerlink" title="热力学数据"></a>热力学数据</h4><p>NIST 数据库： <a href="https://physics.nist.gov/cuu/Constants/index.html" target="_blank" rel="noopener">https://physics.nist.gov/cuu/Constants/index.html</a>  </p>
+<p>CRC Handbook of physical chemistry ： <a href="http://hbcponline.com/faces/contents/ContentsSearch.xhtml" target="_blank" rel="noopener">http://hbcponline.com/faces/contents/ContentsSearch.xhtml</a> 查找热力学参数，晶格常数，entropy等等。</p>
+<p><a href="http://www2.ucdsb.on.ca/tiss/stretton/database/inorganic_thermo.htm" target="_blank" rel="noopener">http://www2.ucdsb.on.ca/tiss/stretton/database/inorganic_thermo.htm</a> 无机化合物的物理和热力学相关数据</p>
+<p><a href="http://www.knowledgedoor.com/2/elements_handbook/cohesive_energy.html" target="_blank" rel="noopener">http://www.knowledgedoor.com/2/elements_handbook/cohesive_energy.html</a> 结合能</p>
+<p><a href="http://www.surface-tension.de/" target="_blank" rel="noopener">http://www.surface-tension.de/</a> 表面张力</p>
+<p><a href="http://www.wiredchemist.com/chemistry/data/thermodynamic-data" target="_blank" rel="noopener">http://www.wiredchemist.com/chemistry/data/thermodynamic-data</a></p>
+<p><a href="https://atct.anl.gov/" target="_blank" rel="noopener">https://atct.anl.gov/</a></p>
+<h4 id="物理常数"><a href="#物理常数" class="headerlink" title="物理常数"></a>物理常数</h4><p><a href="https://physics.nist.gov/cuu/Constants/index.html" target="_blank" rel="noopener">https://physics.nist.gov/cuu/Constants/index.html</a></p>
+<p><a href="http://wild.life.nctu.edu.tw/class/common/energy-unit-conv-table.html" target="_blank" rel="noopener">http://wild.life.nctu.edu.tw/class/common/energy-unit-conv-table.html</a></p>
+<p><a href="http://halas.rice.edu/conversions" target="_blank" rel="noopener">http://halas.rice.edu/conversions</a></p>
+<h4 id="书籍文献下载："><a href="#书籍文献下载：" class="headerlink" title="书籍文献下载："></a>书籍文献下载：</h4><p>google和google scholar：科学上网。</p>
+<p><a href="http://gen.lib.rus.ec/" target="_blank" rel="noopener">http://gen.lib.rus.ec/</a> 下载书籍</p>
+<p>资源丰富，但不要贪多，更不要下一堆放到自己电脑里占地方。找几本好书，认真静下心来好好学习。</p>
+<p><a href="http://www.expaper.cn/" target="_blank" rel="noopener">http://www.expaper.cn/</a> 科研速递论坛， 求助文献，书籍，成功率极高。</p>
+<p>sci-hub 系列，现在网上各种域名，插件，桌面版的都有，我就不瞎凑热闹了。</p>
+<p>5000人QQ群:  157099073  汇聚大家的力量，解决每一篇小文献的困难。</p>
+<p>书籍和文献下载的原则，宁缺毋滥，认真阅读每一篇下载的文献，对自己的时间负责。别图多。</p>
+<h4 id="VASP-相关"><a href="#VASP-相关" class="headerlink" title="VASP 相关"></a>VASP 相关</h4><p><strong>VASP官网</strong></p>
+<p><a href="http://www.vasp.at/" target="_blank" rel="noopener">http://www.vasp.at/</a>, VASP最权威，最专业的学习资料都在这里面了。英文刚开始看起来有点不适应，坚持下去，慢慢就好了。不建议看除官网以外的那些乱七八糟的说明（包括我自己写的教程）</p>
+<p><strong>VASP 教程视频</strong></p>
+<p><a href="http://www.nersc.gov/users/training/events/3-day-vasp-workshop/" target="_blank" rel="noopener">http://www.nersc.gov/users/training/events/3-day-vasp-workshop/</a>, A 3-day VASP Workshop at NERSC: VASP 开发者（长发大胡子那哥们）做的workshop, youtube 有视频。链接：<a href="https://www.youtube.com/playlist?list=PL20S5EeApOSumWZkzsaYxAvozjvFZ3ks4" target="_blank" rel="noopener">https://www.youtube.com/playlist?list=PL20S5EeApOSumWZkzsaYxAvozjvFZ3ks4</a> </p>
+<p><strong>VASP官方论坛</strong></p>
+<p><a href="https://cms.mpi.univie.ac.at/vasp-forum/" target="_blank" rel="noopener">https://cms.mpi.univie.ac.at/vasp-forum/</a></p>
+<p>VASP官方论坛，需要注册才可以提问，但一般来说你的问题已经有人提问过了，直接复制到google里面，基本都会显示该论坛的链接。可以不保存。</p>
+<p><strong>Henkelman 课题组</strong></p>
+<p><a href="http://theory.cm.utexas.edu/henkelman/" target="_blank" rel="noopener">http://theory.cm.utexas.edu/henkelman/</a>, 大量VASP相关的脚本，VTST计算过渡态，bader电荷分析，CHGCAR处理脚本等，向Henkelman致以崇高的敬意。</p>
+<p><strong>ASE</strong>： Atomic Simulation Environment： <a href="https://wiki.fysik.dtu.dk/ase/，" target="_blank" rel="noopener">https://wiki.fysik.dtu.dk/ase/，</a> 适合催化计算相关</p>
+<p><strong>Pymatgen</strong>： <a href="http://pymatgen.org/" target="_blank" rel="noopener">http://pymatgen.org/</a>, 适合材料计算的</p>
+<p><strong>K-path</strong>： <a href="https://www.materialscloud.org/work/tools/seekpath" target="_blank" rel="noopener">https://www.materialscloud.org/work/tools/seekpath</a> </p>
+<p>能带Kpath选择的网站，上传自己的结构，便可以得到建议的路径。</p>
+<p><strong>Chemml</strong>: <a href="https://hachmannlab.github.io/chemml/" target="_blank" rel="noopener">https://hachmannlab.github.io/chemml/</a></p>
+<p><strong>p4vasp</strong>：<a href="http://www.p4vasp.at/" target="_blank" rel="noopener">http://www.p4vasp.at/</a></p>
+<p><strong>RDkit</strong>：<a href="https://www.rdkit.org/" target="_blank" rel="noopener">https://www.rdkit.org/</a>  </p>
+<p><strong>VASPkit</strong> ： <a href="https://sourceforge.net/projects/vaspkit/files/" target="_blank" rel="noopener">https://sourceforge.net/projects/vaspkit/files/</a> 来自中国的良心软件, VASP计算前后处理，功能强大，使用简单，老少皆宜。</p>
+<p><strong>VESTA </strong> ： <a href="http://jp-minerals.org/vesta/en/" target="_blank" rel="noopener">http://jp-minerals.org/vesta/en/</a> 来自日本的良心软件</p>
+<p><strong>Xcrysden</strong>  ：<a href="http://www.xcrysden.org/，" target="_blank" rel="noopener">http://www.xcrysden.org/，</a> 用于批量做图，选择K-path做能带图，等。</p>
+<p><strong>Openbabel</strong> ：<a href="http://openbabel.org/wiki/Main_Page" target="_blank" rel="noopener">http://openbabel.org/wiki/Main_Page</a>  强大的格式转换工具，它说第二，没人敢说第一。</p>
+<p><strong>RDkit</strong>：化学信息学重要的开源包。</p>
+<h4 id="程序软件相关："><a href="#程序软件相关：" class="headerlink" title="程序软件相关："></a>程序软件相关：</h4><h5 id="Bash-：http-tldp-org-HOWTO-Bash-Prog-Intro-HOWTO-html"><a href="#Bash-：http-tldp-org-HOWTO-Bash-Prog-Intro-HOWTO-html" class="headerlink" title="Bash ：http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html"></a>Bash ：<a href="http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html" target="_blank" rel="noopener">http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html</a></h5><p><a href="https://learnpythonthehardway.org/" target="_blank" rel="noopener">https://learnpythonthehardway.org/</a></p>
+<p><a href="https://www.liaoxuefeng.com" target="_blank" rel="noopener">https://www.liaoxuefeng.com</a>, 廖雪峰的网站，英文不想读的话，可以到这里学习。</p>
+<p><a href="https://matplotlib.org/" target="_blank" rel="noopener">https://matplotlib.org/</a>  用python画图</p>
+<p><a href="https://www.scipy.org/" target="_blank" rel="noopener">https://www.scipy.org/</a> python 科学运算相关的库 </p>
+<p><a href="https://stackoverflow.com/" target="_blank" rel="noopener">https://stackoverflow.com/</a>  一般谷歌搜索遇到出现的程序问题，都可以在这里找到答案。</p>
+<p><a href="https://www.geeksforgeeks.org" target="_blank" rel="noopener">https://www.geeksforgeeks.org</a></p>
+<p> <a href="https://stackoverflow.com/" target="_blank" rel="noopener">https://stackoverflow.com/</a>  一般谷歌搜索遇到出现的程序问题，都可以在这里找到答案。</p>
+<h5 id="大牛们的Git-Hub-网站"><a href="#大牛们的Git-Hub-网站" class="headerlink" title="大牛们的Git-Hub 网站"></a>大牛们的Git-Hub 网站</h5><p>很多懂程序, 喜欢分享的大牛们都有自己的github网址，下面会逐渐完善。</p>
+<p>1）<a href="https://github.com/Ionizing" target="_blank" rel="noopener">https://github.com/Ionizing</a> （www.bigbrosci.com这个网站就是这牛人帮忙搭建的）</p>
+<p>2）<a href="https://github.com/wangvei" target="_blank" rel="noopener">https://github.com/wangvei</a> （VASPkit的作者，王伟老师）</p>
+<p>3）<a href="https://github.com/QijingZheng" target="_blank" rel="noopener">https://github.com/QijingZheng</a>  （很屌的一个大牛，虽然没见过）</p>
+<p>4） <a href="https://github.com/obaica" target="_blank" rel="noopener">https://github.com/obaica</a> （只要Follow了他，基本就可以找到其他大牛的github了）</p>
+<p>5）<a href="https://github.com/tamaswells" target="_blank" rel="noopener">https://github.com/tamaswells</a> （脚本小王子，the king of sharing）</p>
+<p>6）<a href="https://github.com/jensengroup" target="_blank" rel="noopener">https://github.com/jensengroup</a>  （总有一些人，会默默地支持穷人们的科研）</p>
+<p>7）<a href="https://github.com/LePingKYXK" target="_blank" rel="noopener">https://github.com/LePingKYXK</a></p>
+<p>8）<a href="http://home.ustc.edu.cn/~lipai/scripts/vasp.html" target="_blank" rel="noopener">http://home.ustc.edu.cn/~lipai/scripts/vasp.html</a></p>
+<h4 id="理论计算，推荐书籍："><a href="#理论计算，推荐书籍：" class="headerlink" title="理论计算，推荐书籍："></a>理论计算，推荐书籍：</h4><h5 id="1）-Density-Functional-Theory-A-Practical-Introduction"><a href="#1）-Density-Functional-Theory-A-Practical-Introduction" class="headerlink" title="1） Density Functional Theory: A Practical Introduction"></a>1） Density Functional Theory: A Practical Introduction</h5><p><a href="http://onlinelibrary.wiley.com/book/10.1002/9780470447710" target="_blank" rel="noopener">http://onlinelibrary.wiley.com/book/10.1002/9780470447710</a> </p>
+<p>有权限的直接下载；没有权限的不要在网上瞎求，很多公式都不全，这个要注意。</p>
+<h5 id="2）Atkin’s-Physical-Chemisty-（10th）"><a href="#2）Atkin’s-Physical-Chemisty-（10th）" class="headerlink" title="2）Atkin’s Physical Chemisty （10th）"></a>2）Atkin’s Physical Chemisty （10th）</h5><p>网上到处都是，最新的是第10版，如果下载不了，看第9版即可。</p>
+<h5 id="3）of-Modern-Catalysis-and-Kinetics"><a href="#3）of-Modern-Catalysis-and-Kinetics" class="headerlink" title="3）of Modern Catalysis and Kinetics"></a>3）of Modern Catalysis and Kinetics</h5><p>做多相催化的强烈建议！<a href="http://onlinelibrary.wiley.com/book/10.1002/3527602658" target="_blank" rel="noopener">http://onlinelibrary.wiley.com/book/10.1002/3527602658</a> </p>
+<p>以上书籍，如不提供下载链接，基本都可以在 <a href="http://gen.lib.rus.ec/" target="_blank" rel="noopener">http://gen.lib.rus.ec/</a>  这个网站获得。</p>
+<h4 id="溶剂相关的："><a href="#溶剂相关的：" class="headerlink" title="溶剂相关的："></a>溶剂相关的：</h4><p><a href="https://www.organicdivision.org/wp-content/uploads/2016/12/organic_solvents.html" target="_blank" rel="noopener">https://www.organicdivision.org/wp-content/uploads/2016/12/organic_solvents.html</a></p>
+<p><a href="http://murov.info/orgsolvents.htm" target="_blank" rel="noopener">http://murov.info/orgsolvents.htm</a></p>
+<h4 id="求职相关"><a href="#求职相关" class="headerlink" title="求职相关"></a>求职相关</h4><h5 id="Psik-Network：-http-psi-k-net"><a href="#Psik-Network：-http-psi-k-net" class="headerlink" title="Psik Network： http://psi-k.net/"></a>Psik Network： <a href="http://psi-k.net/" target="_blank" rel="noopener">http://psi-k.net/</a></h5><p>注册后，一旦有人在网络里面发送海外职位信息，你便会收到邮件提醒。更为重要的是，网站里面有很多珍贵的学习资料。</p>
+<h5 id="Linkedin-领英-https-www-linkedin-com-，"><a href="#Linkedin-领英-https-www-linkedin-com-，" class="headerlink" title="Linkedin 领英 https://www.linkedin.com/，"></a>Linkedin 领英 <a href="https://www.linkedin.com/，" target="_blank" rel="noopener">https://www.linkedin.com/，</a></h5><p>有些老板也会在这上面发布招聘信息，本人当年的博士位置，就是在这里面发现的。 </p>
+<h5 id="Research-gate：-https-www-researchgate-net"><a href="#Research-gate：-https-www-researchgate-net" class="headerlink" title="Research gate： https://www.researchgate.net/,"></a>Research gate： <a href="https://www.researchgate.net/" target="_blank" rel="noopener">https://www.researchgate.net/</a>,</h5><p>可以用来下文献，关注同行最新进展。</p>
+<hr>
+<p>（七）理论计算，推荐书籍：</p>
+<p>1 DFT: A Practical Introduction</p>
+<p> <a href="http://onlinelibrary.wiley.com/book/10.1002/9780470447710" target="_blank" rel="noopener">http://onlinelibrary.wiley.com/book/10.1002/9780470447710</a> </p>
+<p>1）有权限的直接下载</p>
+<p>2）没有权限的不要在网上瞎求，很多公式都不全，这个要注意。</p>
+<p>2 Atkin’s Physical Chemisty （10th）</p>
+<p>网上到处都是，最新的是第10版，如果下载不了，看第9版即可。</p>
+<p>3 Concepts of Modern Catalysis and Kinetics 多相催化的强烈建议！</p>
+<p><a href="http://onlinelibrary.wiley.com/book/10.1002/3527602658" target="_blank" rel="noopener">http://onlinelibrary.wiley.com/book/10.1002/3527602658</a> </p>
+<p>以上书籍，如不提供下载链接，基本都可以在 <a href="http://gen.lib.rus.ec/" target="_blank" rel="noopener">http://gen.lib.rus.ec/</a>  这个网站获得。</p>
+<hr>
+<p>其他： </p>
+<p>1 颜色数据库：</p>
+<p><a href="https://www.rapidtables.com/web/color/RGB_Color.html" target="_blank" rel="noopener">https://www.rapidtables.com/web/color/RGB_Color.html</a> </p>
+<p>2 元素周期表：</p>
+<p><a href="http://www.rsc.org/periodic-table" target="_blank" rel="noopener">http://www.rsc.org/periodic-table</a></p>
+<p><a href="https://www.ptable.com/" target="_blank" rel="noopener">https://www.ptable.com/</a></p>
+<p><a href="http://www.periodictable.com/" target="_blank" rel="noopener">http://www.periodictable.com/</a></p>
+<p>3 Latex相关：</p>
+<p>本人的文章，除合作的外， 基本都是用latex写的，但是推荐网址的话，确实想不起有什么来。找一个latex入门pdf，练上几天，遇到问题google搜索，慢慢就好了。如果非要推荐一个网址的话，那么就选这个： <a href="https://tex.stackexchange.com/" target="_blank" rel="noopener">https://tex.stackexchange.com/</a>  和 www.google.com </p>
+<hr>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/eHmVsslNkaBtAHO0jsHMuK5APDGLDXXL7M3g9VbsIicuyWwcNrwXMnL9cQBsvrIeRFbgNmHiaAlMp1yZTswmcNeA/640?wx_fmt=jpeg" alt="img"></p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/eHmVsslNkaBtAHO0jsHMuK5APDGLDXXLjOuXI8VKlV8BECMzI4PehhbehXThX1tysRKCM2tJrEufnh9JwSQ97w/640?wx_fmt=jpeg" alt="img"></p>
+<p>也欢迎大家关注微信公众号</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+            <a href="/tags/网站/" rel="tag"># 网站</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/21/ex83/" rel="next" title="Ex83 搬砖">
+                <i class="fa fa-chevron-left"></i> Ex83 搬砖
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/03/A16/" rel="prev" title="ExA16 通过ASE简单扩胞的小脚本">
+                ExA16 通过ASE简单扩胞的小脚本 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar2.jpg" alt="By BigBro(a)s">
+            
+              <p class="site-author-name" itemprop="name">By BigBro(a)s</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#结构查找"><span class="nav-number">1.</span> <span class="nav-text">结构查找</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#The-Materials-Project"><span class="nav-number">1.1.</span> <span class="nav-text">The Materials Project</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ioChem-BD"><span class="nav-number">1.2.</span> <span class="nav-text">ioChem-BD</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ChemSpider"><span class="nav-number">1.3.</span> <span class="nav-text">ChemSpider</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Pubchem"><span class="nav-number">1.4.</span> <span class="nav-text">Pubchem</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ICSD-数据库"><span class="nav-number">1.5.</span> <span class="nav-text">ICSD 数据库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CCDC-The-Cambridge-Crystallographic-Data-Centre"><span class="nav-number">1.6.</span> <span class="nav-text">CCDC: The Cambridge Crystallographic Data Centre</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#cccbdb-数据库"><span class="nav-number">1.7.</span> <span class="nav-text">cccbdb 数据库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#团簇数据库："><span class="nav-number">1.8.</span> <span class="nav-text">团簇数据库：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Wulffman"><span class="nav-number">1.9.</span> <span class="nav-text">Wulffman</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#XPS"><span class="nav-number">1.10.</span> <span class="nav-text">XPS</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#热力学数据"><span class="nav-number">2.</span> <span class="nav-text">热力学数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#物理常数"><span class="nav-number">3.</span> <span class="nav-text">物理常数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#书籍文献下载："><span class="nav-number">4.</span> <span class="nav-text">书籍文献下载：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VASP-相关"><span class="nav-number">5.</span> <span class="nav-text">VASP 相关</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#程序软件相关："><span class="nav-number">6.</span> <span class="nav-text">程序软件相关：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Bash-：http-tldp-org-HOWTO-Bash-Prog-Intro-HOWTO-html"><span class="nav-number">6.1.</span> <span class="nav-text">Bash ：http://tldp.org/HOWTO/Bash-Prog-Intro-HOWTO.html</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#大牛们的Git-Hub-网站"><span class="nav-number">6.2.</span> <span class="nav-text">大牛们的Git-Hub 网站</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#理论计算，推荐书籍："><span class="nav-number">7.</span> <span class="nav-text">理论计算，推荐书籍：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1）-Density-Functional-Theory-A-Practical-Introduction"><span class="nav-number">7.1.</span> <span class="nav-text">1） Density Functional Theory: A Practical Introduction</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2）Atkin’s-Physical-Chemisty-（10th）"><span class="nav-number">7.2.</span> <span class="nav-text">2）Atkin’s Physical Chemisty （10th）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3）of-Modern-Catalysis-and-Kinetics"><span class="nav-number">7.3.</span> <span class="nav-text">3）of Modern Catalysis and Kinetics</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#溶剂相关的："><span class="nav-number">8.</span> <span class="nav-text">溶剂相关的：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#求职相关"><span class="nav-number">9.</span> <span class="nav-text">求职相关</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Psik-Network：-http-psi-k-net"><span class="nav-number">9.1.</span> <span class="nav-text">Psik Network： http://psi-k.net/</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Linkedin-领英-https-www-linkedin-com-，"><span class="nav-number">9.2.</span> <span class="nav-text">Linkedin 领英 https://www.linkedin.com/，</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Research-gate：-https-www-researchgate-net"><span class="nav-number">9.3.</span> <span class="nav-text">Research gate： https://www.researchgate.net/,</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">By BigBro(a)s</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+  <div class="footer-custom">Hosted by <a target="_blank" href="https://pages.github.com">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://bigbrosci-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.bigbrosci.com/2019/09/28/experience_03/';
+          this.page.identifier = '2019/09/28/experience_03/';
+          this.page.title = '常用的数据库总结';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://bigbrosci-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OWE4jcfK8IWkx4zaWuOloxKU-gzGzoHsz", "MRBwViAFCsPSOnnRF9LW7bdo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

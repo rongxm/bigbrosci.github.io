@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="单点能,磁性,轨道占据,氧,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本节提要前面的扩展练习中,要求大家结合自己的化学知识,判断计算结果是否正确。相比很多同学已经知道了氧原子含有磁性,我们在计算用需要考虑进去。在本节练习中,大师兄教给你如何分分析氧原子在轨道中的占据情况,判断计算是否合理,并正确进行氧原子能量的计算。 氧原子轨道氧原子的电子构型是 $1s^2 2s^2 2p^4$ ,轨道占据情况如图:  所以氧原子含有两个单电子,具有磁性,且磁矩为2 $μ_B$。">
+<meta name="keywords" content="单点能,磁性,轨道占据,氧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ex08 氧原子能量的正确计算">
+<meta property="og:url" content="http://www.bigbrosci.com/2017/10/30/ex08-calculate-oxygen-atom-energy/index.html">
+<meta property="og:site_name" content="Learn VASP The Hard Way">
+<meta property="og:description" content="本节提要前面的扩展练习中,要求大家结合自己的化学知识,判断计算结果是否正确。相比很多同学已经知道了氧原子含有磁性,我们在计算用需要考虑进去。在本节练习中,大师兄教给你如何分分析氧原子在轨道中的占据情况,判断计算是否合理,并正确进行氧原子能量的计算。 氧原子轨道氧原子的电子构型是 $1s^2 2s^2 2p^4$ ,轨道占据情况如图:  所以氧原子含有两个单电子,具有磁性,且磁矩为2 $μ_B$。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/10/30/ex08-calculate-oxygen-atom-energy/oxygen_occupation.jpg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/10/30/ex08-calculate-oxygen-atom-energy/OSZICAR.jpg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/10/30/ex08-calculate-oxygen-atom-energy/TOTEN.jpg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/10/30/ex08-calculate-oxygen-atom-energy/occupation.jpg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/10/30/ex08-calculate-oxygen-atom-energy/OSZICAR_2.jpg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/10/30/ex08-calculate-oxygen-atom-energy/OUTCAR_2.jpg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/10/30/ex08-calculate-oxygen-atom-energy/occupation_2.jpg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/10/30/ex08-calculate-oxygen-atom-energy/spin_2.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/10/30/ex08-calculate-oxygen-atom-energy/OUTCAR_3.jpg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/10/30/ex08-calculate-oxygen-atom-energy/OSZICAR_3.jpg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/10/30/ex08-calculate-oxygen-atom-energy/OUTCAR_4.jpg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/10/30/ex08-calculate-oxygen-atom-energy/TOTEN_4.jpg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/10/30/ex08-calculate-oxygen-atom-energy/occupation_4.jpg">
+<meta property="og:updated_time" content="2020-10-03T18:55:51.020Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ex08 氧原子能量的正确计算">
+<meta name="twitter:description" content="本节提要前面的扩展练习中,要求大家结合自己的化学知识,判断计算结果是否正确。相比很多同学已经知道了氧原子含有磁性,我们在计算用需要考虑进去。在本节练习中,大师兄教给你如何分分析氧原子在轨道中的占据情况,判断计算是否合理,并正确进行氧原子能量的计算。 氧原子轨道氧原子的电子构型是 $1s^2 2s^2 2p^4$ ,轨道占据情况如图:  所以氧原子含有两个单电子,具有磁性,且磁矩为2 $μ_B$。">
+<meta name="twitter:image" content="http://www.bigbrosci.com/2017/10/30/ex08-calculate-oxygen-atom-energy/oxygen_occupation.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.bigbrosci.com/2017/10/30/ex08-calculate-oxygen-atom-energy/">
+
+
+
+
+
+  <title>Ex08 氧原子能量的正确计算 | Learn VASP The Hard Way</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Learn VASP The Hard Way</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">The 2nd edition</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.bigbrosci.com/2017/10/30/ex08-calculate-oxygen-atom-energy/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="By BigBro(a)s">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn VASP The Hard Way">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ex08 氧原子能量的正确计算</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-30T21:41:12-04:00">
+                2017-10-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/LVASPTHW/" itemprop="url" rel="index">
+                    <span itemprop="name">LVASPTHW</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/10/30/ex08-calculate-oxygen-atom-energy/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/10/30/ex08-calculate-oxygen-atom-energy/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/10/30/ex08-calculate-oxygen-atom-energy/" class="leancloud_visitors" data-flag-title="Ex08 氧原子能量的正确计算">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="本节提要"><a href="#本节提要" class="headerlink" title="本节提要"></a>本节提要</h1><p>前面的扩展练习中,要求大家结合自己的化学知识,判断计算结果是否正确。相比很多同学已经知道了氧原子含有磁性,我们在计算用需要考虑进去。在本节练习中,大师兄教给你如何分分析氧原子在轨道中的占据情况,判断计算是否合理,并正确进行氧原子能量的计算。</p>
+<h1 id="氧原子轨道"><a href="#氧原子轨道" class="headerlink" title="氧原子轨道"></a>氧原子轨道</h1><p>氧原子的电子构型是 $1s^2 2s^2 2p^4$ ,轨道占据情况如图:</p>
+<p><img src="/2017/10/30/ex08-calculate-oxygen-atom-energy/oxygen_occupation.jpg" alt=""></p>
+<p>所以氧原子含有两个单电子,具有磁性,且磁矩为2 $μ_B$。</p>
+<h1 id="计算结果"><a href="#计算结果" class="headerlink" title="计算结果"></a>计算结果</h1><p>我们看一下前面的计算结果:</p>
+<h2 id="OSZICAR"><a href="#OSZICAR" class="headerlink" title="OSZICAR"></a>OSZICAR</h2><p><img src="/2017/10/30/ex08-calculate-oxygen-atom-energy/OSZICAR.jpg" alt="OSZICAR"></p>
+<h2 id="能量信息"><a href="#能量信息" class="headerlink" title="能量信息:"></a>能量信息:</h2><p><img src="/2017/10/30/ex08-calculate-oxygen-atom-energy/TOTEN.jpg" alt="能量信息"></p>
+<h2 id="电子占据情况-OUTCAR-中查看"><a href="#电子占据情况-OUTCAR-中查看" class="headerlink" title="电子占据情况: (OUTCAR 中查看)"></a>电子占据情况: (OUTCAR 中查看)</h2><p><img src="/2017/10/30/ex08-calculate-oxygen-atom-energy/occupation.jpg" alt="电子占据情况"></p>
+<ul>
+<li>Band1 含有两个电子, 对应的 $2s^2$ ;</li>
+<li>Band 2-4 为三个简并态,每个能带上有 1.33 个电子, 对应的 $2p^4$ 。</li>
+</ul>
+<p>但在这里,电子的占据是不正确的:</p>
+<ul>
+<li>因为 $2p_x$ 轨道上含有两个电子, 而不是把 $2p_x$ 上的一个电子平均分配到 3 个 p 轨道上;</li>
+<li>此外,通过这个电子的占据情况,我们不能正确得到氧原子的磁矩信息。</li>
+</ul>
+<p>那么怎么解决这个问题呢?</p>
+<h1 id="分两步解决问题"><a href="#分两步解决问题" class="headerlink" title="分两步解决问题"></a>分两步解决问题</h1><h2 id="第一步"><a href="#第一步" class="headerlink" title="第一步:"></a>第一步:</h2><p>由于氧原子具有磁性, 自旋极化计算要进行考虑, 在 VASP 计算中, 需要在 <code>INCAR</code> 中添加一项: <code>ISPIN = 2</code></p>
+<p><code>ISPIN</code> 的取值为 <code>1</code> 或 <code>2</code>:<br>​    1. 代表不考虑自旋极化,是VASP的默认值;<br>​    2. 代表打开自旋极化该选项,计算中考虑。</p>
+<h2 id="自旋极化什么时候该加呢"><a href="#自旋极化什么时候该加呢" class="headerlink" title="自旋极化什么时候该加呢?"></a>自旋极化什么时候该加呢?</h2><p>需要考虑自旋极化一般来说有以下几种：（新手记住前面4个即可。）</p>
+<ul>
+<li>单原子的计算,</li>
+<li>O$_2$ 分子(基态为三重态)</li>
+<li>自由基相关的计算</li>
+<li>含Fe,Co, Ni 的体系</li>
+<li>要计算的体系具有磁性：顺磁，铁磁，反铁磁等，要打开自旋极化。</li>
+<li>当关注体系的电子性质时，且自己不知道加或者不加的时候，建议加上。</li>
+</ul>
+<p>如果你不知道自己的体系是否要考虑自旋极化，可以简单做这样的一个测试：</p>
+<ul>
+<li>测试1：不加自旋极化，正常算，得到结果1；</li>
+<li>测试2：加上自旋极化，并在INCAR中添加： <code>LORBIT = 11</code><br>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</li>
+<li><h1 id="测试2中’OUTCAR的末尾会输出各个原子的磁矩信息："><a href="#测试2中’OUTCAR的末尾会输出各个原子的磁矩信息：" class="headerlink" title="测试2中’OUTCAR的末尾会输出各个原子的磁矩信息："></a>测试2中’<code>OUTCAR</code>的末尾会输出各个原子的磁矩信息：</h1></li>
+<li>测试2中OUTCAR的末尾会输出各个原子的磁矩信息：<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>6e2ce84518e1be61c275fe32fa33a1df18c0c4c7</p>
+<ul>
+<li>如果体系中原子的磁矩不为0，那么需要考虑自旋极化，</li>
+<li>如果体系所有原子的磁矩都为0，那么就不需要考虑自旋极化，而且此时，你会发现测试1 和 2的结果中：结构和能量是一样的。</li>
+</ul>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+<p>添加该选项后,重新计算,结果如下:</p>
+<h3 id="INCAR"><a href="#INCAR" class="headerlink" title="INCAR"></a>INCAR</h3><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SYSTEM = O</span><br><span class="line">ISMEAR = <span class="number">0</span></span><br><span class="line">SIGMA = <span class="number">0.01</span></span><br><span class="line">ISPIN = <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<h3 id="OSZICAR-1"><a href="#OSZICAR-1" class="headerlink" title="OSZICAR"></a>OSZICAR</h3><p><img src="/2017/10/30/ex08-calculate-oxygen-atom-energy/OSZICAR_2.jpg" alt="OSZICAR"></p>
+<p>可以看出, 加了自旋极化后, <strong>电子迭代步数增加了</strong>, 这是因为体系中的电子被强制分成了 $\alpha$ 和 $\beta$ 两种, 并分别进行计算, 因此增加了计算量。</p>
+<p>体系的磁矩大小在 $OSZICAR$ 中查看, 对应右下角的 <code>mag=</code>  该项, 从这里我们可以看到, 磁矩信息与我们已知的 2 $\mu_B$ 吻合, 这一点是合理的, 正确的。</p>
+<h3 id="OUITCAR-中的能量信息"><a href="#OUITCAR-中的能量信息" class="headerlink" title="OUITCAR 中的能量信息:"></a>OUITCAR 中的能量信息:</h3><p><img src="/2017/10/30/ex08-calculate-oxygen-atom-energy/OUTCAR_2.jpg" alt="OUTCAR"></p>
+<p> 考虑自旋极化后,体系的能量降低了。</p>
+<hr>
+<p> 我们重点通过查看体系的电子占据情况, 判断该计算是否合理: </p>
+<p><img src="/2017/10/30/ex08-calculate-oxygen-atom-energy/occupation_2.jpg" alt="OUTCAR"></p>
+<p>从图中可以看出,结果由两个 <code>spin</code> 组成: spin component 1 和 2:<br>spin component 1 中含有 4 个电子, 另一个中含有 2 个电子:</p>
+<p><img src="/2017/10/30/ex08-calculate-oxygen-atom-energy/spin_2.png" alt="OUTCAR"></p>
+<p>参考该图,可以看出 spin component 1 为自旋向上的 $\alpha$ 电子, 另一个是自旋向下的 $\beta$ 电子。</p>
+<p>但是:</p>
+<pre><code>1. Spincomponent 1中,能带2-4中3个alpha 电子的能量是一样的。这不正确，因为其中一个2px轨道中的alpha电子已经成对,能量要比py 和 pz 低;描述失败!
+2. spincomponent 2 中,另一个beta电子还是平均分配在了三个能带上面。
+</code></pre><p>电子占据依然不合理。</p>
+<p>上面的结果是由于体系的高对称性导致的简并所造成的。 $8 \times 8 \times 8$ 的立方体格子, 在这里具有高阶的点群对称性: $O_h$, 见 <code>OUTCAR</code></p>
+<p><img src="/2017/10/30/ex08-calculate-oxygen-atom-energy/OUTCAR_3.jpg" alt="OUTCAR"></p>
+<p>在 GGA 泛函中, 为了获得体系更低的能量,对于原子来说,通常会采用一种 <code>symmetry broken solution</code> 的处理方法。 但是在 VASP 计算中, 体系的对称性则是通过晶胞来获得, 即把这个晶胞当成一个原子来处理, 因此我们需要手动改变晶胞的形状来消除对称性造成的简并结果。 (此处的解释可能有些牵强, 有兴趣的可以查找与 symmetry broken solution 相关的文献)</p>
+<hr>
+<p>INCAR, KPOINTS, POTCAR等均保持不变。修改POSCAR, 如下:</p>
+<h3 id="POSCAR"><a href="#POSCAR" class="headerlink" title="POSCAR"></a>POSCAR</h3><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">O</span><br><span class="line"><span class="number">1.0</span></span><br><span class="line"><span class="number">7.5</span> <span class="number">0.0</span> <span class="number">0.0</span></span><br><span class="line"><span class="number">0.0</span> <span class="number">8.0</span> <span class="number">0.0</span></span><br><span class="line"><span class="number">0.0</span> <span class="number">0.0</span> <span class="number">8.9</span></span><br><span class="line">O</span><br><span class="line"><span class="number">1</span></span><br><span class="line">Cartesian</span><br><span class="line"><span class="number">0.0</span> <span class="number">0.0</span> <span class="number">0.0</span></span><br></pre></td></tr></table></figure>
+<p>通过改变格子在三个方向的大小, 降低对称性。 大师兄还尝试了三斜的格子, 结果和这个是一致的。 (有兴趣的可以尝试下)</p>
+<h3 id="POSCAR-1"><a href="#POSCAR-1" class="headerlink" title="POSCAR"></a>POSCAR</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">O</span><br><span class="line"><span class="number">1.0</span></span><br><span class="line">	<span class="number">7.5</span>		<span class="number">7.6</span>		<span class="number">0.0</span></span><br><span class="line">	<span class="number">0.0</span>		<span class="number">8.2564</span>		<span class="number">8.2</span></span><br><span class="line">	<span class="number">8.5</span>		<span class="number">0.0</span>		<span class="number">8.9</span></span><br><span class="line">O</span><br><span class="line">	<span class="number">1</span></span><br><span class="line">Cartesian</span><br><span class="line">	<span class="number">0.0</span>		<span class="number">0.0</span>		<span class="number">0.0</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p>下面我们看一下改变晶胞为7.5 x 8.0 x 8.9后的计算结果:</p>
+<h3 id="OSZICAR-2"><a href="#OSZICAR-2" class="headerlink" title="OSZICAR"></a>OSZICAR</h3><p><img src="/2017/10/30/ex08-calculate-oxygen-atom-energy/OSZICAR_3.jpg" alt="OSZICAR"></p>
+<p><code>OSZICAR</code> 中电子迭代步数又增加了, 这是因为对称性的降低增加了计算量。</p>
+<p>磁矩为 $2\mu_B$ ,这一点跟前面一样,正确!</p>
+<hr>
+<p>体系的对称性: 从 $O<em>h$ 降低到了 $D</em>{2h}$</p>
+<h3 id="OSZICAR-3"><a href="#OSZICAR-3" class="headerlink" title="OSZICAR"></a>OSZICAR</h3><p><img src="/2017/10/30/ex08-calculate-oxygen-atom-energy/OUTCAR_4.jpg" alt="OSZICAR"></p>
+<hr>
+<p>能量信息:</p>
+<h3 id="TOTEN"><a href="#TOTEN" class="headerlink" title="TOTEN"></a>TOTEN</h3><p><img src="/2017/10/30/ex08-calculate-oxygen-atom-energy/TOTEN_4.jpg" alt="TOTEN"></p>
+<p>跟前面能量相比, 可以看出, 对称性降低后, <strong>体系的能量进一步降低了</strong>。</p>
+<hr>
+<p>电子占据情况:</p>
+<h3 id="OUTCAR"><a href="#OUTCAR" class="headerlink" title="OUTCAR"></a>OUTCAR</h3><p><img src="/2017/10/30/ex08-calculate-oxygen-atom-energy/occupation_4.jpg" alt="TOTEN"></p>
+<hr>
+<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><ol>
+<li>在 $\alpha$ 电子(spin component 1)中, 能带1 是 $2s$ 中的 $\alpha$ 电子; 能带2-3为两个简并轨道, 对应 $p_y$ 和 $p_z$ 电子, 能带 4 位于 $p_x$ 中的 $\alpha$ 电子。 这里能带 4 的能量应该比 2 和 3 要低, 但结果恰恰相反, 描述不合理;</li>
+<li>在 $\beta$ 电子(spin component 2)中, 能带 1 是 $2s$ 的 $\beta$ 电子, 能带 2 为 $p_x$ 中的 $\beta$ 电子, 此时该 $\beta$ 电子占据了一个轨道, 而不是分布在三个 $p$ 轨道上, 结果是合理的。</li>
+</ol>
+<ul>
+<li><p>计算到这里, 已经是 VASP 官网对于单原子能量最为完整和准确的计算了。 虽然上面 $p_x$ 的 $\alpha$ 电子比 $p_y$ 和 $p_z$能量高, 至少电子的轨道电子占据情况是正确的, 且磁矩和简并的错误已经消除。 由此可见, VASP对于单原子的电子占据情况(至少对于 O 原子来说), 虽然取得了部分理想结果, 但还是有不足的地方。</p>
+</li>
+<li><p>此外,体系的对称性可以通过 <code>ISYM</code> 来控制( 扩展阅读 <a href="http://cms.mpi.univie.ac.at/vasp/guide/node115.html" target="_blank" rel="noopener">ISYM</a> ), <code>ISYM = 0</code> 的时候, 不考虑对称性进行计算.</p>
+</li>
+<li><p>大师兄也尝试过了将 <code>ISYM = 0</code> 应用在 $8 \times 8 \times 8$ (test3)以及 $7.5 \times 8.0 \times 8.9$ (test4) 的格子里进行计算。 对于电子占据情况来说, 均得到了与前面 $7.5 \times 8.0 \times 8.9$ 一致的结果。 但是使用 $7.5 \times 8.0 \times 8.9$ 所得到的能量更低(test4 的能量比 test3 低)。</p>
+</li>
+<li><p>使用 $7.5 \times 8.0 \times 8.9$ 格子时, <code>ISYM = 0</code> (test4) 和采用默认值, 得到的能量结果是相同的, 因此, 改变晶胞的对称性在计算单原子能量的时候是必须的, 单独通过 <code>ISYM</code> 这一项不考虑对称性是远远不够的。</p>
+</li>
+</ul>
+<h1 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h1><ol>
+<li><code>ISYM</code>: <a href="http://cms.mpi.univie.ac.at/vasp/guide/node115.html" target="_blank" rel="noopener">http://cms.mpi.univie.ac.at/vasp/guide/node115.html</a></li>
+<li>重现本节所有练习, 并自己认真分析结果, 查看电子占据情况, 体系的磁性, 以及能量信息。</li>
+</ol>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<li>知道什么时候使用自旋极化计算,怎么进行自旋极化计算;</li>
+<li>知道为什么自旋极化后计算量增加了;</li>
+<li>知道在哪里查看体系的磁性信息;</li>
+<li>知道为什么对称性降低后计算量增加了;</li>
+<li>会分析单原子中电子轨道的占据情况;判断结果是否合理;</li>
+<li>知道通过改变晶格大小调节体系的对称性从而消除简并对能量的影响;</li>
+<li>知道ISYM这一个参数,在计算单原子能量中,ISYM的作用远远不及改变晶格大小;</li>
+<li>知道vasp也存在自己局限性,不要完全相信。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/单点能/" rel="tag"># 单点能</a>
+          
+            <a href="/tags/磁性/" rel="tag"># 磁性</a>
+          
+            <a href="/tags/轨道占据/" rel="tag"># 轨道占据</a>
+          
+            <a href="/tags/氧/" rel="tag"># 氧</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/29/ex07_OUTCAR/" rel="next" title="Ex07 VASP的输出文件（三）">
+                <i class="fa fa-chevron-left"></i> Ex07 VASP的输出文件（三）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/18/Appendix_01_gkzs/" rel="prev" title="通过Ubuntu连接国科智算的方法">
+                通过Ubuntu连接国科智算的方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar2.jpg" alt="By BigBro(a)s">
+            
+              <p class="site-author-name" itemprop="name">By BigBro(a)s</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#本节提要"><span class="nav-number">1.</span> <span class="nav-text">本节提要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#氧原子轨道"><span class="nav-number">2.</span> <span class="nav-text">氧原子轨道</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算结果"><span class="nav-number">3.</span> <span class="nav-text">计算结果</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#OSZICAR"><span class="nav-number">3.1.</span> <span class="nav-text">OSZICAR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#能量信息"><span class="nav-number">3.2.</span> <span class="nav-text">能量信息:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#电子占据情况-OUTCAR-中查看"><span class="nav-number">3.3.</span> <span class="nav-text">电子占据情况: (OUTCAR 中查看)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分两步解决问题"><span class="nav-number">4.</span> <span class="nav-text">分两步解决问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一步"><span class="nav-number">4.1.</span> <span class="nav-text">第一步:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自旋极化什么时候该加呢"><span class="nav-number">4.2.</span> <span class="nav-text">自旋极化什么时候该加呢?</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#测试2中’OUTCAR的末尾会输出各个原子的磁矩信息："><span class="nav-number">5.</span> <span class="nav-text">测试2中’OUTCAR的末尾会输出各个原子的磁矩信息：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#INCAR"><span class="nav-number">5.0.1.</span> <span class="nav-text">INCAR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OSZICAR-1"><span class="nav-number">5.0.2.</span> <span class="nav-text">OSZICAR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OUITCAR-中的能量信息"><span class="nav-number">5.0.3.</span> <span class="nav-text">OUITCAR 中的能量信息:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#POSCAR"><span class="nav-number">5.0.4.</span> <span class="nav-text">POSCAR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#POSCAR-1"><span class="nav-number">5.0.5.</span> <span class="nav-text">POSCAR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OSZICAR-2"><span class="nav-number">5.0.6.</span> <span class="nav-text">OSZICAR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OSZICAR-3"><span class="nav-number">5.0.7.</span> <span class="nav-text">OSZICAR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TOTEN"><span class="nav-number">5.0.8.</span> <span class="nav-text">TOTEN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OUTCAR"><span class="nav-number">5.0.9.</span> <span class="nav-text">OUTCAR</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#分析"><span class="nav-number">6.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#扩展阅读"><span class="nav-number">7.</span> <span class="nav-text">扩展阅读</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">By BigBro(a)s</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+  <div class="footer-custom">Hosted by <a target="_blank" href="https://pages.github.com">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://bigbrosci-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.bigbrosci.com/2017/10/30/ex08-calculate-oxygen-atom-energy/';
+          this.page.identifier = '2017/10/30/ex08-calculate-oxygen-atom-energy/';
+          this.page.title = 'Ex08 氧原子能量的正确计算';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://bigbrosci-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OWE4jcfK8IWkx4zaWuOloxKU-gzGzoHsz", "MRBwViAFCsPSOnnRF9LW7bdo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

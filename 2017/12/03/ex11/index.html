@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="磁性,MAGMOM,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前面几节，我们讲解了O分子单点计算和O$_2$的POSCAR和POTCAR的准备。这一节我们主要讲解一下： 1）O$_2$的分子结构分析 2）如何初步进行构型优化计算。 O$_2$ 的单点计算首先解释下什么是单点计算：顾名思义就是不优化结构，直接算个能量，电子相关的性质。你也可能会听到很多人说静态计算，或者自冾计算。其实都一样的：几何结构计算前后不发生变化。 首先提交O$_2$ 静态计算任务，运行">
+<meta name="keywords" content="磁性,MAGMOM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ex11 O$_2$单点计算和优化结果分析">
+<meta property="og:url" content="http://www.bigbrosci.com/2017/12/03/ex11/index.html">
+<meta property="og:site_name" content="Learn VASP The Hard Way">
+<meta property="og:description" content="前面几节，我们讲解了O分子单点计算和O$_2$的POSCAR和POTCAR的准备。这一节我们主要讲解一下： 1）O$_2$的分子结构分析 2）如何初步进行构型优化计算。 O$_2$ 的单点计算首先解释下什么是单点计算：顾名思义就是不优化结构，直接算个能量，电子相关的性质。你也可能会听到很多人说静态计算，或者自冾计算。其实都一样的：几何结构计算前后不发生变化。 首先提交O$_2$ 静态计算任务，运行">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/03/ex11/ex11-1.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/03/ex11/ex11-2.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/03/ex11/ex11-3.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/03/ex11/ex11-4.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/03/ex11/ex11-5.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/03/ex11/ex11-6.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/03/ex11/ex11-7.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/03/ex11/ex11-8.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/03/ex11/ex11-10.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/03/ex11/ex11-11.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/03/ex11/ex11-12.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/03/ex11/ex11-13.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/03/ex11/ex11-14.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/03/ex11/ex11-15.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/03/ex11/ex11-16.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2017/12/03/ex11/ex11-17.jpeg">
+<meta property="og:updated_time" content="2020-10-03T18:55:51.057Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ex11 O$_2$单点计算和优化结果分析">
+<meta name="twitter:description" content="前面几节，我们讲解了O分子单点计算和O$_2$的POSCAR和POTCAR的准备。这一节我们主要讲解一下： 1）O$_2$的分子结构分析 2）如何初步进行构型优化计算。 O$_2$ 的单点计算首先解释下什么是单点计算：顾名思义就是不优化结构，直接算个能量，电子相关的性质。你也可能会听到很多人说静态计算，或者自冾计算。其实都一样的：几何结构计算前后不发生变化。 首先提交O$_2$ 静态计算任务，运行">
+<meta name="twitter:image" content="http://www.bigbrosci.com/2017/12/03/ex11/ex11-1.jpeg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.bigbrosci.com/2017/12/03/ex11/">
+
+
+
+
+
+  <title>Ex11 O$_2$单点计算和优化结果分析 | Learn VASP The Hard Way</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Learn VASP The Hard Way</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">The 2nd edition</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.bigbrosci.com/2017/12/03/ex11/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="By BigBro(a)s">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn VASP The Hard Way">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ex11 O$_2$单点计算和优化结果分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-03T02:06:48-05:00">
+                2017-12-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/LVASPTHW/" itemprop="url" rel="index">
+                    <span itemprop="name">LVASPTHW</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/03/ex11/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/12/03/ex11/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/12/03/ex11/" class="leancloud_visitors" data-flag-title="Ex11 O$_2$单点计算和优化结果分析">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前面几节，我们讲解了O分子单点计算和O$_2$的POSCAR和POTCAR的准备。这一节我们主要讲解一下：</p>
+<p>1）O$_2$的分子结构分析</p>
+<p>2）如何初步进行构型优化计算。</p>
+<h3 id="O-2-的单点计算"><a href="#O-2-的单点计算" class="headerlink" title="O$_2$ 的单点计算"></a>O$_2$ 的单点计算</h3><p>首先解释下什么是单点计算：顾名思义就是不优化结构，直接算个能量，电子相关的性质。你也可能会听到很多人说静态计算，或者自冾计算。其实都一样的：几何结构计算前后不发生变化。</p>
+<p>首先提交O$_2$ 静态计算任务，运行，等待结束。如果你的任务出错，请跟大师兄的输入文件进行对比、改正，直至计算正常结束。如下图：</p>
+<p><img src="/2017/12/03/ex11/ex11-1.jpeg" alt=""></p>
+<p>任务结束后查看OSZICAR:</p>
+<p>从OSZICAR最后，得到体系的磁矩为2μB，你应该知道这个磁矩是怎么回事，由哪两个电子贡献。</p>
+<p><img src="/2017/12/03/ex11/ex11-2.jpeg" alt=""></p>
+<p>如果不知道，看下图O$_2$的分子轨道结构：</p>
+<p><img src="/2017/12/03/ex11/ex11-3.jpeg" alt=""></p>
+<p>看完该图，相信大家对于O$_2$的成键方式有了一个更加深刻的印象。我们对比下VASP的输出结果。首先分析α电子的排布情况：</p>
+<p> <img src="/2017/12/03/ex11/ex11-4.jpeg" alt=""></p>
+<p>在这里，你会发现能带3和4 是简并的，应该是π(p2x）和π(p2y） 轨道中的α电子。能带 5 对应的应该是σ(2pz) 的电子。在O$_2$分子的电子构型中，两个O原子的2pz轨道以头碰头的方式形成一个σ键，其能量要比2px（2py）以肩并肩方式形成的π键能量要低。但是，能带5的能量（-13.3126）比3和4的（-13.3870）要高些，这与O$_2$的电子构型不一致，表明VASP的单点计算结果是不可靠的。</p>
+<p>再看一下β电子的排布情况：</p>
+<p><img src="/2017/12/03/ex11/ex11-5.jpeg" alt=""></p>
+<p>能带4和5对应的是应该是π（2px） 和π（2py） 轨道中的β电子。且总的轨道能量与前面图中一致，这说明VASP对β电子的描述是合理的。</p>
+<p>为什么出现这样的情况呢？难道跟前面O原子的计算一样，VASP又算不准啦？</p>
+<p>不是的，VASP怎么着也是个老牌的，响当当的计算程序，总不能让人每天指着鼻子骂算不准！</p>
+<p>这里的主要原因是：来自于实验的键长值未必就是计算程序所认可的。也就是说，实验值和理论值之间存在偏差，实验的结构不能直接用来计算其性质，只可以作为一个理想的初始值。所以，O$_2$的分子结构需要优化一下。</p>
+<h3 id="VASP-优化分子结构"><a href="#VASP-优化分子结构" class="headerlink" title="VASP 优化分子结构"></a>VASP 优化分子结构</h3><p>VASP优化分子结构的时候，需要用到一个参数：<code>IBRION</code>。引用官网的话：IBRION determines how the ions are updated and moved. 也就是说IBRION 这个参数决定了结构的优化过程。当你去官网查看的时候（google 搜索VASP IBRION这两个关键词），会发现IBRION有很多值。</p>
+<p><img src="/2017/12/03/ex11/ex11-6.jpeg" alt=""></p>
+<p>想要正确进行计算，你就需要去硬着头皮去了解各个值的含义了，这个过程必须自己去做，只听别人的建议去设置参数，而不自己去主动学习的，你的能力永远不会得到提升！！！</p>
+<p>一般来说，优化结构的时候有3个选择：</p>
+<p>IBRION=3：你的初始结构很差的时候；</p>
+<p>IBRION=2：共轭梯度算法，很可靠的一个选择，一般来说用它基本没什么问题。</p>
+<p>IBRION=1：用于小范围内稳定结构的搜索。</p>
+<p>如果你的体系遇到结构不收敛的时候，首先检查自己的结构是否合理，也就是物理化学意义是否清晰。如果结构没问题，可以尝试下换下IBRION的参数。</p>
+<p> 下面，我们在INCAR中加上IBRION参数（IBRION=2），其他输入文件保持不变，重新进行计算：</p>
+<p><img src="/2017/12/03/ex11/ex11-7.jpeg" alt=""></p>
+<p>如果是用上图中的INCAR，你会发现任务很快就算完了。而且只有一步，难道输入的结构就是VASP计算出来的的稳定结构吗？有这种可能，但几率极低。</p>
+<p>如果我们仔细查看下OUTCAR中的电子构型，发现它的信息和前面的单点计算一样。这说明，vasp并没有优化，而是又运行了一次单点计算。</p>
+<p>为什么呢？ 这是因为另一个参数：<code>NSW</code>。</p>
+<p>NSW 控制几何结构优化的步数。也就是VASP进行多少离子步。</p>
+<p>官网查看下NSW选项，发现默认值是0，也就是没有进行优化。（默认值，也叫缺省值，英文里面是 Default。 意思是，如果你不输入这个参数，程序将默认使用XXX的数值）</p>
+<p><img src="/2017/12/03/ex11/ex11-8.jpeg" alt=""></p>
+<p>现在原因找到了，继续进行优化任务。问题来了：NSW怎么设置呢？</p>
+<ul>
+<li>首先，它必须是大于等于0的整数。</li>
+<li>其次，一般来说，简单的体系200步内就可以正常结束。</li>
+<li>不知道什么时候收敛，初始结构很差，或者设置了很严格的收敛标准，那么你就要增大一下NSW的取值了，比如NSW=500或者更大。</li>
+<li>我们的这个O$_2$例子很简单，设置了NSW=10（你也可以设置为100,200或者500，不会影响计算结果的。）</li>
+</ul>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">System = O</span><br><span class="line">ISMEAR = <span class="number">0</span></span><br><span class="line">SIGMA  = <span class="number">0.01</span></span><br><span class="line">ISPIN  = <span class="number">2</span></span><br><span class="line">MAGMOM = <span class="number">2</span>*<span class="number">2</span></span><br><span class="line"></span><br><span class="line">IBRION = <span class="number">2</span></span><br><span class="line">NSW = <span class="number">10</span></span><br></pre></td></tr></table></figure>
+<p>计算完成后，打开OSZICAR：</p>
+<p><img src="/2017/12/03/ex11/ex11-10.jpeg" alt=""></p>
+<p>可以看到，结构优化进行了3步便停止了（如果你设置了NSW=1000，那么也是3步后就结束）。其中，每一步内又包含了若干电子步。此时的你应该知道是什么参数控制优化的结束，如果不知道请查看前面Ex09中关于收敛的文章。思考一下： 同样优化200步，设置EDIFF=1E-7和EDIFF=1E-4会有什么区别呢？ </p>
+<p>查看下OUTCAR： </p>
+<p> <img src="/2017/12/03/ex11/ex11-11.jpeg" alt=""></p>
+<p>你会发现，优化过后，OUTCAR中α电子的占据状态调整过来了，β电子的保持不变。这说明计算成功了，优化起作用了。</p>
+<p>那么优化过后的结构怎么查看呢？键长又是多少呢？</p>
+<p>下面我们要开始真正掌握VASP的输出文件了：CONTCAR。 CONTCAR是VASP的一个输出文件，它包含了VASP计算中最后一步几何优化的结构信息，也就是优化完的结果。它也是文本格式，可以直接打开查看，如图：</p>
+<p><img src="/2017/12/03/ex11/ex11-12.jpeg" alt=""></p>
+<p> 怎么才能知道优化完的<code>O-O</code>键长是多少呢？</p>
+<p>1）通过坐标直接算：</p>
+<p>此时，要注意CONTCAR输出的是Direct坐标，也就是分数坐标，需要转换成笛卡尔坐标。</p>
+<p>xy两个方向不用考虑（都是0），z方向的坐标相减即可：键长保留四位就足够了。</p>
+<p>(0.136785-( -0.001953))*8.9 = 1.2348 （$\AA$）</p>
+<p>2)  使用可视化软件测量：</p>
+<p>这样手动算，简单来说还可以，等复杂了就麻烦了，幸运的是，常用的建模软件中：p4vasp，VESTA，VMD，MS，ASE-gui等，都有测量键长的办法。这里简单讲解一下p4vasp 的用法。</p>
+<h4 id="p4vasp的安装"><a href="#p4vasp的安装" class="headerlink" title="p4vasp的安装"></a>p4vasp的安装</h4><p>这个详见本书的附录2：<a href="https://www.bigbrosci.com/2017/11/18/A02/">https://www.bigbrosci.com/2017/11/18/A02/</a></p>
+<p>1） Ubuntu 系统： <code>sudo apt-get install  p4vasp</code></p>
+<p>2） Windows系统： 下载p4vasp的安装包，解压后直接打开即可。</p>
+<p>下面是Windows下通过p4vasp读取CONTCAR的方法。Linux的也可以这样做，但终端里面：<code>p4v CONTCAR</code> 更高效直接。打开VASP后的界面如下： 注意图中： <code>System：</code>后面的三个问号部分，后面会进行对比：</p>
+<p><img src="/2017/12/03/ex11/ex11-13.jpeg" alt=""></p>
+<p>点击左侧栏中的 <code>Open</code> 选项。下图中，左侧点击进入CONTCAR所在的目录，进入后，在右侧会显示CONTCAR</p>
+<p><img src="/2017/12/03/ex11/ex11-14.jpeg" alt=""></p>
+<p><img src="/2017/12/03/ex11/ex11-15.jpeg" alt=""></p>
+<p>双击右侧的CONTCAR, 你会发现之前的三个问号？？？部分发生了变化：</p>
+<p>显示的 O 表明VASP读取CONTCAR成功。</p>
+<p><img src="/2017/12/03/ex11/ex11-16.jpeg" alt=""></p>
+<p>点击左侧的Show按钮，就可以查看结构了。</p>
+<h5 id="可视化界面的基本操作"><a href="#可视化界面的基本操作" class="headerlink" title="可视化界面的基本操作"></a>可视化界面的基本操作</h5><p>鼠标左键按住不放，可以3维空间旋转结构；</p>
+<p>鼠标中间摁住不放，可以上下，左右移动结构：</p>
+<p>鼠标右键摁住不敢，动动鼠标可以缩放结构；</p>
+<p>选择合适的观察位置：</p>
+<p>1 把鼠标移动到你要选中的原子上，</p>
+<p>2 通过空格（键盘上最长的键）用来选择或者取消选择原子：</p>
+<p>3 选中两个氧原子后，如下图：</p>
+<p><img src="/2017/12/03/ex11/ex11-17.jpeg" alt=""></p>
+<p> 选中之后，点<code>Structure</code> –&gt;<code>Measure</code> 显示键长为1.234774 Å，和我们手动计算的结果一样。</p>
+<p> 当然，也可以先点击：<code>Structure</code> –&gt;<code>Measure</code>，然后再选择感兴趣的原子。</p>
+<h5 id="小结一下："><a href="#小结一下：" class="headerlink" title="小结一下："></a>小结一下：</h5><p>实验值为1.2075 Å，VASP计算结果为1.2348 Å。两者之间的差值为： 0.0289 Å，偏差为：(1.2348-1.2075)/1.2075 = 2.26%。对于理论和实验之间的偏差，如果小于5%，我们一般可以认为吻合的很好。有时候很多同学揪着VASP的计算结果与实验值的偏差不放，误差已经千分之几了，感觉心里还是不放心，有着一种不完全匹配不罢休的冲动。这大可不必放在心上，如果你的结果偏离实验值千分之几，直接用就可以了。</p>
+<p> “To err is human; to describe the error properly is sublime.”<br>— Cliff Swartz, Physics Today 37 (1999),388.</p>
+<p>对于其他的软件程序（MS，VESTA，VMD等），大家下载安装后，百度里面搜一搜教程，基本操作应该很快就能掌握。</p>
+<h3 id="扩展练习："><a href="#扩展练习：" class="headerlink" title="扩展练习："></a>扩展练习：</h3><p>1 IBRION：<a href="https://cms.mpi.univie.ac.at/vasp/vasp/IBRION_tag_NFREE_tag.html" target="_blank" rel="noopener">https://cms.mpi.univie.ac.at/vasp/vasp/IBRION_tag_NFREE_tag.html</a></p>
+<p>2 NSW：<a href="http://cms.mpi.univie.ac.at/vasp/guide/node108.html" target="_blank" rel="noopener">http://cms.mpi.univie.ac.at/vasp/guide/node108.html</a></p>
+<p>3 CONTCAR：<a href="https://cms.mpi.univie.ac.at/wiki/index.php/CONTCAR" target="_blank" rel="noopener">https://cms.mpi.univie.ac.at/wiki/index.php/CONTCAR</a></p>
+<p>4 从头开始重现本节的所有操作；</p>
+<p>5 尝试不同的初始键长，运行vasp，查看输出结果。</p>
+<h3 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h3><p>1）学会结合自己所学的化学知识，分析双原子的电子构型；</p>
+<p>2）知道IBRION + NSW进行结构优化；</p>
+<p>3）知道什么参数控制结构优化的停止，以及单个离子步内电子步数；</p>
+<p>4）学会使用可视化软件查看输出的几何结构；</p>
+<p>5）知道理论结果和实验值之间没有100%吻合。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/磁性/" rel="tag"># 磁性</a>
+          
+            <a href="/tags/MAGMOM/" rel="tag"># MAGMOM</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/02/ex10/" rel="next" title="Ex10 O$_2$结构搭建以及POTCAR注意部分">
+                <i class="fa fa-chevron-left"></i> Ex10 O$_2$结构搭建以及POTCAR注意部分
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/04/ex12/" rel="prev" title="Ex12 VASP中MAGMOM的简单设定">
+                Ex12 VASP中MAGMOM的简单设定 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar2.jpg" alt="By BigBro(a)s">
+            
+              <p class="site-author-name" itemprop="name">By BigBro(a)s</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#O-2-的单点计算"><span class="nav-number">1.</span> <span class="nav-text">O$_2$ 的单点计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VASP-优化分子结构"><span class="nav-number">2.</span> <span class="nav-text">VASP 优化分子结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#p4vasp的安装"><span class="nav-number">2.1.</span> <span class="nav-text">p4vasp的安装</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#可视化界面的基本操作"><span class="nav-number">2.1.1.</span> <span class="nav-text">可视化界面的基本操作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#小结一下："><span class="nav-number">2.1.2.</span> <span class="nav-text">小结一下：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展练习："><span class="nav-number">3.</span> <span class="nav-text">扩展练习：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结："><span class="nav-number">4.</span> <span class="nav-text">总结：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">By BigBro(a)s</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+  <div class="footer-custom">Hosted by <a target="_blank" href="https://pages.github.com">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://bigbrosci-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.bigbrosci.com/2017/12/03/ex11/';
+          this.page.identifier = '2017/12/03/ex11/';
+          this.page.title = 'Ex11 O$_2$单点计算和优化结果分析';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://bigbrosci-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OWE4jcfK8IWkx4zaWuOloxKU-gzGzoHsz", "MRBwViAFCsPSOnnRF9LW7bdo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+  
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        extensions: ["tex2jax.js","[siunitx]/siunitx.js"],
+        TeX: {
+          extensions: [
+            "AMSmath.js","AMSsymbols.js", "sinuitx.js", "[mhchem]/mhchem.js"
+          ]
+        },
+        jax: ["input/TeX","output/HTML-CSS"],
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+      MathJax.Ajax.config.path['siunitx']  = '/js/MathJax-siunitx';
+      MathJax.Ajax.config.path["mhchem"] = "https://cdnjs.cloudflare.com/ajax/libs/mathjax-mhchem/3.3.0";
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

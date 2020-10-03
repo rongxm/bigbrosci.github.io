@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="NEB,过渡态,NH3,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="从本节起，我们开始学习下过渡态相关的计算。在进行下面的讲解之前，大家务必要记住这两点：  1） 过渡态只是一个结构而已，过渡态的计算并不是你想象的那么神秘；也就是计算很容易。  2）物理化学，结构化学书中的过渡态相关的基本知识要掌握，也就是你的理论基础要扎实。感觉基础不好的，认真看书。   过渡态计算的例子我们遵循一个从简单到复杂的顺序，慢慢介绍一下表面化学中过渡态的一般计算思路和方法。简单的例子">
+<meta name="keywords" content="NEB,过渡态,NH3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ex70 过渡态的计算（一）">
+<meta property="og:url" content="http://www.bigbrosci.com/2018/11/08/ex70/index.html">
+<meta property="og:site_name" content="Learn VASP The Hard Way">
+<meta property="og:description" content="从本节起，我们开始学习下过渡态相关的计算。在进行下面的讲解之前，大家务必要记住这两点：  1） 过渡态只是一个结构而已，过渡态的计算并不是你想象的那么神秘；也就是计算很容易。  2）物理化学，结构化学书中的过渡态相关的基本知识要掌握，也就是你的理论基础要扎实。感觉基础不好的，认真看书。   过渡态计算的例子我们遵循一个从简单到复杂的顺序，慢慢介绍一下表面化学中过渡态的一般计算思路和方法。简单的例子">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/08/ex70/ex70-1.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/08/ex70/ex70-2.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/08/ex70/ex70-3.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/08/ex70/ex70-4.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/08/ex70/ex70-5.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/08/ex70/ex70-6.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/08/ex70/ex70-7.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/08/ex70/ex70-8.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/08/ex70/ex70-9.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/08/ex70/ex70-10.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/08/ex70/ex70-11.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/08/ex70/ex70-12.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/08/ex70/ex70-13.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/11/08/ex70/ex70-14.png">
+<meta property="og:updated_time" content="2020-10-03T18:55:51.727Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ex70 过渡态的计算（一）">
+<meta name="twitter:description" content="从本节起，我们开始学习下过渡态相关的计算。在进行下面的讲解之前，大家务必要记住这两点：  1） 过渡态只是一个结构而已，过渡态的计算并不是你想象的那么神秘；也就是计算很容易。  2）物理化学，结构化学书中的过渡态相关的基本知识要掌握，也就是你的理论基础要扎实。感觉基础不好的，认真看书。   过渡态计算的例子我们遵循一个从简单到复杂的顺序，慢慢介绍一下表面化学中过渡态的一般计算思路和方法。简单的例子">
+<meta name="twitter:image" content="http://www.bigbrosci.com/2018/11/08/ex70/ex70-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.bigbrosci.com/2018/11/08/ex70/">
+
+
+
+
+
+  <title>Ex70 过渡态的计算（一） | Learn VASP The Hard Way</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Learn VASP The Hard Way</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">The 2nd edition</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.bigbrosci.com/2018/11/08/ex70/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="By BigBro(a)s">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn VASP The Hard Way">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ex70 过渡态的计算（一）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-08T15:30:16-05:00">
+                2018-11-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/LVASPTHW/" itemprop="url" rel="index">
+                    <span itemprop="name">LVASPTHW</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/08/ex70/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/08/ex70/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/11/08/ex70/" class="leancloud_visitors" data-flag-title="Ex70 过渡态的计算（一）">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>从本节起，我们开始学习下过渡态相关的计算。在进行下面的讲解之前，大家务必要记住这两点：</p>
+<ul>
+<li><p>1） 过渡态只是一个结构而已，过渡态的计算并不是你想象的那么神秘；也就是计算很容易。</p>
+</li>
+<li><p>2）物理化学，结构化学书中的过渡态相关的基本知识要掌握，也就是你的理论基础要扎实。感觉基础不好的，认真看书。</p>
+</li>
+</ul>
+<h3 id="过渡态计算的例子"><a href="#过渡态计算的例子" class="headerlink" title="过渡态计算的例子"></a>过渡态计算的例子</h3><p>我们遵循一个从简单到复杂的顺序，慢慢介绍一下表面化学中过渡态的一般计算思路和方法。简单的例子，本节我们选取的是VASP官网的经典计算：NH<sub>3</sub>的翻转，如下图：</p>
+<p><img src="/2018/11/08/ex70/ex70-1.png" alt=""></p>
+<p>如果你不太懂这个过程，可以把NH<sub>3</sub>看做一把雨伞。翻转的过程，就相当于大风把伞吹翻。</p>
+<p><img src="/2018/11/08/ex70/ex70-2.jpeg" alt=""></p>
+<p>对于这个计算的一些参考资料，大家可以点下面这两个链接：</p>
+<p>1） <a href="http://www.vasp.at/vasp-workshop/tutorials/tutorial_ammonia_flipping.pdf" target="_blank" rel="noopener">http://www.vasp.at/vasp-workshop/tutorials/tutorial_ammonia_flipping.pdf</a></p>
+<p>Vasp官网的一个PPT介绍，这个PPT有些年头了，不过对于我们学习还是很有帮助的。建议看完PPT里面的内容（最好是自己练习一遍后），再继续下面的学习。</p>
+<p>2） <a href="https://cms.mpi.univie.ac.at/wiki/index.php/Category:Examples" target="_blank" rel="noopener">https://cms.mpi.univie.ac.at/wiki/index.php/Category:Examples</a></p>
+<p>VASP wiki网页中关于过渡态计算的例子。</p>
+<hr>
+<h3 id="过渡态计算：初末态结构的优化。"><a href="#过渡态计算：初末态结构的优化。" class="headerlink" title="过渡态计算：初末态结构的优化。"></a>过渡态计算：初末态结构的优化。</h3><p>过渡态计算的第一步：我们要知道自己想算什么，需要准备什么？</p>
+<p>算过渡态，肯定指的是某一个反应或者过程的过渡态。过渡态的两边也分别对应着反应物和反应产物。所以，算一个反应的过渡态，不管计算过程如何，我们最终都会有三个结构：初始和末态结构，以及过渡态。初末态的结构和前我们已经讲过的优化过程是一样的，我们先回顾一番。</p>
+<hr>
+<h4 id="初态结构的优化"><a href="#初态结构的优化" class="headerlink" title="初态结构的优化"></a>初态结构的优化</h4><p><strong>1）搭建结构（POSCAR）</strong></p>
+<p><img src="/2018/11/08/ex70/ex70-3.jpeg" alt=""></p>
+<p>该图中的三个结构分别对应的是NH3翻转的初始，过渡态以及末态结构。这里反应物和产物都是NH3。首先，我们肯定要有一个NH3的结构。这里大师兄就直接复制PPT里面的坐标快速制备一个POSCAR。</p>
+<p><img src="/2018/11/08/ex70/ex70-4.png" alt=""></p>
+<p>注意： PPT里面没有写元素符号，大家记得自己加上。下图是本人复制后制作的POSCAR。 （添加了元素行，Cartesian坐标。）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ammonia flipping</span><br><span class="line">1.0</span><br><span class="line"> +9.0000000000  +0.0000000000  +0.0000000000</span><br><span class="line"> +0.0000000000 +10.0000000000  +0.0000000000</span><br><span class="line"> +0.0000000000  +0.0000000000 +11.0000000000</span><br><span class="line">H N</span><br><span class="line"> 3 1</span><br><span class="line">Selective</span><br><span class="line">Cartesian</span><br><span class="line"> +3.8185740000  +3.9721220000  +4.3936400000  T T T</span><br><span class="line"> +3.0000000000  +2.5542720000  +4.3936400000  T T T</span><br><span class="line"> +2.1814260000  +3.9721220000  +4.3936400000  T T T</span><br><span class="line"> +3.0000000000  +3.5000000000  +4.0000000000  F F F</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/11/08/ex70/ex70-5.png" alt=""></p>
+<hr>
+<p><strong>2） 准备输入文件（INCAR）</strong></p>
+<p>优化NH$_3$的初始结构：(回顾气相分子计算需要注意的地方)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">System = NH3</span><br><span class="line">ISMEAR = 0</span><br><span class="line">SIMGA = 0.01</span><br><span class="line"></span><br><span class="line">ALGO = FAST</span><br><span class="line">ENCUT = 450</span><br><span class="line">EDIFF = 1E-5</span><br><span class="line"></span><br><span class="line">NWRITE = 0</span><br><span class="line">LWAVE = .FALSE.</span><br><span class="line">LCHARG = .FALSE.</span><br><span class="line"></span><br><span class="line">IBRION = 2</span><br><span class="line">POTIM = 0.1</span><br><span class="line">EDIFFG = -0.02</span><br><span class="line">NSW = 100</span><br></pre></td></tr></table></figure>
+<p><strong>3） 准备输入文件（KPOINTS）</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">K-POINTS</span><br><span class="line"> 0</span><br><span class="line">Gamma</span><br><span class="line"> 1 1 1</span><br><span class="line"> 0 0 0</span><br></pre></td></tr></table></figure>
+<p><strong>4） 准备POTCAR 并提交任务</strong></p>
+<p><strong>5) 优化完的结构：</strong></p>
+<p><img src="/2018/11/08/ex70/ex70-6.png" alt=""></p>
+<p>只需要几步优化就完成了。这是因为我们复制的别人的（VASP官网例子）结构，因为这些结构已经被优化过了。即我们优化过程有一个很好的猜测结构。</p>
+<p>这给我们的启发就是：在你开始计算的时候，一定要善于利用前人的或者自己前面的计算结构。这会大大节省我们的计算工作量。</p>
+<hr>
+<h4 id="末态结构的搭建优化"><a href="#末态结构的搭建优化" class="headerlink" title="末态结构的搭建优化"></a>末态结构的搭建优化</h4><p>在上面结构的基础上，我们很容易搭建初末态的结构。仔细观察这个图，我们可以保持H原子的坐标不变，只需要将N原子的坐标修改一下。初始结构里面，三个H原子在xy平面上，</p>
+<p>N与H原子z方向的距离为0.3929 Å。如果N原子翻转过去，那么它的坐标将会是：</p>
+<p>4.3929 + 0.3929  = 4.7858 Å。</p>
+<p><img src="/2018/11/08/ex70/ex70-7.jpeg" alt=""></p>
+<p><strong>自行将这个图顺时针旋转90°</strong></p>
+<p><img src="/2018/11/08/ex70/ex70-8.png" alt=""></p>
+<p>然后跟前面同样的方法，优化一下就可以了。</p>
+<h4 id="过渡态结构的优化"><a href="#过渡态结构的优化" class="headerlink" title="过渡态结构的优化"></a>过渡态结构的优化</h4><p><img src="/2018/11/08/ex70/ex70-9.jpeg" alt=""></p>
+<p>上图中，我们可以发现，过渡态是一个平面的结构，我们可以按照前面末态结构搭建的思想弄一个初始的过渡态结构出来。即直接将N原子的z方向坐标修改成H原子的。如下图：</p>
+<p><img src="/2018/11/08/ex70/ex70-10.png" alt=""></p>
+<p>对比下前面初末态结构的坐标，你会发现Z 方向上被固定住了（最后一列SZ没有选择）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+3.8177218605  +3.9717738141  +4.3929644172  T T F</span><br><span class="line">+3.0000000000  +2.5559112549  +4.3926756556  T T F</span><br><span class="line">+2.1822781395  +3.9717738141  +4.3929644172  T T F</span><br><span class="line">+3.0000000000  +3.5000000000  +4.3929644172  F F F</span><br></pre></td></tr></table></figure>
+<p>这样做是强制优化过程中，所有的原子都在xy平面上。我们只优化H原面的坐标。原因如下：</p>
+<p><img src="/2018/11/08/ex70/ex70-11.png" alt=""></p>
+<p>这个三角形对应的就是我们从初始结构（IS）搭建过渡态结构（TS）的过程。在初始结构里面，N在三角形最下面，H在右边的点上，当我们人为把N原子放到H平面上的时候，N从下面的点移动到上面，导致N—H 键变短（从1.022 减小到0.944 Å）。但这个变短的过程是我们人为搭建结构所导致的。所以我们要把H原子在xy表面上放开，继续优化一下。参数（ICNAR，POTCAR， KPOINTS）保持不变，提交优化任务，最终我们的过渡态结构如下：</p>
+<p><img src="/2018/11/08/ex70/ex70-12.png" alt=""></p>
+<p>N, H 在同一平面内，N—H 键长为：1.004 Å</p>
+<hr>
+<h3 id="频率计算：（过渡态的验证办法之一）"><a href="#频率计算：（过渡态的验证办法之一）" class="headerlink" title="频率计算：（过渡态的验证办法之一）"></a>频率计算：（过渡态的验证办法之一）</h3><p>验证一个算完的过渡态是不是真正过渡态的时候，我们需要用到频率计算。因为过渡态只有一个虚频。（自己看书去学习为什么只有一个虚频？）复习下前面我们讲过的频率计算的细节：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">IBRION = 5</span><br><span class="line">POTIM = 0.015</span><br><span class="line">EDIFF = 1E-6</span><br><span class="line">NFREE = 2</span><br><span class="line">NSW = 1</span><br></pre></td></tr></table></figure>
+<p>5）此外，我们需要另外加一个无关痛痒的参数：NWRITE = 2 （或者不设置，默认值是2）</p>
+<p>大师兄本人喜欢用NWRITE = 0 。但当参数为0，使用Jmol可视化频率计算结果的时候：你会发现所有的原子都是同一个颜色，如下图：</p>
+<p><img src="/2018/11/08/ex70/ex70-13.png" alt=""></p>
+<p>当使用NWRITE的默认值2的时候，则是正常的：这是因为NWRITE = 0 写入的OUTCAR的数据太少，Jmol无法获取元素相关的参数用来可视化。此处，特别感谢群里的：<strong>连赞小朋友</strong>帮忙分析.</p>
+<p><img src="/2018/11/08/ex70/ex70-14.png" alt=""></p>
+<p>提取频率相关的参数，可以使用下面的命令：</p>
+<p>grep cm-1 OUTCAR 提取所有的频率（检查频率结果推荐使用）</p>
+<p>grep ‘i=’  OUTCAR  提取所有的虚频 （基本没啥用）</p>
+<p>grep ‘f  =’ OUTCAR 提取所有的非虚频 （计算零点能推荐使用）</p>
+<p>Jmol中所有的虚频都在最下面，大家可以根据前面的grep命令的结果和Jmol的界面对比下。本计算一共有3个虚频： 5.7, 10.2和806.8 cm<sup>-1</sup> 。前面2个虚频很小，直接不管就可以了。</p>
+<h3 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h3><p>算到这里，NH<sub>3</sub>翻转的过渡态我们就已经讲完了。本节采用的是直接优化的方法获取过渡态的结构，适用于一些非常简单的体系或者你已经非常熟悉的过渡态结构。回到开头我们讲的那句话，过渡态只是一个结构而已，我们需要做的就是如何通过一些计算的技巧和方法来获取这些结构。很多人一提到过渡态就会想到使用VTST编译的VASP程序算NEB（Nudged Elastic Band method）以及CI-NEB (Climbing Image NEB)，其实NEB和CI-NEB也仅仅是大家常用的一个方法而已，除此之外，还有很多。</p>
+<p><strong>最关键的</strong>就是通过结构化学的基础知识来搭建、计算并判断这些过渡态结构背后的物理化学意义，通俗点说就是：算的对不对，你要自己心里有个数。</p>
+<p>很多人会说算过渡态要通过频率来验证，其实这一步只是前面一步的副产物而已。只要你的化学基本功底深厚，加以训练，就可以准确判断反应的路径。</p>
+<p>本节计算例子的下载： 链接：<a href="https://pan.baidu.com/s/1hHGhrOlxMik8NBUqEzolwQ" target="_blank" rel="noopener">https://pan.baidu.com/s/1hHGhrOlxMik8NBUqEzolwQ</a>   密码：2dw5</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NEB/" rel="tag"># NEB</a>
+          
+            <a href="/tags/过渡态/" rel="tag"># 过渡态</a>
+          
+            <a href="/tags/NH3/" rel="tag"># NH3</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/07/ex69/" rel="next" title="Ex69 表面吸附物种的熵">
+                <i class="fa fa-chevron-left"></i> Ex69 表面吸附物种的熵
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/09/ex71/" rel="prev" title="Ex71 过渡态的计算（二）">
+                Ex71 过渡态的计算（二） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar2.jpg" alt="By BigBro(a)s">
+            
+              <p class="site-author-name" itemprop="name">By BigBro(a)s</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#过渡态计算的例子"><span class="nav-number">1.</span> <span class="nav-text">过渡态计算的例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过渡态计算：初末态结构的优化。"><span class="nav-number">2.</span> <span class="nav-text">过渡态计算：初末态结构的优化。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#初态结构的优化"><span class="nav-number">2.1.</span> <span class="nav-text">初态结构的优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#末态结构的搭建优化"><span class="nav-number">2.2.</span> <span class="nav-text">末态结构的搭建优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#过渡态结构的优化"><span class="nav-number">2.3.</span> <span class="nav-text">过渡态结构的优化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#频率计算：（过渡态的验证办法之一）"><span class="nav-number">3.</span> <span class="nav-text">频率计算：（过渡态的验证办法之一）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结："><span class="nav-number">4.</span> <span class="nav-text">总结：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">By BigBro(a)s</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+  <div class="footer-custom">Hosted by <a target="_blank" href="https://pages.github.com">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://bigbrosci-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.bigbrosci.com/2018/11/08/ex70/';
+          this.page.identifier = '2018/11/08/ex70/';
+          this.page.title = 'Ex70 过渡态的计算（一）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://bigbrosci-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OWE4jcfK8IWkx4zaWuOloxKU-gzGzoHsz", "MRBwViAFCsPSOnnRF9LW7bdo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

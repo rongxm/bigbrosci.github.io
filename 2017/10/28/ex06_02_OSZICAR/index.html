@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="OSZICAR,优化,ALGO,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="上一节，我们学习了CONTCAR的一些基本内容。本着从简到易，从最常用到最不常用的原则，这一节，我们学习VASP的另外一个简单，但又很重要的的输出文件：OSZICAR。  首先，推荐一个QE学习的视频：https://www.bilibili.com/video/av36194036 （用良心带人入坑） OSZICAR 的含义师兄，OSZICAR是什么的缩写？为什么起这么一个名字？ 不好意思，这个">
+<meta name="keywords" content="OSZICAR,优化,ALGO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ex06 VASP的输出文件（二）">
+<meta property="og:url" content="http://www.bigbrosci.com/2017/10/28/ex06_02_OSZICAR/index.html">
+<meta property="og:site_name" content="Learn VASP The Hard Way">
+<meta property="og:description" content="上一节，我们学习了CONTCAR的一些基本内容。本着从简到易，从最常用到最不常用的原则，这一节，我们学习VASP的另外一个简单，但又很重要的的输出文件：OSZICAR。  首先，推荐一个QE学习的视频：https://www.bilibili.com/video/av36194036 （用良心带人入坑） OSZICAR 的含义师兄，OSZICAR是什么的缩写？为什么起这么一个名字？ 不好意思，这个">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-03T18:55:51.019Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ex06 VASP的输出文件（二）">
+<meta name="twitter:description" content="上一节，我们学习了CONTCAR的一些基本内容。本着从简到易，从最常用到最不常用的原则，这一节，我们学习VASP的另外一个简单，但又很重要的的输出文件：OSZICAR。  首先，推荐一个QE学习的视频：https://www.bilibili.com/video/av36194036 （用良心带人入坑） OSZICAR 的含义师兄，OSZICAR是什么的缩写？为什么起这么一个名字？ 不好意思，这个">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.bigbrosci.com/2017/10/28/ex06_02_OSZICAR/">
+
+
+
+
+
+  <title>Ex06 VASP的输出文件（二） | Learn VASP The Hard Way</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Learn VASP The Hard Way</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">The 2nd edition</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.bigbrosci.com/2017/10/28/ex06_02_OSZICAR/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="By BigBro(a)s">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn VASP The Hard Way">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ex06 VASP的输出文件（二）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-28T18:30:16-04:00">
+                2017-10-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/LVASPTHW/" itemprop="url" rel="index">
+                    <span itemprop="name">LVASPTHW</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/10/28/ex06_02_OSZICAR/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/10/28/ex06_02_OSZICAR/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/10/28/ex06_02_OSZICAR/" class="leancloud_visitors" data-flag-title="Ex06 VASP的输出文件（二）">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>上一节，我们学习了<code>CONTCAR</code>的一些基本内容。本着从简到易，从最常用到最不常用的原则，这一节，我们学习VASP的另外一个简单，但又很重要的的输出文件：<code>OSZICAR</code>。 </p>
+<p>首先，推荐一个QE学习的视频：<a href="https://www.bilibili.com/video/av36194036" target="_blank" rel="noopener">https://www.bilibili.com/video/av36194036</a> （用良心带人入坑）</p>
+<h3 id="OSZICAR-的含义"><a href="#OSZICAR-的含义" class="headerlink" title="OSZICAR 的含义"></a><code>OSZICAR</code> 的含义</h3><p>师兄，<code>OSZICAR</code>是什么的缩写？为什么起这么一个名字？</p>
+<p>不好意思，这个我真不知道。也没有认真去考证过。目前只能告诉大家先把这个名字记住。</p>
+<h3 id="什么是优化？"><a href="#什么是优化？" class="headerlink" title="什么是优化？"></a>什么是优化？</h3><p>在介绍<code>OSZICAR</code>的内容和功能之前，有必要先给大家澄清一个计算中常见的词：优化。</p>
+<p>计算一个体系，我们有<code>2</code>个优化过程：</p>
+<ul>
+<li>电子结构的优化： 可以理解为对某一固定的几何结构，迭代求解薛定谔方程来获得体系能量极小值的一个过程。这个迭代过程，每一次迭代求解都可以认为是电子结构的一个优化。（通常被大伙称为：电子步）</li>
+<li>几何结构的优化：可以理解为在电子结构优化的结果上，获取原子的受力情况，然后根据受力情况，调节原子的位置，再进行电子结构优化，获取新的受力情况，然后再调节原子位置，一直重复这样的过程，直至找到体系势能面上一个极小值的过程。（通常被大伙称为：离子步）</li>
+</ul>
+<p>思考一下，我们的<code>O</code>原子，我们只可能对它进行电子结构的优化，因为它的几何结构不会发生变化。</p>
+<h3 id="OSZICAR是干什么的？"><a href="#OSZICAR是干什么的？" class="headerlink" title="OSZICAR是干什么的？"></a><code>OSZICAR</code>是干什么的？</h3><p>当VASP迭代求解<code>O</code>原子电子结构的时候，整个过程就会记录在OSZICAR中。下面我们就看一下VASP官网对<code>OSZICAR</code>的解释说明：<a href="https://cms.mpi.univie.ac.at/wiki/index.php/OSZICAR" target="_blank" rel="noopener">https://cms.mpi.univie.ac.at/wiki/index.php/OSZICAR</a></p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Information about convergence speed and about the current step is written to stdout and to the **OSZICAR** <span class="keyword">file</span>. Always keep a copy of the **OSZICAR** <span class="keyword">file</span>, it might give important information.</span><br></pre></td></tr></table></figure>
+<p>也就是说：<code>OSZICAR</code>是用来记录优化过程一些信息的文件。这里的优化过程既包括电子结构，又包括几何结构。</p>
+<h3 id="OSZICAR长什么样子？"><a href="#OSZICAR长什么样子？" class="headerlink" title="OSZICAR长什么样子？"></a><code>OSZICAR</code>长什么样子？</h3><p>在Linux的终端中，使用Vim打开<code>OSZICAR</code>，你会得到类似下面的信息：</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">       N       E                     dE             d eps       ncg     rms          rms（c）</span><br><span class="line">DAV:   <span class="number">1</span>     <span class="number">0.324969965196E+02</span>    <span class="number">0.32497E+02</span>   -<span class="number">0.10270E+03</span>    <span class="number">48</span>   <span class="number">0.977E+01</span></span><br><span class="line">DAV:   <span class="number">2</span>     <span class="number">0.501749892771E+00</span>   -<span class="number">0.31995E+02</span>   -<span class="number">0.31995E+02</span>    <span class="number">72</span>   <span class="number">0.202E+01</span></span><br><span class="line">DAV:   <span class="number">3</span>    -<span class="number">0.182605770767E-01</span>   -<span class="number">0.52001E+00</span>   -<span class="number">0.50521E+00</span>    <span class="number">48</span>   <span class="number">0.521E+00</span></span><br><span class="line">DAV:   <span class="number">4</span>    -<span class="number">0.203547758465E-01</span>   -<span class="number">0.20942E-02</span>   -<span class="number">0.20860E-02</span>    <span class="number">96</span>   <span class="number">0.333E-01</span></span><br><span class="line">DAV:   <span class="number">5</span>    -<span class="number">0.203547873947E-01</span>   -<span class="number">0.11548E-07</span>   -<span class="number">0.11210E-07</span>    <span class="number">48</span>   <span class="number">0.844E-04</span>    <span class="number">0.307E-01</span></span><br><span class="line">DAV:   <span class="number">6</span>    -<span class="number">0.213726161828E-01</span>   -<span class="number">0.10178E-02</span>   -<span class="number">0.17884E-03</span>    <span class="number">48</span>   <span class="number">0.111E-01</span>    <span class="number">0.155E-01</span></span><br><span class="line">DAV:   <span class="number">7</span>    -<span class="number">0.214708381542E-01</span>   -<span class="number">0.98222E-04</span>   -<span class="number">0.23522E-04</span>    <span class="number">48</span>   <span class="number">0.459E-02</span></span><br><span class="line">   <span class="number">1</span> F= -<span class="number">.21470838E-01</span> E0= -<span class="number">.13757722E-01</span>  d E =-<span class="number">.154262E-01</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>第一行中各项的含义：（没汉语解释的，大师兄也翻译不出来）</p>
+<p>1） <code>N</code> 代表电子结构的迭代步数，通常被大家称为电子步。</p>
+<p>2） <code>E</code> 代表当前电子步的体系能量;</p>
+<p>3） <code>dE</code>当前电子步和上一步体系能量的差值;</p>
+<p>4） <code>d eps</code> the change in the band structure energy; </p>
+<p>5）<code>ncg</code> the number of evaluations of the Hamiltonian acting onto a wavefunction; </p>
+<p>6） <code>rms</code>  the norm of the residuum of the trialwavefunctions （i.e. their approximate error）</p>
+<p>7） <code>rms (c)</code> the difference between input and output charge density.</p>
+</li>
+<li><p>第二行中<code>DAV</code>的含义：</p>
+<p>1） <code>Blocked Davidson algorithm</code>的缩写。看不懂不要紧，简单点：就是一个电子迭代求解的自洽算法。在对电子结构迭代求解的过程，前人们发展出了很多不同的算法。就好比是，从北京到南京，有很多种出行选择一样，可以坐火车，汽车，乘飞机，也可以步行，骑马，骑驴，骑自行车，等等。每一种出行方式都是一种算法。大家可以根据自己的情况，选择适合自己的出行方式。所以，对自己的研究方向，也需要找一个适合自己体系的合适的算法。</p>
+<p>2） 除了<code>DAV</code>，今后你还会看到<code>RMM</code> （residual minimization scheme） 和 <code>CG</code> （conjugate-gradient algorithm）等等。选择不同的算法，第二行以及后面显示的也会有所区别。这点大家掌握即可。具体到每个算法怎么回事，当你计算算起来了，有余力，慢慢开始学习量化基础知识的时候再仔细琢磨。</p>
+<p>3） 前面我们说了，要找一个适合自己体系的算法，是选<code>DAV</code>，<code>RMM</code>还是<code>CG</code>，亦或是其他的呢？ 这个可以在<code>INCAR</code>中通过参数<code>ALGO</code>设置，参考链接： <a href="https://cms.mpi.univie.ac.at/wiki/index.php/ALGO" target="_blank" rel="noopener">https://cms.mpi.univie.ac.at/wiki/index.php/ALGO</a> 。一般来说，使用<code>ALGO = Fast</code>可以满足大部分的需求。可以理解为北京到南京出行，大家最常用的火车。</p>
+<p>4） 师兄：这个氧原子的计算中，我们没有在<code>INCAR</code>中设置<code>DAV</code>这个算法相关的参数啊，为什么<code>OSZICAR</code>中还会出现<code>DAV</code>呢？</p>
+<p>原因在于：同很多软件一样，<code>VASP</code>也有很多<code>默认的参数</code>，这就避免了当你不设置某个参数的时候进行不下去的尴尬局面，当然，有些相关的参数，你不设置的时候VASP也会罢工，这个我们以后再说。此时的计算，对于电子结构收敛的算法来说，默认的是<code>DAV</code>这个方法，也就是INCAR中： <code>ALGO = N</code>。</p>
+<p>5）划重点：</p>
+<p>我们知道<code>VASP</code>的<code>INCAR</code>设置中，有很多相应的参数。而新手恰恰在学习的过程中，由于不能在短时间了解这些参数的具体含义，使用方法，从而导致了不知道怎么去选择的情况。而就是在这种情况下，选择了胡搞。也就是<code>INCAR</code>中参数，认识的写上去，不认识的也写上去。这也恰恰是新手在计算过程中容易出错的一个主要原因。前面我们说了<code>VASP</code>有很多默认的参数，而新手在学习的时候，不能图快，要一步一个脚印地走。看见一个参数，就好好琢磨琢磨，争取理解透了，或者知道这个参数大体上怎么回事。如果你不认识的参数，千万不要写上去，使用默认的就可以。</p>
+</li>
+<li><p>最后一行：</p>
+<p>1） <code>F</code>前面的 1 代表几何结构优化的次数（也称为离子步的步数），本练习只有1步。</p>
+<p>2） <code>F =</code> 是体系的总能量, 与<code>OUTCAR</code>中 <code>free energy  TOTEN</code> 后面的值相等；（<code>OUTCAR</code>还没讲，暂且记住）</p>
+<p>3） <code>E0</code> 后面的能量对应<code>OUTCAR</code>中 <code>energy (sigma-&gt;0)</code>后面的能量（下图到数第一行）。</p>
+</li>
+</ul>
+<h3 id="OSZICAR-的作用"><a href="#OSZICAR-的作用" class="headerlink" title="OSZICAR 的作用"></a><code>OSZICAR</code> 的作用</h3><p>Always keep a copy of the <strong>OSZICAR</strong> file, it might give important information. 官网既然这么说，这表明OSZICAR确实很重要，重要在哪里呢？ </p>
+<ul>
+<li><p>整个体系的优化过程都记录下来了。（当然后面我们要讲的<code>OUTCAR</code>也以更加详细的方式将优化过程记下来了）但<code>OSZICAR</code>可以更加直观地观测我们体系优化过程中能量的变化过程。</p>
+</li>
+<li><p>通过<code>OSZICAR</code>获取体系的能量，也就是<code>E0</code>后面的那一项。<strong>很多人在使用<code>VASP</code>的时候，不知道该选择哪个能量</strong>，这里大师兄就告诉你：选择<code>E0</code>后面的即可。不管你有什么疑问，不管别人怎么跟你争论，都不要管，先老老实实记住：我们选<code>E0</code>后面的这个能量。随着你的学习，很多疑问自己就解开了。命令使用方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">iciq-lq@ln3:/THFS/home/iciq-lq/LVASPTHW/ex05$ grep E0 OSZICAR  </span><br><span class="line">   1 F= -.21470838E-01 E0= -.13757722E-01  d E =-.154262E-01</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>后面的学习中，我们会经常讲解<code>OSZICAR</code>相关的内容，由于时间的原因，也主要是因为新手才刚刚接触计算，就不做过多的解释。</p>
+</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这一节，我们需要了解和学习的内容主要有以下几个方面：</p>
+<p>1） <code>VASP</code>计算中的优化：几何和电子结构优化大体有个了解</p>
+<p>2）<code>OSZICAR</code>中各项的含义，争取多理解几个；</p>
+<p>3）<code>DAV</code>对应的<code>INCAR</code>中<code>ALGO</code>是怎么设置的；一般来说<code>ALGO=FAST</code>可以满足大部分人的计算需求；</p>
+<p>4）知道<code>VASP</code>有默认的参数，自己不要画蛇填足。保持<code>INCAR</code>干净整洁，不知道的，模糊不清的参数坚决不往<code>INCAR</code>里面写。</p>
+<p>5）知道怎么从<code>OSZICAR</code>中获取体系的能量。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OSZICAR/" rel="tag"># OSZICAR</a>
+          
+            <a href="/tags/优化/" rel="tag"># 优化</a>
+          
+            <a href="/tags/ALGO/" rel="tag"># ALGO</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/27/ex06_01_CONTCAR/" rel="next" title="Ex06 VASP的输出文件（一）">
+                <i class="fa fa-chevron-left"></i> Ex06 VASP的输出文件（一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/29/ex07_OUTCAR/" rel="prev" title="Ex07 VASP的输出文件（三）">
+                Ex07 VASP的输出文件（三） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar2.jpg" alt="By BigBro(a)s">
+            
+              <p class="site-author-name" itemprop="name">By BigBro(a)s</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#OSZICAR-的含义"><span class="nav-number">1.</span> <span class="nav-text">OSZICAR 的含义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是优化？"><span class="nav-number">2.</span> <span class="nav-text">什么是优化？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OSZICAR是干什么的？"><span class="nav-number">3.</span> <span class="nav-text">OSZICAR是干什么的？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OSZICAR长什么样子？"><span class="nav-number">4.</span> <span class="nav-text">OSZICAR长什么样子？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OSZICAR-的作用"><span class="nav-number">5.</span> <span class="nav-text">OSZICAR 的作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">By BigBro(a)s</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+  <div class="footer-custom">Hosted by <a target="_blank" href="https://pages.github.com">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://bigbrosci-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.bigbrosci.com/2017/10/28/ex06_02_OSZICAR/';
+          this.page.identifier = '2017/10/28/ex06_02_OSZICAR/';
+          this.page.title = 'Ex06 VASP的输出文件（二）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://bigbrosci-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OWE4jcfK8IWkx4zaWuOloxKU-gzGzoHsz", "MRBwViAFCsPSOnnRF9LW7bdo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

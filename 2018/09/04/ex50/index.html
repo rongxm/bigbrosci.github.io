@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="p4vasp,功函数,vtotav,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前面一节我们介绍了计算功函数的具体流程，以及用p4vasp获取真空能级的方法。 本节我们介绍另外两个方法，从本质上来说，这些方法是一样的，都是基于对 LOCPOT 中数据的处理。 1 使用 vtotav-v5.2f 脚本操作流程如下：  注意：  gfortran -o vtotav.x vtotav-5.2f 这个命令将 vtotav-5.2f 这 个脚本编译成可执行文件 vtotav.x。">
+<meta name="keywords" content="p4vasp,功函数,vtotav">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ex50 功函数（work function）的计算（二）">
+<meta property="og:url" content="http://www.bigbrosci.com/2018/09/04/ex50/index.html">
+<meta property="og:site_name" content="Learn VASP The Hard Way">
+<meta property="og:description" content="前面一节我们介绍了计算功函数的具体流程，以及用p4vasp获取真空能级的方法。 本节我们介绍另外两个方法，从本质上来说，这些方法是一样的，都是基于对 LOCPOT 中数据的处理。 1 使用 vtotav-v5.2f 脚本操作流程如下：  注意：  gfortran -o vtotav.x vtotav-5.2f 这个命令将 vtotav-5.2f 这 个脚本编译成可执行文件 vtotav.x。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/09/04/ex50/ex50-1.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/09/04/ex50/ex50-2.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/09/04/ex50/ex50-3.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/09/04/ex50/ex50-4.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/09/04/ex50/ex50-5.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/09/04/ex50/ex50-6.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/09/04/ex50/ex50-7.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/09/04/ex50/ex50-8.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/09/04/ex50/ex50-9.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/09/04/ex50/ex50-10.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/09/04/ex50/ex50-11.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/09/04/ex50/ex50-12.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/09/04/ex50/ex50-13.jpeg">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/09/04/ex50/ex50-14.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2018/09/04/ex50/ex50-15.png">
+<meta property="og:updated_time" content="2020-10-03T18:55:51.460Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ex50 功函数（work function）的计算（二）">
+<meta name="twitter:description" content="前面一节我们介绍了计算功函数的具体流程，以及用p4vasp获取真空能级的方法。 本节我们介绍另外两个方法，从本质上来说，这些方法是一样的，都是基于对 LOCPOT 中数据的处理。 1 使用 vtotav-v5.2f 脚本操作流程如下：  注意：  gfortran -o vtotav.x vtotav-5.2f 这个命令将 vtotav-5.2f 这 个脚本编译成可执行文件 vtotav.x。">
+<meta name="twitter:image" content="http://www.bigbrosci.com/2018/09/04/ex50/ex50-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.bigbrosci.com/2018/09/04/ex50/">
+
+
+
+
+
+  <title>Ex50 功函数（work function）的计算（二） | Learn VASP The Hard Way</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Learn VASP The Hard Way</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">The 2nd edition</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.bigbrosci.com/2018/09/04/ex50/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="By BigBro(a)s">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn VASP The Hard Way">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ex50 功函数（work function）的计算（二）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-04T02:06:48-04:00">
+                2018-09-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/LVASPTHW/" itemprop="url" rel="index">
+                    <span itemprop="name">LVASPTHW</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/04/ex50/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/09/04/ex50/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/09/04/ex50/" class="leancloud_visitors" data-flag-title="Ex50 功函数（work function）的计算（二）">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="/2018/09/04/ex50/ex50-1.png" alt=""></p>
+<p>前面一节我们介绍了计算功函数的具体流程，以及用p4vasp获取真空能级的方法。</p>
+<p>本节我们介绍另外两个方法，从本质上来说，这些方法是一样的，都是基于对 LOCPOT 中数据的处理。</p>
+<h3 id="1-使用-vtotav-v5-2f-脚本"><a href="#1-使用-vtotav-v5-2f-脚本" class="headerlink" title="1 使用 vtotav-v5.2f 脚本"></a>1 使用 vtotav-v5.2f 脚本</h3><p>操作流程如下：</p>
+<p><img src="/2018/09/04/ex50/ex50-2.jpeg" alt=""></p>
+<p><strong>注意：</strong></p>
+<ol>
+<li><p><code>gfortran -o vtotav.x vtotav-5.2f</code></p>
+<p>这个命令将 <code>vtotav-5.2f</code> 这 个脚本编译成可执行文件 <code>vtotav.x</code>。</p>
+<p>gfortran 不管用的话可以试试<code>ifort -o vtotav.xvtotav-5.2f</code>这个命令。</p>
+</li>
+<li><p>./vtotav.x 在当前目录下运行这个可执行文件;会让你选择计算的方向，这里我们 slab 的真空层是在 z 方向，所以我们输入 3  (回想一下，上一节，我们在 p4vasp 中选择z方向的鼠标操作，它们是一样的)，都是讲 LOCPOT 文件处理，然后生成z方向的相关数据。</p>
+</li>
+<li><p>运行完毕后，当前目录下会多出来一个 VLINE 文件。这个文件就是 p4vasp 中选择 z 方向之后所显示的红线数据，(不过横坐标有些不同)。</p>
+</li>
+<li><p>我们看一下 VLINE 文件的数据内容，第一行中 224 代表有 224 个点，3 代表 z 方向。</p>
+</li>
+<li><p>VLINE 文件中横坐标为当前点的序号，从 1-224，而 p4vasp 中导出来的文件，横坐标为 z 方向的坐标，不过这个不影响我们对真空能级的计算。</p>
+</li>
+</ol>
+<p>上图中最后的两行命令，</p>
+<ol>
+<li>从上一级目录下拷贝了一个 python 脚本，名为：<code>wplot-f.py</code>；</li>
+<li>运行这个 python 脚本，效果如下：</li>
+</ol>
+<p><img src="/2018/09/04/ex50/ex50-3.jpeg" alt=""></p>
+<p>我们又得到了前面一节的功函数的图像。真空能级，大家从 150 前后取个值即可，也可以在一段直线的区间范围内求个平均数。</p>
+<p>对比下前面一节和本节中的数据：</p>
+<p><img src="/2018/09/04/ex50/ex50-4.png" alt=""></p>
+<p>左图为本节的，右图为上节的。</p>
+<p>Python 脚本这么神奇，是怎么写出来的呢？脚本内容如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># Written By Qiang for workfunction Visualization from VLINE file</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">x = []</span><br><span class="line">y = []</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"VLINE"</span>, mode=<span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    next(f)</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">        xy=line.rstrip().split()</span><br><span class="line">        x.append(float(xy[<span class="number">0</span>]))</span><br><span class="line">        y.append(float(xy[<span class="number">1</span>]))</span><br><span class="line"></span><br><span class="line">plt.plot(x,y) </span><br><span class="line">plt.savefig(<span class="string">'workfunction'</span> + <span class="string">'.pdf'</span>, dpi=<span class="number">400</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>思路如下：</p>
+<ol>
+<li>读取 VLINE 文件；</li>
+<li>第一行画图的时候用不着，需要跳过，next(f)；</li>
+<li>将剩下的那些行中，第一个数存到 x 列表里面，第二个数存到 y 列表里面；</li>
+<li>使用 matplotlib 中的 pyplot 读取 x， y 列表中的数据，进行画图： plt.plot(x,y)；</li>
+<li>将生成的图保存成 workfunction.pdf 文件，分辨率 dpi 为 400。</li>
+</ol>
+<p><strong>注意：</strong></p>
+<ol>
+<li>如果你想保存成 eps, png, jpg,只需将 .pdf 改成 .eps, .png, .jpg 即可；</li>
+<li>如果想要分辨率更高，可以修改400这个数值；</li>
+<li>如果只想保存成 pdf 文件，不想弹出图片的查看窗口，把 plt.show() 这一行注释掉就可以了， # plt.show()；</li>
+<li>如果只想看一下图，不想保存 pdf 文件，将第 16 行注释掉就可以了。</li>
+</ol>
+<h3 id="2-使用-vtotav-py-脚本"><a href="#2-使用-vtotav-py-脚本" class="headerlink" title="2 使用 vtotav.py 脚本"></a>2 使用 vtotav.py 脚本</h3><p>第一个脚本就讲到这里了，这个脚本不错，唯一的缺点就是横坐标不是 z 方向的数值，那么我们看一下第二个脚本的操作。</p>
+<p><img src="/2018/09/04/ex50/ex50-5.jpeg" alt=""></p>
+<p><strong>注意：</strong></p>
+<ol>
+<li><p>这里用到的脚本名字为：<code>vtotav.py</code>；</p>
+</li>
+<li><p>vtotav.py LOCPOT z  这个命令意思是，用 vtotav.py 读取 LOCPOT 文件，并处理生成 z 方向的数据；</p>
+</li>
+<li><p>脚本运行完毕后，目录中多了一个 LOCPOT_Z 文件，这个文件内容如下：</p>
+<p><img src="/2018/09/04/ex50/ex50-6.jpeg" alt=""></p>
+</li>
+<li><p>图中最后两行，</p>
+<ol>
+<li>大师兄又从前面的目录下拷贝了一个脚本： wplot.py；</li>
+<li>然后运行这个 python 脚本， 效果如下：</li>
+</ol>
+</li>
+</ol>
+<p><img src="/2018/09/04/ex50/ex50-7.jpeg" alt=""></p>
+<p>这个脚本中，横坐标为 z 方向的大小，比前面的脚本有所改进，和 p4vasp 的数据是一样的。首先我们先看一下可视化的脚本，然后再讲解 vtotav.py 这个脚本的获取和使用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># Written By Qiang for workfunction Visualization from LOCPOT_Z file</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">x = []</span><br><span class="line">y = []</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"LOCPOT_Z"</span>, mode=<span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    first_line = f.readline()</span><br><span class="line">    name_x = first_line.split()[<span class="number">1</span>]</span><br><span class="line">    name_y = first_line.split()[<span class="number">2</span>]</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">        xy=line.rstrip().split()</span><br><span class="line">        x.append(float(xy[<span class="number">0</span>]))</span><br><span class="line">        y.append(float(xy[<span class="number">1</span>]))</span><br><span class="line"></span><br><span class="line">plt.plot(x,y) </span><br><span class="line">plt.xlabel(name_x) </span><br><span class="line">plt.ylabel(name_y) </span><br><span class="line">plt.savefig(<span class="string">'workfunction'</span> + <span class="string">'.pdf'</span>, dpi=<span class="number">400</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>这个跟前面的那个脚本很像，不同的地方在于这个脚本中读取了第一行的内容，并将它们作为横坐标和纵坐标的名字。(Distance 和 Potential)</p>
+<h3 id="3-vtotav-py-脚本的获取和使用"><a href="#3-vtotav-py-脚本的获取和使用" class="headerlink" title="3 vtotav.py 脚本的获取和使用"></a>3 vtotav.py 脚本的获取和使用</h3><p>这个脚本可以在github网站免费下载，网址为：</p>
+<p><a href="https://github.com/compphys/ase_tools/blob/master/scripts/vtotav.py" target="_blank" rel="noopener">https://github.com/compphys/ase_tools/blob/master/scripts/vtotav.py</a> </p>
+<p><img src="/2018/09/04/ex50/ex50-8.jpeg" alt=""></p>
+<p>本人的做法是：</p>
+<ol>
+<li>把图中的代码复制下来，然后保存到一个文本里面，将文本命名为：vtotav.py；</li>
+<li>赋予脚本可执行权限： chmod u+x vtotav.py；</li>
+<li>将脚本移至 ~/bin 目录下： mv vtotav.py ~/bin；</li>
+<li>然后直接用就可以了，跟前面图中的操作一样。</li>
+</ol>
+<p>不过本人刚刚发现这个脚本可以按照下面的方法下载，下载完成后，重复前面的 2-4 步即可：</p>
+<ol>
+<li><p>点击 scripts</p>
+<p><img src="/2018/09/04/ex50/ex50-9.png" alt=""></p>
+</li>
+<li><p>鼠标右击这个脚本</p>
+<p><img src="/2018/09/04/ex50/ex50-10.png" alt=""></p>
+</li>
+<li><p>另存为，然后选择保存的目录</p>
+<p><img src="/2018/09/04/ex50/ex50-11.png" alt=""></p>
+</li>
+<li><p>这里本人保存到电脑桌面上了</p>
+<p><img src="/2018/09/04/ex50/ex50-12.png" alt=""></p>
+</li>
+</ol>
+<p><strong>注意：</strong></p>
+<p>如果你运行脚本的时候，没有得到下面图中的这个结果：</p>
+<p><img src="/2018/09/04/ex50/ex50-13.jpeg" alt=""></p>
+<p>原因可能在与：</p>
+<p><img src="/2018/09/04/ex50/ex50-14.png" alt=""></p>
+<p>这个脚本需要调用 ase 这个程序中的模块，那么什么是 ase 呢？ase 怎么安装呢？</p>
+<p>对于 ase，本书的 ex0 中就已经提到了，可能大家也忘记了。ASE 是 Atomic Simulation Environment 的缩写，这是一个非常强大的工具。官方网址：</p>
+<p><a href="https://wiki.fysik.dtu.dk/ase/" target="_blank" rel="noopener">https://wiki.fysik.dtu.dk/ase/</a></p>
+<p>是大大师兄(本人的师兄)做博后的课题组开发出来。Linux 系统下面，安装 ASE 很简单：</p>
+<p><img src="/2018/09/04/ex50/ex50-15.png" alt=""></p>
+<p>一个命令就可以搞定了，Soooo eeeeeasy! 至于 Windows 下面嘛，本人不会。不想用 Linux，还想用 ASE 的就只能自己捣鼓捣鼓了。捣鼓好了也不要给我发教程，因为本人不推荐用 Windows 做计算。</p>
+<h3 id="4-扩展练习："><a href="#4-扩展练习：" class="headerlink" title="4 扩展练习："></a>4 扩展练习：</h3><ol>
+<li>下载本节的例子，以及所有的脚本，按照讲解的操作一遍流程，链接：<a href="https://pan.baidu.com/s/1dEHvHr7" target="_blank" rel="noopener">https://pan.baidu.com/s/1dEHvHr7</a> 密码：ponm；</li>
+<li>Linux 用户自行安装 ASE，使用 vtotav.py 这个脚本走一遍过程；</li>
+<li>熟悉下用 python 画图的基本方式。</li>
+</ol>
+<h3 id="5-总结："><a href="#5-总结：" class="headerlink" title="5 总结："></a>5 总结：</h3><p>讲解到这里，功函数的可视化也就差不多了。当然了，只要你有了数据，用什么画图都可以， excel, origin, matlab, gplot… 不过貌似作图也没什么用，我们大体上看下，然后找个区间取静电势的数值才是正事。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/p4vasp/" rel="tag"># p4vasp</a>
+          
+            <a href="/tags/功函数/" rel="tag"># 功函数</a>
+          
+            <a href="/tags/vtotav/" rel="tag"># vtotav</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/03/ex49/" rel="next" title="Ex49 功函数（work function）的计算（一）">
+                <i class="fa fa-chevron-left"></i> Ex49 功函数（work function）的计算（一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/05/ex51/" rel="prev" title="Ex51 影响功函数计算的因素（一）">
+                Ex51 影响功函数计算的因素（一） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar2.jpg" alt="By BigBro(a)s">
+            
+              <p class="site-author-name" itemprop="name">By BigBro(a)s</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-使用-vtotav-v5-2f-脚本"><span class="nav-number">1.</span> <span class="nav-text">1 使用 vtotav-v5.2f 脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-使用-vtotav-py-脚本"><span class="nav-number">2.</span> <span class="nav-text">2 使用 vtotav.py 脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-vtotav-py-脚本的获取和使用"><span class="nav-number">3.</span> <span class="nav-text">3 vtotav.py 脚本的获取和使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-扩展练习："><span class="nav-number">4.</span> <span class="nav-text">4 扩展练习：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-总结："><span class="nav-number">5.</span> <span class="nav-text">5 总结：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">By BigBro(a)s</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+  <div class="footer-custom">Hosted by <a target="_blank" href="https://pages.github.com">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://bigbrosci-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.bigbrosci.com/2018/09/04/ex50/';
+          this.page.identifier = '2018/09/04/ex50/';
+          this.page.title = 'Ex50 功函数（work function）的计算（二）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://bigbrosci-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OWE4jcfK8IWkx4zaWuOloxKU-gzGzoHsz", "MRBwViAFCsPSOnnRF9LW7bdo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+  
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        extensions: ["tex2jax.js","[siunitx]/siunitx.js"],
+        TeX: {
+          extensions: [
+            "AMSmath.js","AMSsymbols.js", "sinuitx.js", "[mhchem]/mhchem.js"
+          ]
+        },
+        jax: ["input/TeX","output/HTML-CSS"],
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+      MathJax.Ajax.config.path['siunitx']  = '/js/MathJax-siunitx';
+      MathJax.Ajax.config.path["mhchem"] = "https://cdnjs.cloudflare.com/ajax/libs/mathjax-mhchem/3.3.0";
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

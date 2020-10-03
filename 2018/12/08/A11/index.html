@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="国科智算,Sbatch,Slurm,VASP,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="国科智算提交VASP任务今天QQ群里，有人问怎么在国科智算的超算中心提交VASP的任务。本着一言不合就写教程的态度，这一节我们就看下VASP的任务是怎么提交的。提交任务的脚本见群文件：vasp_qiangli.sh。下载后重命名成vasp.sh即可。想试用的，购买机时的可以加QQ群：608307988咨询一下。 Slurm国科智算上系统采用的是slurm 任务调度工具。Simple Linux U">
+<meta name="keywords" content="国科智算,Sbatch,Slurm,VASP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="国科智算提交VASP任务">
+<meta property="og:url" content="http://www.bigbrosci.com/2018/12/08/A11/index.html">
+<meta property="og:site_name" content="Learn VASP The Hard Way">
+<meta property="og:description" content="国科智算提交VASP任务今天QQ群里，有人问怎么在国科智算的超算中心提交VASP的任务。本着一言不合就写教程的态度，这一节我们就看下VASP的任务是怎么提交的。提交任务的脚本见群文件：vasp_qiangli.sh。下载后重命名成vasp.sh即可。想试用的，购买机时的可以加QQ群：608307988咨询一下。 Slurm国科智算上系统采用的是slurm 任务调度工具。Simple Linux U">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-03T18:55:50.855Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="国科智算提交VASP任务">
+<meta name="twitter:description" content="国科智算提交VASP任务今天QQ群里，有人问怎么在国科智算的超算中心提交VASP的任务。本着一言不合就写教程的态度，这一节我们就看下VASP的任务是怎么提交的。提交任务的脚本见群文件：vasp_qiangli.sh。下载后重命名成vasp.sh即可。想试用的，购买机时的可以加QQ群：608307988咨询一下。 Slurm国科智算上系统采用的是slurm 任务调度工具。Simple Linux U">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.bigbrosci.com/2018/12/08/A11/">
+
+
+
+
+
+  <title>国科智算提交VASP任务 | Learn VASP The Hard Way</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Learn VASP The Hard Way</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">The 2nd edition</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="Searching..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.bigbrosci.com/2018/12/08/A11/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="By BigBro(a)s">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Learn VASP The Hard Way">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">国科智算提交VASP任务</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-08T15:30:16-05:00">
+                2018-12-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/LVASPTHW附录/" itemprop="url" rel="index">
+                    <span itemprop="name">LVASPTHW附录</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/08/A11/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/08/A11/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/12/08/A11/" class="leancloud_visitors" data-flag-title="国科智算提交VASP任务">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="国科智算提交VASP任务"><a href="#国科智算提交VASP任务" class="headerlink" title="国科智算提交VASP任务"></a>国科智算提交VASP任务</h1><p>今天QQ群里，有人问怎么在国科智算的超算中心提交VASP的任务。本着一言不合就写教程的态度，这一节我们就看下VASP的任务是怎么提交的。提交任务的脚本见群文件：<code>vasp_qiangli.sh</code>。下载后重命名成<code>vasp.sh</code>即可。想试用的，购买机时的可以加QQ群：608307988咨询一下。</p>
+<h2 id="Slurm"><a href="#Slurm" class="headerlink" title="Slurm"></a>Slurm</h2><p>国科智算上系统采用的是<code>slurm</code> 任务调度工具。<strong>Simple Linux Utility for Resource Management</strong>，它是一个用于<code>Linux</code>和 <code>Unix</code> 内核系统的免费、开源的任务调度工具，被世界范围内的超级计算机和计算机群广泛采用。它提供了三个关键功能。第一，为用户分配一定时间的专享或非专享的资源(计算机节点)，以供用户执行工作。第二，它提供了一个框架，用于启动、执行、监测在节点上运行着的任务(通常是并行的任务，例如<code>MPI</code>，第三，为任务队列合理地分配资源。 大约60％的<a href="https://zh.wikipedia.org/wiki/TOP500" target="_blank" rel="noopener">500强</a>超级计算机上都运行着<code>Slurm</code>，包括2016年前世界上最快的计算机<a href="https://zh.wikipedia.org/wiki/%E5%A4%A9%E6%B2%B3%E4%BA%8C%E5%8F%B7" target="_blank" rel="noopener">天河-2</a>。 以上是来自<a href="https://www.wikipedia.org" target="_blank" rel="noopener">维基百科</a>的解释，具体的大家可以浏览<code>Slurm</code> 的官网：<a href="https://slurm.schedmd.com/" target="_blank" rel="noopener">Slurm Workload Manager</a></p>
+<h2 id="Sbatch"><a href="#Sbatch" class="headerlink" title="Sbatch"></a>Sbatch</h2><p>在这个调度系统中，提交任务时我们需要用到命令： <code>sbatch</code>  : <a href="https://slurm.schedmd.com/sbatch.html" target="_blank" rel="noopener">https://slurm.schedmd.com/sbatch.html</a> </p>
+<p><code>sbatch</code> 命令后面要跟一堆的参数，比如计算时间，节点数，邮箱，队列，调用的环境变量，任务名称等等。但这些信息通过命令直接输入又有些麻烦，所以我们把它们放到一个<code>脚本</code>里面，免得每次都重新输入一大长串的内容。而这个脚本，也就是我们本节内容的主角： <code>vasp.sh</code>。</p>
+<p>首先，我们浏览<code>sbatch</code>的详细参数： <a href="https://slurm.schedmd.com/sbatch.html" target="_blank" rel="noopener">https://slurm.schedmd.com/sbatch.html</a> </p>
+<p>然后根据这些参数，我们就可以创建一个<code>vasp.sh</code>脚本了。</p>
+<h2 id="vasp-sh"><a href="#vasp-sh" class="headerlink" title="vasp.sh"></a>vasp.sh</h2><p>下面就是<code>vasp.sh</code> 的主要内容：有2种写法，这两种写法也可以混着用，不影响。主要还是要参考<code>sbatch</code>的使用说明，需要什么就按照格式填写相应的内容。</p>
+<p><strong>写法（一）</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment">#SBATCH -J BigBro              ## Job Name</span></span><br><span class="line"><span class="comment">#SBATCH -o %j.out              ## standard output </span></span><br><span class="line"><span class="comment">#SBATCH -e %j.err              ## standard error</span></span><br><span class="line"><span class="comment">#SBATCH -p operation           ## Partition</span></span><br><span class="line"><span class="comment">#SBATCH -N 1                   ## Number of nodes</span></span><br><span class="line"><span class="comment">#SBATCH --ntasks-per-node=28   ## Each node has 28 tasks</span></span><br><span class="line"><span class="comment">#SBATCH -t 02-23:57:25         ## time for your job: 2 d，23 h ，57 min and 23 s</span></span><br><span class="line"></span><br><span class="line">module load mpi/intelmpi/2017.4.239</span><br><span class="line">mpirun /public/software/apps/vasp/544/vasp.5.4.4/bin/vasp_std</span><br></pre></td></tr></table></figure>
+<p> <strong>写法（二）</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment">#SBATCH --job-name=BigBro      ## Job Name</span></span><br><span class="line"><span class="comment">#SBATCH --output=%j.out        ## standard output </span></span><br><span class="line"><span class="comment">#SBATCH --error=%j.err         ## standard error</span></span><br><span class="line"><span class="comment">#SBATCH --partition=operation  ## Partition</span></span><br><span class="line"><span class="comment">#SBATCH --nodes=1              ## Number of nodes</span></span><br><span class="line"><span class="comment">#SBATCH --ntasks-per-node=28   ## Each node has 28 tasks</span></span><br><span class="line"><span class="comment">#SBATCH --time=02-23:57:25     ## time for your job: 2 d，23 h ，57 min and 23 s</span></span><br><span class="line"></span><br><span class="line">module load mpi/intelmpi/2017.4.239</span><br><span class="line">mpirun /public/software/apps/vasp/544/vasp.5.4.4/bin/vasp_std</span><br></pre></td></tr></table></figure>
+<p>上面每一行的含义，大师兄都注释出来了。</p>
+<p>从第二行往下一次为：</p>
+<ul>
+<li>任务的名字，</li>
+<li><code>VASP</code>的标准输出，</li>
+<li>错误输出，</li>
+<li>任务运行的分区，</li>
+<li>使用的节点，</li>
+<li>每个节点的的<code>tasks</code>数目。这个<code>tasks</code>可以理解为每个节点的核数，国科智算的新机器每个节点是28个核。</li>
+<li>以及你的计算所用的时间。</li>
+</ul>
+<p>最后两行为：我们调用的环境变量以及运行<code>vasp</code>程序。</p>
+<p>需要注意的是，脚本里面的内容比如<code>-N</code>（修改任务所需的节点数目）、<code>-J</code>（修改任务的名字）这些我们频繁更换的，可以从脚本里面拿出来，在命令中运行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sbtach -N 2 -J test vasp.sh</span><br></pre></td></tr></table></figure>
+<p>本人自己的计算，一般28个核就够，任务名字也懒得修改。就把<code>-N</code>,<code>-J</code>写到vasp.sh中了。大家根据自己的任务特点自动修改就行了。下面我们具体演示一下。</p>
+<h2 id="实例操作1："><a href="#实例操作1：" class="headerlink" title="实例操作1："></a>实例操作1：</h2><p>我们要在<code>operation</code>分区，运行一个<code>VASP</code>的单点计算，任务名称为：<code>single</code>， 使用2个节点，限制时间为2个小时；那么脚本的修改以及任务提交如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">gkzshpc101@login02:~/ex-A11/test_single$ </span><br><span class="line">gkzshpc101@login02:~/ex-A11/test_single$ ls</span><br><span class="line">INCAR  KPOINTS  POSCAR  POTCAR  vasp.sh</span><br><span class="line">gkzshpc101@login02:~/ex-A11/test_single$ cat vasp.sh </span><br><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment">#SBATCH -J single </span></span><br><span class="line"><span class="comment">#SBATCH -o out.%j</span></span><br><span class="line"><span class="comment">#SBATCH -e err.%j</span></span><br><span class="line"><span class="comment">#SBATCH -p operation </span></span><br><span class="line"><span class="comment">#SBATCH -N 2</span></span><br><span class="line"><span class="comment">#SBATCH --ntasks-per-node=28</span></span><br><span class="line"><span class="comment">#SBATCH -t 02:00:25</span></span><br><span class="line"></span><br><span class="line">module load mpi/intelmpi/2017.4.239</span><br><span class="line">mpirun /public/software/apps/vasp/544/vasp.5.4.4/bin/vasp_std</span><br><span class="line">gkzshpc101@login02:~/ex-A11/test_single$ sbatch  vasp.sh </span><br><span class="line">Submitted batch job 35525</span><br><span class="line">gkzshpc101@login02:~/ex-A11/test_single$ squeue </span><br><span class="line">             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)</span><br><span class="line">             35525 operation   single gkzshpc1  R       0:09      2 c[0032-0033]</span><br><span class="line">gkzshpc101@login02:~/ex-A11/test_single$ ls</span><br><span class="line">CHG  CHGCAR  CONTCAR  DOSCAR  EIGENVAL  err.35525  IBZKPT  INCAR  KPOINTS  OSZICAR  out.35525  OUTCAR  PCDAT  POSCAR  POTCAR  REPORT  vasprun.xml  vasp.sh  WAVECAR  XDATCAR</span><br><span class="line">gkzshpc101@login02:~/ex-A11/test_single$</span><br></pre></td></tr></table></figure>
+<h2 id="实例操作2："><a href="#实例操作2：" class="headerlink" title="实例操作2："></a>实例操作2：</h2><p>我们在<code>Operation</code>分区，运行一个<code>VASP</code>的<code>CI-NEB</code>的过渡态计算任务，任务名称为：<code>NEB</code>，使用4个节点，限制时间为12个小时；那么脚本的修改以及任务提交如下：插了7个点，用112个核算，16个核算一个点。下面有点长，文字描述就到此结束，自己慢慢看，希望对大家有所帮助。<strong>注意：</strong>脚本里面，我们换成编译了<code>VTST</code>的<code>vasp 5.4.1</code>版本。</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">gkzshpc101@login02:~/ex-A11/test_neb$ ls</span><br><span class="line"><span class="number">00</span>  <span class="number">01</span>  <span class="number">02</span>  <span class="number">03</span>  <span class="number">04</span>  <span class="number">05</span>  <span class="number">06</span>  <span class="number">07</span>  <span class="number">08</span>  FS  INCAR  IS  KPOINTS  POTCAR  vasp.sh</span><br><span class="line">gkzshpc101@login02:~/ex-A11/test_neb$ cat vasp.sh </span><br><span class="line">#<span class="comment">!/bin/bash</span></span><br><span class="line">#SBATCH -J NEB </span><br><span class="line">#SBATCH -o <span class="keyword">out</span>.%j</span><br><span class="line">#SBATCH -e err.%j</span><br><span class="line">#SBATCH -p operation </span><br><span class="line">#SBATCH -N <span class="number">4</span></span><br><span class="line">#SBATCH --ntasks-per-node=<span class="number">28</span></span><br><span class="line">#SBATCH -t <span class="number">12</span>:<span class="number">00</span>:<span class="number">25</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">module</span> load mpi/intelmpi/<span class="number">2017.4.</span><span class="number">239</span></span><br><span class="line">mpirun /<span class="keyword">public</span>/software/apps/vasp/41_neb/vasp<span class="number">.5.</span><span class="number">4.1</span>/bin/vasp_std</span><br><span class="line">gkzshpc101@login02:~/ex-A11/test_neb$ </span><br><span class="line">gkzshpc101@login02:~/ex-A11/test_neb$ sbatch  vasp.sh </span><br><span class="line">Submitted batch job <span class="number">35526</span></span><br><span class="line">gkzshpc101@login02:~/ex-A11/test_neb$ squeue </span><br><span class="line">             JOBID PARTITION     <span class="keyword">NAME</span>     USER ST       TIME  NODES NODELIST(REASON)</span><br><span class="line">             <span class="number">35526</span> operation      NEB gkzshpc1  R       <span class="number">0</span>:<span class="number">07</span>      <span class="number">4</span> c[<span class="number">0056</span>-<span class="number">0057</span>,<span class="number">0060</span>-<span class="number">0061</span>]</span><br><span class="line">gkzshpc101@login02:~/ex-A11/test_neb$ ls</span><br><span class="line"><span class="number">00</span>  <span class="number">01</span>  <span class="number">02</span>  <span class="number">03</span>  <span class="number">04</span>  <span class="number">05</span>  <span class="number">06</span>  <span class="number">07</span>  <span class="number">08</span>  err<span class="number">.35526</span>  FS  INCAR  IS  KPOINTS  <span class="keyword">out</span><span class="number">.35526</span>  POTCAR  vasprun.xml  vasp.sh</span><br><span class="line">gkzshpc101@login02:~/ex-A11/test_neb$ ls *</span><br><span class="line">err<span class="number">.35526</span>  FS  INCAR  IS  KPOINTS  <span class="keyword">out</span><span class="number">.35526</span>  POTCAR  vasprun.xml  vasp.sh</span><br><span class="line"></span><br><span class="line"><span class="number">00</span>:</span><br><span class="line">POSCAR</span><br><span class="line"></span><br><span class="line"><span class="number">01</span>:</span><br><span class="line">CHG  CHGCAR  CONTCAR  DOSCAR  EIGENVAL  IBZKPT  OSZICAR  OUTCAR  PCDAT  POSCAR  REPORT  WAVECAR  XDATCAR</span><br><span class="line"></span><br><span class="line"><span class="number">02</span>:</span><br><span class="line">CHG  CHGCAR  CONTCAR  DOSCAR  EIGENVAL  IBZKPT  OSZICAR  OUTCAR  PCDAT  POSCAR  REPORT  stdout  WAVECAR  XDATCAR</span><br><span class="line"></span><br><span class="line"><span class="number">03</span>:</span><br><span class="line">CHG  CHGCAR  CONTCAR  DOSCAR  EIGENVAL  IBZKPT  OSZICAR  OUTCAR  PCDAT  POSCAR  REPORT  stdout  WAVECAR  XDATCAR</span><br><span class="line"></span><br><span class="line"><span class="number">04</span>:</span><br><span class="line">CHG  CHGCAR  CONTCAR  DOSCAR  EIGENVAL  IBZKPT  OSZICAR  OUTCAR  PCDAT  POSCAR  REPORT  stdout  WAVECAR  XDATCAR</span><br><span class="line"></span><br><span class="line"><span class="number">05</span>:</span><br><span class="line">CHG  CHGCAR  CONTCAR  DOSCAR  EIGENVAL  IBZKPT  OSZICAR  OUTCAR  PCDAT  POSCAR  REPORT  stdout  WAVECAR  XDATCAR</span><br><span class="line"></span><br><span class="line"><span class="number">06</span>:</span><br><span class="line">CHG  CHGCAR  CONTCAR  DOSCAR  EIGENVAL  IBZKPT  OSZICAR  OUTCAR  PCDAT  POSCAR  REPORT  stdout  WAVECAR  XDATCAR</span><br><span class="line"></span><br><span class="line"><span class="number">07</span>:</span><br><span class="line">CHG  CHGCAR  CONTCAR  DOSCAR  EIGENVAL  IBZKPT  OSZICAR  OUTCAR  PCDAT  POSCAR  REPORT  stdout  WAVECAR  XDATCAR</span><br><span class="line"></span><br><span class="line"><span class="number">08</span>:</span><br><span class="line">CHG  CHGCAR  CONTCAR  DOSCAR  EIGENVAL  IBZKPT  OSZICAR  OUTCAR  PCDAT  POSCAR  REPORT  stdout  WAVECAR  XDATCAR</span><br><span class="line">gkzshpc101@login02:~/ex-A11/test_neb$ </span><br><span class="line">gkzshpc101@login02:~/ex-A11/test_neb$ head -n <span class="number">10</span> <span class="keyword">out</span><span class="number">.35526</span> </span><br><span class="line"> running on  <span class="number">112</span> total cores</span><br><span class="line"> each image running on   <span class="number">16</span> cores</span><br><span class="line"> distrk:  each k-point on   <span class="number">16</span> cores,    <span class="number">1</span> groups</span><br><span class="line"> distr:  one band on    <span class="number">1</span> cores,   <span class="number">16</span> groups</span><br><span class="line"> vasp<span class="number">.5.</span><span class="number">4.1</span> 5Feb16 (build May <span class="number">24</span> <span class="number">2018</span> <span class="number">19</span>:<span class="number">36</span>:<span class="number">47</span>) <span class="keyword">complex</span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/国科智算/" rel="tag"># 国科智算</a>
+          
+            <a href="/tags/Sbatch/" rel="tag"># Sbatch</a>
+          
+            <a href="/tags/Slurm/" rel="tag"># Slurm</a>
+          
+            <a href="/tags/VASP/" rel="tag"># VASP</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/20/ex77-01/" rel="next" title="Ex77 过渡态任务的提交与查看（一）">
+                <i class="fa fa-chevron-left"></i> Ex77 过渡态任务的提交与查看（一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/15/A12_jobID/" rel="prev" title="A12 通过job-ID快速进入计算目录">
+                A12 通过job-ID快速进入计算目录 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar2.jpg" alt="By BigBro(a)s">
+            
+              <p class="site-author-name" itemprop="name">By BigBro(a)s</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">133</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">161</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#国科智算提交VASP任务"><span class="nav-number">1.</span> <span class="nav-text">国科智算提交VASP任务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Slurm"><span class="nav-number">1.1.</span> <span class="nav-text">Slurm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sbatch"><span class="nav-number">1.2.</span> <span class="nav-text">Sbatch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vasp-sh"><span class="nav-number">1.3.</span> <span class="nav-text">vasp.sh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例操作1："><span class="nav-number">1.4.</span> <span class="nav-text">实例操作1：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例操作2："><span class="nav-number">1.5.</span> <span class="nav-text">实例操作2：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">By BigBro(a)s</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+  <div class="footer-custom">Hosted by <a target="_blank" href="https://pages.github.com">GitHub Pages</a></div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://bigbrosci-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://www.bigbrosci.com/2018/12/08/A11/';
+          this.page.identifier = '2018/12/08/A11/';
+          this.page.title = '国科智算提交VASP任务';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://bigbrosci-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("OWE4jcfK8IWkx4zaWuOloxKU-gzGzoHsz", "MRBwViAFCsPSOnnRF9LW7bdo");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
