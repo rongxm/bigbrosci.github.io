@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="功函数,真空层,">
+  <meta name="keywords" content="Pymatgen,骚操作,软件,">
 
 
 
@@ -79,31 +79,25 @@
 
 
 
-<meta name="description" content="前面功函数的计算流程( VASP 计算细节以及结果分析)，我们已经掌握了。这一节介绍一下影响功函数的主要因素：真空层的厚度。首先个人经验：计算功函数的时候，真空层厚度一定要足够。  这里有两点：  多厚才算足够?具体要根据自己的体系测试下，一般来说 20 Å 左右足以。 是不是越厚越好? 越厚的话，计算出来的结果差别不大，但会增加计算量。前面我们讲过影响计算量的因素。  我们以 Cu(111) 表">
-<meta name="keywords" content="功函数,真空层">
+<meta name="description" content="大师兄在9月8日的文章中讲了如何用 Pymatgen 计算离子的电导率（该方法可以用来研究固态电解质等问题），本次，大师兄介绍一下如何使用 Pymatgen 可视化离子的迁移概率密度。 先举个例子，  在“Design principles for solid-state lithium superionic conductors”一文中（Wang et al., Nature Materials">
+<meta name="keywords" content="Pymatgen,骚操作,软件">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Ex52 影响功函数计算的因素（二）">
-<meta property="og:url" content="http://www.bigbrosci.com/2018/09/06/ex52/index.html">
+<meta property="og:title" content="离子迁移概率密度可视化">
+<meta property="og:url" content="http://www.bigbrosci.com/2020/10/02/A24/index.html">
 <meta property="og:site_name" content="Learn VASP The Hard Way">
-<meta property="og:description" content="前面功函数的计算流程( VASP 计算细节以及结果分析)，我们已经掌握了。这一节介绍一下影响功函数的主要因素：真空层的厚度。首先个人经验：计算功函数的时候，真空层厚度一定要足够。  这里有两点：  多厚才算足够?具体要根据自己的体系测试下，一般来说 20 Å 左右足以。 是不是越厚越好? 越厚的话，计算出来的结果差别不大，但会增加计算量。前面我们讲过影响计算量的因素。  我们以 Cu(111) 表">
+<meta property="og:description" content="大师兄在9月8日的文章中讲了如何用 Pymatgen 计算离子的电导率（该方法可以用来研究固态电解质等问题），本次，大师兄介绍一下如何使用 Pymatgen 可视化离子的迁移概率密度。 先举个例子，  在“Design principles for solid-state lithium superionic conductors”一文中（Wang et al., Nature Materials">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://www.bigbrosci.com/2018/09/06/ex52/ex52-0.png">
-<meta property="og:image" content="http://www.bigbrosci.com/2018/09/06/ex52/ex52-1.png">
-<meta property="og:image" content="http://www.bigbrosci.com/2018/09/06/ex52/ex52-2.png">
-<meta property="og:image" content="http://www.bigbrosci.com/2018/09/06/ex52/ex52-3.png">
-<meta property="og:image" content="http://www.bigbrosci.com/2018/09/06/ex52/ex52-4.png">
-<meta property="og:image" content="http://www.bigbrosci.com/2018/09/06/ex52/ex52-5.png">
-<meta property="og:image" content="http://www.bigbrosci.com/2018/09/06/ex52/ex52-6.png">
-<meta property="og:image" content="http://www.bigbrosci.com/2018/09/06/ex52/ex52-7.png">
-<meta property="og:image" content="http://www.bigbrosci.com/2018/09/06/ex52/ex52-8.png">
-<meta property="og:image" content="http://www.bigbrosci.com/2018/09/06/ex52/ex52-9.png">
-<meta property="og:image" content="http://www.bigbrosci.com/2018/09/06/ex52/ex52-10.png">
-<meta property="og:image" content="http://www.bigbrosci.com/2018/09/06/ex52/ex52-11.png">
-<meta property="og:updated_time" content="2020-10-03T18:55:51.491Z">
+<meta property="og:image" content="http://www.bigbrosci.com/2020/10/02/A24/A24_1.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2020/10/02/A24/A24_2.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2020/10/02/A24/A24_3.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2020/10/02/A24/A24_4.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2020/10/02/A24/A24_5.png">
+<meta property="og:image" content="http://www.bigbrosci.com/2020/10/02/A24/A24_6.png">
+<meta property="og:updated_time" content="2020-10-04T14:01:04.656Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ex52 影响功函数计算的因素（二）">
-<meta name="twitter:description" content="前面功函数的计算流程( VASP 计算细节以及结果分析)，我们已经掌握了。这一节介绍一下影响功函数的主要因素：真空层的厚度。首先个人经验：计算功函数的时候，真空层厚度一定要足够。  这里有两点：  多厚才算足够?具体要根据自己的体系测试下，一般来说 20 Å 左右足以。 是不是越厚越好? 越厚的话，计算出来的结果差别不大，但会增加计算量。前面我们讲过影响计算量的因素。  我们以 Cu(111) 表">
-<meta name="twitter:image" content="http://www.bigbrosci.com/2018/09/06/ex52/ex52-0.png">
+<meta name="twitter:title" content="离子迁移概率密度可视化">
+<meta name="twitter:description" content="大师兄在9月8日的文章中讲了如何用 Pymatgen 计算离子的电导率（该方法可以用来研究固态电解质等问题），本次，大师兄介绍一下如何使用 Pymatgen 可视化离子的迁移概率密度。 先举个例子，  在“Design principles for solid-state lithium superionic conductors”一文中（Wang et al., Nature Materials">
+<meta name="twitter:image" content="http://www.bigbrosci.com/2020/10/02/A24/A24_1.png">
 
 
 
@@ -133,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://www.bigbrosci.com/2018/09/06/ex52/">
+  <link rel="canonical" href="http://www.bigbrosci.com/2020/10/02/A24/">
 
 
 
 
 
-  <title>Ex52 影响功函数计算的因素（二） | Learn VASP The Hard Way</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>离子迁移概率密度可视化 | Learn VASP The Hard Way</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -308,7 +302,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.bigbrosci.com/2018/09/06/ex52/">
+    <link itemprop="mainEntityOfPage" href="http://www.bigbrosci.com/2020/10/02/A24/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="By BigBro(a)s">
@@ -325,7 +319,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Ex52 影响功函数计算的因素（二）</h1>
+          <h1 class="post-title" itemprop="name headline">离子迁移概率密度可视化</h1>
         
 
         <div class="post-meta">
@@ -337,8 +331,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-06T02:06:48-04:00">
-                2018-09-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-02T00:30:16-04:00">
+                2020-10-02
               </time>
             
 
@@ -378,8 +372,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/09/06/ex52/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/09/06/ex52/" itemprop="commentCount"></span>
+                <a href="/2020/10/02/A24/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/10/02/A24/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -387,7 +381,7 @@
 
           
           
-             <span id="/2018/09/06/ex52/" class="leancloud_visitors" data-flag-title="Ex52 影响功函数计算的因素（二）">
+             <span id="/2020/10/02/A24/" class="leancloud_visitors" data-flag-title="离子迁移概率密度可视化">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -418,160 +412,42 @@
       
 
       
-        <p>前面功函数的计算流程( VASP 计算细节以及结果分析)，我们已经掌握了。这一节介绍一下影响功函数的主要因素：真空层的厚度。首先个人经验：计算功函数的时候，真空层厚度一定要足够。</p>
-<p><img src="/2018/09/06/ex52/ex52-0.png" alt=""></p>
-<p>这里有两点：</p>
-<ol>
-<li>多厚才算足够?具体要根据自己的体系测试下，一般来说 20 Å 左右足以。</li>
-<li>是不是越厚越好? 越厚的话，计算出来的结果差别不大，但会增加计算量。前面我们讲过影响计算量的因素。</li>
-</ol>
-<p>我们以 Cu(111) 表面的例子，简单介绍下真空层厚度对功函数的影响。</p>
-<h3 id="1-不同真空层厚度的测试-上一节内容"><a href="#1-不同真空层厚度的测试-上一节内容" class="headerlink" title="1 不同真空层厚度的测试(上一节内容)"></a>1 不同真空层厚度的测试(上一节内容)</h3><p><img src="/2018/09/06/ex52/ex52-1.png" alt=""></p>
-<ol>
-<li><p>先准备一个真空层为 10 Å 的计算文件夹： POSCAR 如上图；</p>
-</li>
-<li><p>将前面两节的 INCAR,KPOINTS, POTCAR, 以及提交任务的脚本复制过来；</p>
-</li>
-<li><p>批量生成测试文件，每个文件夹以真空层的厚度命名。命令如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">for i in $(seq 12 2 36); do cp 10 $i; sed -i &quot;5s/16/$((6+$i))/g&quot;$i/POSCAR ; done</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>批量提交任务。</p>
-</li>
-</ol>
-<p><strong>注意：</strong></p>
-<ol>
-<li>这样的批量操作本书刚刚开始的时候就已经讲到了，这里不要再问我。</li>
-<li>如果不会用这个办法批量制作输入文件，想其他的办法批量操作，条条大路通罗马，不要死磕在我的这个命令上。</li>
-</ol>
-<h3 id="2-结果处理"><a href="#2-结果处理" class="headerlink" title="2 结果处理"></a>2 结果处理</h3><p>前面的测试计算中，共有 14 个任务。在 Ex50 这一节中<code>vtotav-v5.2f</code>, <code>vtotav.py</code> 或者 p4vasp 这三种可视化的方法，我们查找真空能级的数值，都必须读取数据文件，比如 VLINE, LOCPOT_Z 或者 p4vasp 导出来的 *dat 文件。所以，我们要分别在这 14 个任务的文件夹中重复 Ex50 的操作14次。手动挨个弄可以完全实现，但本人不想这么做，因为这样弄除了让你的操作更熟练些外，并不会有其他的收获。那就写个脚本批量处理吧。</p>
-<p><img src="/2018/09/06/ex52/ex52-2.png" alt=""></p>
-<p>首先我们分析下上图： 我们获取的真空能级在图中直线部分中间的一个点或者一个小区间的平均值。大约是真空层一半的高度。比如，我们的表层原子 z 方向坐标为 6，真空层厚度为 16，那么我们可以取 6 + (16/2)= 14 时对于的点来得到真空能级。也可以通过 [14-1, 14+1] 这个区间中所有的真空能级求平均数来获得。下面我们看一下脚本的主要内容：</p>
-<ol>
-<li><p>注意部分：</p>
-<p>使用这个脚本的时候，需要注意的内容。本人写了一堆废话在脚本里面，主要是提醒大家使用脚本的时候，需要注意的一些事项。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Welcome to visit our website: www.bigbrosci.com to get more useful information.</span></span><br><span class="line"> </span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">Written By Qiang </span></span><br><span class="line"><span class="string">This script has two functions:</span></span><br><span class="line"><span class="string"> 1) workfunction Visualization from LOCPOT_Z file</span></span><br><span class="line"><span class="string"> 2) Roughly estimate the Vaccum Energy</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Please Contact lqcata@gmail.com if you have questions.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Note1: Read POSCAR with Cartesian coordinations! </span></span><br><span class="line"><span class="string">  This means </span></span><br><span class="line"><span class="string">  1) you have to convet the direct to cartesian firstly </span></span><br><span class="line"><span class="string">  2) otherwise you will get an error.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Note2: Read LOCPOT_Z to plot the figure and calculate the vaccum energy</span></span><br><span class="line"><span class="string">  This means </span></span><br><span class="line"><span class="string">  1)1you have to run command:  work.py LOCPOT z firstly to get the LOCPOT_Z file before use this script</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Note3: the idea to calculate the vaccum energy is following:</span></span><br><span class="line"><span class="string">  1) get the middle z value in the plateau: </span></span><br><span class="line"><span class="string">     middle z value = ( coordination of the highest atom + length of the slab in z direction) / 2 </span></span><br><span class="line"><span class="string">  2) selecte the area to calculate the vaccum energy: </span></span><br><span class="line"><span class="string">     from  (middle z  value - 1) to (middle z value + 1)  unit is in angstrom </span></span><br><span class="line"><span class="string">  3) do the average of all points y direction.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Note 4: this is only a rough estimation but useful.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Note 5: Check the figure firstly and then use the numbers calculated from this script. </span></span><br><span class="line"><span class="string">  1) If the midlle z value is far from the plateau in the figure, you have to calculate the energy by hand.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">'''</span></span><br></pre></td></tr></table></figure>
-<ol>
-<li>脚本是谁写的，主要功能是什么；</li>
-<li>脚本读取 POSCAR, POSCAR 要为 Cartesian 坐标；</li>
-<li>脚本默认读取 LOCPOT_Z 文件，如果没有该文件，你需要做的一些事情(生成以及如何将 VLINE 文件转换为 LOCPOT_Z 文件)</li>
-<li>该脚本是如何获取真空能级的；</li>
-<li>一定要查看功函数可视化的结果，用来判断我们的这个方法是否试用。</li>
-</ol>
-<p>写这么多废话，原因主要有 2 个：</p>
-<ol>
-<li>提醒大家在使用别人脚本的时候，一些需要注意的事项你要清楚。如果不清楚，可以咨询下脚本的作者；</li>
-<li>如果你写了一个脚本放到网上供大家使用，请花些时间写清楚脚本的运行原理，以及尽可能详细的注意事项。</li>
-</ol>
-</li>
-<li><p>脚本正文：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np </span><br><span class="line">x = []</span><br><span class="line">y = []</span><br><span class="line">dic = &#123;&#125;</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"LOCPOT_Z"</span>, mode=<span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    first_line = f.readline()</span><br><span class="line">    name_x = first_line.split()[<span class="number">1</span>]</span><br><span class="line">    name_y = first_line.split()[<span class="number">2</span>]</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">        xy=line.rstrip().split()</span><br><span class="line">        x.append(float(xy[<span class="number">0</span>]))</span><br><span class="line">        y.append(float(xy[<span class="number">1</span>]))</span><br><span class="line">        dic.update(&#123;xy[<span class="number">0</span>]:xy[<span class="number">1</span>]&#125;)</span><br><span class="line">plt.plot(x,y) </span><br><span class="line">plt.xlabel(name_x) </span><br><span class="line">plt.ylabel(name_y) </span><br><span class="line">plt.savefig(<span class="string">'workfunction'</span> + <span class="string">'.pdf'</span>, dpi=<span class="number">400</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment">#%%%%%%%%%%%%%%%%%%%%%%#</span></span><br><span class="line"><span class="comment"># Get the Vaccum Energy</span></span><br><span class="line"><span class="comment">#%%%%%%%%%%%%%%%%%%%%%%#</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Get the total line numbers of POSCAR </span></span><br><span class="line">num_lines = sum(<span class="number">1</span> <span class="keyword">for</span> line <span class="keyword">in</span> open(<span class="string">'POSCAR'</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># Read POSCAR </span></span><br><span class="line">pos = open(<span class="string">'POSCAR'</span>, mode = <span class="string">'r'</span>)</span><br><span class="line">line = pos.readlines()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Get  the  slab length in z direction </span></span><br><span class="line">vaccum = float(line[<span class="number">4</span>].split()[<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># Get all atoms' coordination in z direction and store them in the list</span></span><br><span class="line">z_list = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">9</span>, num_lines): </span><br><span class="line">    z_list.append(float(line[i].split()[<span class="number">2</span>]))</span><br><span class="line"></span><br><span class="line"><span class="comment">#  max(z_list) is highest atoms' coordination in z direction</span></span><br><span class="line"><span class="comment"># Get the vaccum lenth: </span></span><br><span class="line">l_vaccum = vaccum - max(z_list)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'The Vaccum in this calculation is:\t\t %s'</span>  %(l_vaccum)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Choose the middle z value in the workfuntion.pdf </span></span><br><span class="line">num_middle = (max(z_list) + vaccum) / <span class="number">2</span> </span><br><span class="line"><span class="comment">#print num_middle</span></span><br><span class="line"></span><br><span class="line">middle_y = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> dic.keys():</span><br><span class="line">    i = float(i)</span><br><span class="line"><span class="comment"># Select the date area within 1 angstrom from the middle point:</span></span><br><span class="line">    <span class="keyword">if</span> i &gt; num_middle <span class="number">-1</span> <span class="keyword">and</span> i &lt;  num_middle + <span class="number">1</span>:</span><br><span class="line">        middle_y.append(float(dic.get(str(i))))</span><br><span class="line"><span class="comment"># Get the average value in the selected area</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'The Vaccum Energy in this calculation is:\t %s'</span>  %(np.mean(middle_y))</span><br><span class="line"></span><br><span class="line">pos.close()</span><br></pre></td></tr></table></figure>
-<ol>
-<li><p><code>plt.show()</code> 之前为我们 Ex50 这一节可视化的脚本： 44 和 53 行中，额外将 LOCPOT_Z 中两列的数据保存到一个字典里面，便于后面根据 z 方向的坐标查找真空能级。</p>
-</li>
-<li><p>获取 POSCAR 文件总的行数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">num_lines = sum(1 for line in open(&apos;POSCAR&apos;))</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>读取 POSCAR 文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pos = open(&apos;POSCAR&apos;, mode = &apos;r&apos;)</span><br><span class="line">line = pos.readlines()</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>获取 slab 在 z 方向的数值</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vaccum = float(line[4].split()[2])</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>将所有原子的 z 坐标保存到 z_list 数列中</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">z_list = []</span><br><span class="line">for i in range(9, num_lines): </span><br><span class="line">  z_list.append(float(line[i].split()[2]))</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>获得真空层的厚度</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">l_vaccum = vaccum - max(z_list)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>计算距离表层原子一半真空层厚度的z方向的数值： num_middle</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">num_middle = (max(z_list) + vaccum) / 2</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>将 [num_middle-1, num_middle+1] 区间范围内所有的真空能级提取出来，并保存到middle_y 这个数列中</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">middle_y = []</span><br><span class="line"></span><br><span class="line">for i in dic.keys():</span><br><span class="line">    i = float(i)</span><br><span class="line"># Select the date area within 1 angstrom from the middle point:</span><br><span class="line">    if i &gt; num_middle -1 and i &lt;  num_middle + 1:</span><br><span class="line">        middle_y.append(float(dic.get(str(i)))</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>求平均值，并打印出来</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print &apos;The Vaccum Energy in this calculation is:\t %s&apos;  %(np.mean(middle_y))</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-</li>
-<li><p>运行脚本：</p>
-<p><img src="/2018/09/06/ex52/ex52-3.png" alt=""></p>
-<p>图中第一个命令中，输出比较复杂，并且会和前面示例一样，展示功函数可视化的结果。</p>
-<p>但这不便于批量提取数据，可注销脚本中一下三行，直接获取真空能级</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#plt.show() </span><br><span class="line">#print &apos;The Vaccum in this calculation is:\t\t %s&apos;  %(l_vaccum)</span><br><span class="line">#print &apos;The Vaccum Energy in this calculation is:\t %s&apos;  %(np.mean(middle_y))</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用脚本批量获取真空能级</p>
-<p>先将脚本复制到bin文件夹中，赋予可执行权限。</p>
-<p><img src="/2018/09/06/ex52/ex52-4.png" alt=""></p>
-<ol>
-<li><p>批量生成 LOCPOT_Z 文件：</p>
-<p><img src="/2018/09/06/ex52/ex52-5.png" alt=""></p>
-</li>
-<li><p>使用脚本批量读取</p>
-<p><img src="/2018/09/06/ex52/ex52-6.png" alt=""></p>
-</li>
-</ol>
-</li>
-<li><p>批量获得费米能级：</p>
-<p><img src="/2018/09/06/ex52/ex52-7.png" alt=""></p>
-<p>我们需要的为第 4 列的数据。(图中的冒号也算作一列)</p>
-</li>
-</ol>
-<h3 id="3-数据分析："><a href="#3-数据分析：" class="headerlink" title="3 数据分析："></a>3 数据分析：</h3><p><img src="/2018/09/06/ex52/ex52-8.png" alt=""></p>
-<p>真空能级，费米能级以及功函数随真空层厚度的变化</p>
-<p><img src="/2018/09/06/ex52/ex52-9.png" alt=""></p>
-<p>图中的测试曲线看起来很漂亮，但纵坐标范围太大，我们将功函数随真空层的变化作图如下：</p>
-<p><img src="/2018/09/06/ex52/ex52-10.png" alt=""></p>
-<p>从图中，可以看出： 20-30 Å 范围内，功函数的波动变化较小，为 4.81 eV。其他的波动值在 4.85-4.87 eV 之间。Cu(111) 表面的功函数为：4.94 eV。参考的是 CRC handbook 中的数值。</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">Gu</th>
-<th style="text-align:center">100</th>
-<th style="text-align:center">5.10</th>
-<th style="text-align:center">FE</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">110</td>
-<td style="text-align:center">4.48</td>
-<td style="text-align:center">PE</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">111</td>
-<td style="text-align:center">4.94</td>
-<td style="text-align:center">PE</td>
-</tr>
-<tr>
-<td style="text-align:center"></td>
-<td style="text-align:center">112</td>
-<td style="text-align:center">4.53</td>
-<td style="text-align:center">PE</td>
-</tr>
-</tbody>
-</table>
-<p>实验与理论偏差为： -0.13 / 4.94  = 2.63 %</p>
-<p>师兄，实验值结果是 4.94 eV， 如果我们采用 30 Å 时的结果 (4.87 eV)，跟实验的差别更小，是不是更好?</p>
-<p>可以这么说。但是</p>
-<ol>
-<li>从我们测试的结果可以看出来，功函数随着真空层的变化，存在一个计算的误差；</li>
-<li>实验测量值也会有一定的误差范围。</li>
-</ol>
-<p>所以，如果你硬要把理论和实验结果完美地吻合，这是很难做到的，这当然也是大家所梦寐以求的终极目标。一般来说，只要在合理的误差范围之内 (5% 的样子)，跟实验值结果一致就可以了，此外，如果你发表文章的时候，为了保证计算的可重复性。计算参数设置，模型尺寸等都要尽可能地详细。</p>
-<p>师兄，不是说真空层对功函数的影响很大吗，为什么在 10 Å 的时候，得到的功函数 (4.80 eV) 和 20 Å (4.81 eV) 的时候一样?</p>
-<p>这是因为，在当前的体系下，4 层的 p(1x1)-Cu(111) 表面，10 Å 已经可以了。但 10-20 Å 时，误差波动较大。12 Å 的数据也可以用，如同前面所提到的，他们都在一个合理的误差范围之内，但必须注明你的模型尺寸。对于其他的体系，还需要大家自己动手去测试一下。</p>
-<p>此外，给大家推荐一篇文章：<a href="https://pubs.rsc.org/is/content/articlehtml/2016/mh/c5mh00160a" target="_blank" rel="noopener">Fermi level, work function and vacuum level</a></p>
-<p><img src="/2018/09/06/ex52/ex52-11.png" alt=""></p>
-<p>本文刚刚开始的图片就是从这篇文章中偷过来的。</p>
-<h3 id="4-扩展练习："><a href="#4-扩展练习：" class="headerlink" title="4 扩展练习："></a>4 扩展练习：</h3><ol>
-<li>复习功函数的相关内容；</li>
-<li>计算，测试自己研究体系的功函数；</li>
-<li>弄清获取真空能级的脚本原理(切记，搞不明白之前，不可乱用！！！)</li>
-</ol>
-<h3 id="5-总结："><a href="#5-总结：" class="headerlink" title="5 总结："></a>5 总结：</h3><p>到本节为止，功函数的计算就先简单介绍到这里了，计算步骤，可视化以及测试都大体讲解了一下。但我们用的模型例子比较简单，如果你的体系复杂，计算仍有疑问，请在 QQ 群中交流或者发邮件给我 (<a href="mailto:lqcata@gmail.com" target="_blank" rel="noopener">lqcata@gmail.com</a>) 。</p>
+        <p>大师兄在9月8日的文章中讲了如何用 Pymatgen 计算离子的电导率（该方法可以用来研究固态电解质等问题），<strong>本次，大师兄介绍一下如何使用 Pymatgen 可视化离子的迁移概率密度。</strong></p>
+<p>先举个例子，</p>
+<blockquote>
+<p>在“Design principles for solid-state lithium superionic conductors”一文中（Wang et al., Nature Materials <strong>2015</strong>, <em>14</em> , 1026–1031. ），作者用Ab Initio Molecular Dynamic （AIMD）计算了Li 离子在Li$\mathrm{_1}$$\mathrm{_0}$GeP$\mathrm{_2}$S$\mathrm{_1}$$\mathrm{_2}$， Li$\mathrm{_7}$P$\mathrm{_3}$S$\mathrm{_1}$$\mathrm{_1}$，Li$\mathrm{_2}$S，和 Li$\mathrm{_4}$GeS$\mathrm{_4}$ 四种材料中的迁移概率密度（Probability Density），结果如下图所示：</p>
+</blockquote>
+<p><img src="/2020/10/02/A24/A24_1.png" alt=""></p>
+<blockquote>
+<ul>
+<li>从图中可以看出Li离子在图a所示材料中主要沿c轴方向的通道迁移，而且由于这个通道连通得比较好，Li离子的迁移势垒会比较低（0.22~0.25 eV）。</li>
+<li>Li离子在图b所示的材料的迁移路径形成了一个三维网格，而且由于这个概率密度比图b中的概率密度分布得更加均匀，Li离子的迁移势垒更低（0.18~0.19 eV）。</li>
+<li>图b所示的材料就完全不行了，因为Li离子的概率密度仅分布在特定的位点附近，说明离子不能有效地移动。</li>
+<li>Li离子在图d所示材料中也存在迁移局域化的行为。</li>
+<li>作者总结说 “A general principle for the design of Li-ion conductors with low activation energy can be distilled from the above findings: all of the sites within the diffusion network should be energetically close to equivalent, with large channels connecting them.”</li>
+</ul>
+</blockquote>
+<p><strong>那么我们如何在自己的计算中画出这样的图呢？</strong>Pymatgen 举手说，它可以帮忙！</p>
+<p>但是在开始之前，我们要安装Pymatgen的插件：<strong>Pymatgen-diffusion</strong>（<a href="https://github.com/materialsvirtuallab/pymatgen-diffusion）。" target="_blank" rel="noopener">https://github.com/materialsvirtuallab/pymatgen-diffusion）。</a></p>
+<h2 id="安装-Pymatgen-diffusion"><a href="#安装-Pymatgen-diffusion" class="headerlink" title="安装 Pymatgen-diffusion"></a>安装 Pymatgen-diffusion</h2><p><strong>推荐大家使用最新版的Anaconda安装Pymatgen及其插件。</strong>点击上面的链接，进入官网后，点击最新版本链接，</p>
+<p><img src="/2020/10/02/A24/A24_2.png" alt=""></p>
+<p>我们可以下载.zip文件，</p>
+<p><img src="/2020/10/02/A24/A24_3.png" alt=""></p>
+<p>下载完成后，大家可以解压这个文件，得到 pymatgen-diffusion-2019.8.18文件夹。</p>
+<p>我们把其中的 pymatgen_diffusion 文件夹放到 Anaconda的site-packages文件夹下，路径是 Windows 系统：……\Anaconda\Lib\site-packages；Linux系统：……/anaconda3/lib/pythonx.x/site-packages，就算安装好了。</p>
+<p>接下来我们可以启动python，导入这个模块，如果不报错就没有问题了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[test@ln0%tianhe2 li_sn_s]$ python</span><br><span class="line">Python 3.8.3 (default, Jul  2 2020, 16:21:59) </span><br><span class="line">[GCC 7.3.0] :: Anaconda, Inc. on linux</span><br><span class="line">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span><br><span class="line">&gt;&gt;&gt; import pymatgen_diffusion</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="学习用法"><a href="#学习用法" class="headerlink" title="学习用法"></a>学习用法</h2><p>我们可以在其github网站上通过例子学习这个模块的用法。</p>
+<p><img src="/2020/10/02/A24/A24_4.png" alt=""></p>
+<p>点击打开 probbility_analysis.ipynb 文件。</p>
+<p><img src="/2020/10/02/A24/A24_5.png" alt=""></p>
+<p>其内容如下（有所删减）：如果不想看的话可直接查看 <strong>开始作图</strong> 部分</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen.analysis.diffusion_analyzer <span class="keyword">import</span> DiffusionAnalyzer</span><br><span class="line"><span class="keyword">from</span> pymatgen_diffusion.aimd.pathway <span class="keyword">import</span> ProbabilityDensityAnalysis</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="comment">#ProbabilityDensityAnalysis object</span></span><br><span class="line">filename=<span class="string">"/Users/iekhengchu/repos/pymatgen-diffusion/pymatgen_diffusion/aimd/tests/cNa3PS4_pda.json"</span></span><br><span class="line"></span><br><span class="line">data = json.load(open(<span class="string">"../pymatgen_diffusion/aimd/tests/cNa3PS4_pda.json"</span>, <span class="string">"r"</span>))</span><br><span class="line">diff_analyzer = DiffusionAnalyzer.from_dict(data) <span class="comment"># 初始化DiffusionAnalyzer类</span></span><br><span class="line"></span><br><span class="line">pda = ProbabilityDensityAnalysis.from_diffusion_analyzer(diff_analyzer, interval=<span class="number">0.5</span>, </span><br><span class="line">                                                         species=(<span class="string">"Na"</span>, <span class="string">"Li"</span>)) <span class="comment">#可以指定离子</span></span><br><span class="line"><span class="comment">#Save probability distribution to a CHGCAR-like file</span></span><br><span class="line">pda.to_chgcar(filename=<span class="string">"CHGCAR_new2.vasp"</span>) <span class="comment">#保存概率密度文件</span></span><br></pre></td></tr></table></figure>
+<h2 id="开始作图"><a href="#开始作图" class="headerlink" title="开始作图"></a>开始作图</h2><p>代码（test.py）如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pymatgen_diffusion.aimd.pathway <span class="keyword">import</span> ProbabilityDensityAnalysis</span><br><span class="line"><span class="keyword">from</span> pymatgen.core.trajectory <span class="keyword">import</span> Trajectory</span><br><span class="line"><span class="keyword">from</span> pymatgen.io.vasp.outputs <span class="keyword">import</span> Xdatcar</span><br><span class="line"><span class="keyword">from</span> pymatgen.analysis.diffusion_analyzer <span class="keyword">import</span> DiffusionAnalyzer</span><br><span class="line"></span><br><span class="line">traj = Trajectory.from_file(<span class="string">'XDATCAR'</span>)</span><br><span class="line">diff = DiffusionAnalyzer.from_structures(traj,<span class="string">'Li'</span>,<span class="number">900</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line">pda = ProbabilityDensityAnalysis.from_diffusion_analyzer(diff,interval=<span class="number">0.5</span>,species=(<span class="string">"Li"</span>))</span><br><span class="line">pda.to_chgcar(filename=<span class="string">"pda.vasp"</span>) <span class="comment">#保存概率密度文件</span></span><br></pre></td></tr></table></figure>
+<p>此处理过程大概耗时8分钟，因机器而异。</p>
+<p>在VESTA中可视化如下：</p>
+<p><img src="/2020/10/02/A24/A24_6.png" alt=""></p>
 
       
     </div>
@@ -589,9 +465,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/功函数/" rel="tag"># 功函数</a>
+            <a href="/tags/Pymatgen/" rel="tag"># Pymatgen</a>
           
-            <a href="/tags/真空层/" rel="tag"># 真空层</a>
+            <a href="/tags/骚操作/" rel="tag"># 骚操作</a>
+          
+            <a href="/tags/软件/" rel="tag"># 软件</a>
           
         </div>
       
@@ -619,8 +497,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/05/ex51/" rel="next" title="Ex51 影响功函数计算的因素（一）">
-                <i class="fa fa-chevron-left"></i> Ex51 影响功函数计算的因素（一）
+              <a href="/2020/09/24/A23/" rel="next" title="Ubuntu常用软件的安装">
+                <i class="fa fa-chevron-left"></i> Ubuntu常用软件的安装
               </a>
             
           </div>
@@ -628,10 +506,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/30/ex53/" rel="prev" title="Ex53 表面吸附以及模型的搭建思想">
-                Ex53 表面吸附以及模型的搭建思想 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -781,7 +655,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-不同真空层厚度的测试-上一节内容"><span class="nav-number">1.</span> <span class="nav-text">1 不同真空层厚度的测试(上一节内容)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-结果处理"><span class="nav-number">2.</span> <span class="nav-text">2 结果处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-数据分析："><span class="nav-number">3.</span> <span class="nav-text">3 数据分析：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-扩展练习："><span class="nav-number">4.</span> <span class="nav-text">4 扩展练习：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-总结："><span class="nav-number">5.</span> <span class="nav-text">5 总结：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装-Pymatgen-diffusion"><span class="nav-number">1.</span> <span class="nav-text">安装 Pymatgen-diffusion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#学习用法"><span class="nav-number">2.</span> <span class="nav-text">学习用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始作图"><span class="nav-number">3.</span> <span class="nav-text">开始作图</span></a></li></ol></div>
             
 
           </div>
@@ -959,9 +833,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://www.bigbrosci.com/2018/09/06/ex52/';
-          this.page.identifier = '2018/09/06/ex52/';
-          this.page.title = 'Ex52 影响功函数计算的因素（二）';
+          this.page.url = 'http://www.bigbrosci.com/2020/10/02/A24/';
+          this.page.identifier = '2020/10/02/A24/';
+          this.page.title = '离子迁移概率密度可视化';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://bigbrosci-com.disqus.com/embed.js';
